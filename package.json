@@ -1,0 +1,50 @@
+{
+  "name": "manifest-tools",
+  "version": "0.0.1",
+  "description": "Tool for obtaining and converting Manifests for different platforms",
+  "author": {
+    "name": "TBD",
+    "email": "TBD",
+    "url": "TBD"
+  },
+  "keywords": [
+    "convert manifest",
+    "manifest",
+    "W3C",
+    "Firefox OS",
+    "Windows 10",
+    "Chrome OS",
+    "Android",
+    "iOS"
+  ],
+  "dependencies": {
+    "cheerio": "^0.18.0",
+    "meow": "^2.0.0",
+    "request": "^2.53.0"
+  },
+  "devDependencies": {
+    "blanket": "^1.1.6",
+    "grunt-cli": "^0.1.13",
+    "grunt-contrib-jshint": "^0.10.0",
+    "grunt-contrib-nodeunit": "^0.4.1",
+    "grunt-contrib-watch": "^0.6.1",
+    "grunt-mocha-test": "^0.12.7",
+    "jshint-stylish": "^1.0.0",
+    "jshint-teamcity": "^1.0.6",
+    "load-grunt-tasks": "^1.0.0",
+    "mocha": "^2.1.0",
+    "mocha-teamcity-reporter": "0.0.4",
+    "should": "^5.0.1",
+    "time-grunt": "^1.0.0",
+    "travis-cov": "^0.2.5"
+  },
+  "scripts": {
+    "test": "grunt"
+  },
+  "bin": "cli.js",
+  "config": {
+    "travis-cov": {
+      "threshold": 80
+    }
+  }
+}

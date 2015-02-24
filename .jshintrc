@@ -1,0 +1,28 @@
+{
+  "curly": true,
+  "eqeqeq": true,
+  "immed": true,
+  "indent": 2,
+  "latedef": true,
+  "newcap": true,
+  "noarg": true,
+  "sub": true,
+  "undef": true,
+  "unused": true,
+  "boss": true,
+  "eqnull": true,
+  "node": true,
+  "quotmark": "single",
+
+  "globals": {
+    "after": false,
+    "before": false,
+    "afterEach": false,
+    "beforeEach": false,
+    "describe": false,
+    "it": false,
+    "mocha": false,
+    "expect": false,
+    "ManifestConverter": false
+  }
+}
