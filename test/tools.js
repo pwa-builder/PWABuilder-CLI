@@ -408,7 +408,7 @@ describe('Tools', function () {
       });
     });
 
-    it('Should should return an Error in callback if input format is invalid.', function(done) {
+    it('Should return an Error in callback if input format is invalid.', function(done) {
       var manifestInfo = { content: { 'start_url': 'url' }, format: 'invalid format' };
       tools.convertTo(manifestInfo, 'W3C', function(err) {
         should.exist(err);
@@ -417,7 +417,7 @@ describe('Tools', function () {
       });
     });
 
-    it('Should should return an Error in callback if output format is invalid.', function(done) {
+    it('Should return an Error in callback if output format is invalid.', function(done) {
       var manifestInfo = { content: { 'start_url': 'url' }, format: 'W3C' };
       tools.convertTo(manifestInfo, 'invalid format', function(err) {
         should.exist(err);
