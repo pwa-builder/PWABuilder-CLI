@@ -373,7 +373,7 @@ describe('Tools', function () {
   });
 
   describe('convertTo()', function () {
-    it('if manifestInfo is undefined, it should should return an Error in callback.', function(done) {
+    it('Should should return an Error in callback if manifestInfo is undefined.', function(done) {
       tools.convertTo(undefined, 'W3C', function(err){
         should.exist(err);
         err.should.have.property('message', 'Manifest content is empty or not initialized.');
@@ -381,10 +381,47 @@ describe('Tools', function () {
       });
     });
 
-    it('if manifestInfo does not contains content property, it should should return an Error in callback.', function(done) {
+    it('Should should return an Error in callback if manifestInfo does not contains content property.', function(done) {
       tools.convertTo({ key: 'value' }, 'W3C', function(err) {
         should.exist(err);
         err.should.have.property('message', 'Manifest content is empty or not initialized.');
+        done();
+      });
+    });
+
+    it('Should return the same object and no error if the format is the same', function (done) {
+      var manifestInfo = { content: { 'start_url': 'url' }, format: 'W3C' };
+      tools.convertTo(manifestInfo, 'W3C', function(err, result) {
+        should.not.exist(err);
+        result.should.be.exactly(manifestInfo);
+        done();
+      });
+    });
+
+    it('Should use w3c as default format', function (done) {
+      var manifestInfo = { content: { 'start_url': 'url' } };
+      tools.convertTo(manifestInfo, undefined, function(err, result) {
+        should.not.exist(err);
+        result.should.be.exactly(manifestInfo);
+        result.should.have.property('format', 'w3c');
+        done();
+      });
+    });
+
+    it('Should should return an Error in callback if input format is invalid.', function(done) {
+      var manifestInfo = { content: { 'start_url': 'url' }, format: 'invalid format' };
+      tools.convertTo(manifestInfo, 'W3C', function(err) {
+        should.exist(err);
+        err.should.have.property('message', 'Manifest format is not recognized.');
+        done();
+      });
+    });
+
+    it('Should should return an Error in callback if output format is invalid.', function(done) {
+      var manifestInfo = { content: { 'start_url': 'url' }, format: 'W3C' };
+      tools.convertTo(manifestInfo, 'invalid format', function(err) {
+        should.exist(err);
+        err.should.have.property('message', 'Manifest format is not recognized.');
         done();
       });
     });
