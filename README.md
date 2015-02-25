@@ -1,12 +1,10 @@
-# Manifest Tools
+﻿# Manifest Tools
 
 This tool is used for obtaining and converting manifest for different platforms.
 
 ## Installation
 
-
 ## Usage
-
 
 ## Supported Platform Manifests
 
@@ -15,6 +13,19 @@ This tool is used for obtaining and converting manifest for different platforms.
 - [Chrome OS](https://developer.chrome.com/apps/manifest)
 - [Firefox OS](https://developer.mozilla.org/en-US/Apps/Build/Manifest)
 
+## Development
+
+In the terminal execute:
+
+````
+npm install
+````
+
+In order to run tests and jshint execute:
+
+````
+grunt
+````
 
 ## change-log
 
