@@ -373,6 +373,22 @@ describe('Tools', function () {
   });
 
   describe('convertTo()', function () {
+    it('if manifestInfo is undefined, it should should return an Error in callback.', function(done) {
+      tools.convertTo(undefined, 'W3C', function(err){
+        should.exist(err);
+        err.should.have.property('message', 'Manifest content is empty or not initialized.');
+        done();
+      });
+    });
+
+    it('if manifestInfo does not contains content property, it should should return an Error in callback.', function(done) {
+      tools.convertTo({ key: 'value' }, 'W3C', function(err) {
+        should.exist(err);
+        err.should.have.property('message', 'Manifest content is empty or not initialized.');
+        done();
+      });
+    });
+
     it('Convert from W3C to chromeOS.');
     it('Convert from W3C to W3C.');
     it('Convert from chromeOS to W3C.');
