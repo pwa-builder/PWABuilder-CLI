@@ -5,6 +5,7 @@ var path = require('path');
 var fs = require('fs');
 var should = require('should');
 var http = require('http');
+var url = require('url');
 
 var responseFunction;
 
@@ -306,14 +307,61 @@ describe('Tools', function () {
       });
     });
 
-    it('Should retrieve the manifest info object from a site that contains the manifest tag.');
+    it('Should retrieve the manifest info object from a site that contains the manifest tag.', function(done) {
+      responseFunction = function(req, res) {
+        var url_parts = url.parse(req.url);
+        var route = url_parts.pathname;
 
-    it('Should create the manifest info object from a site that does not contains the manifest tag.');
+        if (route === '/manifest.json') {
+          res.writeHead(200, { 'Content-Type': 'application/json' });
 
-    //responseFunction = function(req, res) {
-    //  var url_parts = url.parse(req.url);
-    //  var route = url_parts.pathname;
-    //});
+          res.end(JSON.stringify({'start_url': 'http://www.contoso.com/'}));
+        } else {
+          res.writeHead(200, { 'Content-Type': 'text/html' });
+
+          res.end('<!doctype>' +
+          '<html>' +
+            '<head>' +
+              '<title>test</title>' +
+              '<link rel="manifest" href="http://localhost:8042/manifest.json">' +
+            '</head>' +
+            '<body></body>' +
+          '</html>');
+        }
+      };
+
+      tools.getManifestFromSite('http://localhost:8042/urlWithManifestTag', function(err, manifestInfo) {
+        should.not.exist(err);
+        should.exist(manifestInfo);
+        manifestInfo.should.have.properties('content', 'format');
+        manifestInfo.content.should.have.property('start_url', 'http://www.contoso.com/');
+        done();
+      });
+    });
+
+    it('Should create the manifest info object from a site that does not contains the manifest tag.', function(done) {
+      responseFunction = function(req, res) {
+        res.writeHead(200, { 'Content-Type': 'text/html' });
+
+        res.end('<!doctype>' +
+        '<html>' +
+          '<head>' +
+            '<title>test</title>' +
+          '</head>' +
+          '<body></body>' +
+        '</html>');
+      };
+
+      var siteUrl ='http://localhost:8042/urlWithoutManifestTag';
+
+      tools.getManifestFromSite(siteUrl, function(err, manifestInfo) {
+        should.not.exist(err);
+        should.exist(manifestInfo);
+        manifestInfo.should.have.properties('content', 'format');
+        manifestInfo.content.should.have.property('start_url', siteUrl);
+        done();
+      });
+    });
 
     afterEach(function () {
       responseFunction = undefined;
