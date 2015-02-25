@@ -389,7 +389,7 @@ describe('Tools', function () {
       });
     });
 
-    it('Should return the same object and no error if the format is the same', function (done) {
+    it('Should return the same object and no error if the format is the same.', function (done) {
       var manifestInfo = { content: { 'start_url': 'url' }, format: 'W3C' };
       tools.convertTo(manifestInfo, 'W3C', function(err, result) {
         should.not.exist(err);
@@ -398,7 +398,7 @@ describe('Tools', function () {
       });
     });
 
-    it('Should use w3c as default format', function (done) {
+    it('Should use w3c as default format.', function (done) {
       var manifestInfo = { content: { 'start_url': 'url' } };
       tools.convertTo(manifestInfo, undefined, function(err, result) {
         should.not.exist(err);
