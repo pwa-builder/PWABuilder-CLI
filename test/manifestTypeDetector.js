@@ -5,7 +5,7 @@ var should = require('should');
 
 describe('Manifest Type Detector', function () {
   describe('detect()', function () {
-    it('Empty object should match w3c format.', function() {
+    it('Empty object should match w3c format', function() {
       var manifestObj = {};
 
       var result = manifestTypeDetector.detect(manifestObj);
@@ -14,7 +14,7 @@ describe('Manifest Type Detector', function () {
       result.should.be.equal('w3c');
     });
 
-    it('W3C manifest object should match w3c format.', function() {
+    it('W3C manifest object should match w3c format', function() {
       var manifestObj = {
         'start_url': 'url',
         'name': 'test'
@@ -26,7 +26,7 @@ describe('Manifest Type Detector', function () {
       result.should.be.equal('w3c');
     });
 
-    it('Invalid manifest object should return undefined as format.', function() {
+    it('Invalid manifest object should return undefined as format', function() {
       var manifestObj = {
         'start_url': 'url',
         'name': 'test',
