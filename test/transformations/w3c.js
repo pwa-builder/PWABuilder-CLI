@@ -3,7 +3,7 @@
 var transformation = require('../../lib/transformations/w3c');
 var should = require('should');
 
-describe('transformation: w3c', function () {
+describe('transformation: W3C Manifest', function () {
   describe('convertToBase()', function () {
     it('Should should return an Error in callback if manifestInfo is undefined', function(done) {
       var originalManifest;
