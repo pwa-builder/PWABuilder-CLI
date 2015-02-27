@@ -10,8 +10,8 @@ This tool is used for obtaining and converting manifest for different platforms.
 
 - [W3C](http://www.w3.org/TR/appmanifest/)
 - [Web App Template] (http://wat-docs.azurewebsites.net/JsonWindows)
-- [Chrome OS](https://developer.chrome.com/apps/manifest)
-- [Firefox OS](https://developer.mozilla.org/en-US/Apps/Build/Manifest)
+- [Chrome Hosted Apps](https://developers.google.com/chrome/apps/docs/developers_guide)
+- [Firefox Open Web Apps](https://developer.mozilla.org/Apps/Build/Manifest)
 
 ## Development
 
