@@ -34,30 +34,30 @@ var outputFiles = {
 
 describe('Tools', function () {
   describe('getManifestFromFile()', function () {
-    it('Invalid path should return an Error in callback', function(done) {
-      tools.getManifestFromFile(inputFiles.notExistingFile, function(err){
+    it('Should return an Error if path is invalid', function (done) {
+      tools.getManifestFromFile(inputFiles.notExistingFile, function (err){
         should.exist(err);
         done();
       });
     });
 
-    it('Invalid json format should return an Error in callback', function(done) {
-      tools.getManifestFromFile(inputFiles.invalidManifest, function(err){
-        should.exist(err);
-        err.should.have.property('message', 'Invalid manifest format');
-        done();
-      });
-    });
-
-    it('Invalid manifest format should return an Error in callback.', function(done) {
-      tools.getManifestFromFile(inputFiles.invalidManifestFormat, function(err){
+    it('Should return an Error if JSON format is invalid', function (done) {
+      tools.getManifestFromFile(inputFiles.invalidManifest, function (err){
         should.exist(err);
         err.should.have.property('message', 'Invalid manifest format');
         done();
       });
     });
 
-    it('Valid manifest file should return a manifest info object in callback', function(done) {
+    it('Should return an Error if manifest format is invalid', function (done) {
+      tools.getManifestFromFile(inputFiles.invalidManifestFormat, function (err){
+        should.exist(err);
+        err.should.have.property('message', 'Invalid manifest format');
+        done();
+      });
+    });
+
+    it('Should return a manifest object if input manifest is valid', function (done) {
       tools.getManifestFromFile(inputFiles.validManifest, function(err, manifestInfo){
         should.not.exist(err);
         should.exist(manifestInfo);
@@ -68,23 +68,23 @@ describe('Tools', function () {
   });
 
   describe('writeToFile()', function () {
-    it('if manifestInfo is undefined, it should should return an Error in callback', function(done) {
-      tools.writeToFile(undefined, outputFiles.invalidManifestPath, function(err){
+    it('Should return an Error if manifest info is undefined', function (done) {
+      tools.writeToFile(undefined, outputFiles.invalidManifestPath, function (err){
         should.exist(err);
         err.should.have.property('message', 'Manifest content is empty or invalid.');
         done();
       });
     });
 
-    it('if manifestInfo does not contains content property, it should should return an Error in callback', function(done) {
-      tools.writeToFile({ key: 'value' }, outputFiles.invalidManifestPath, function(err){
+    it('Should return an Error if content property is undefined', function (done) {
+      tools.writeToFile({ key: 'value' }, outputFiles.invalidManifestPath, function (err){
         should.exist(err);
         err.should.have.property('message', 'Manifest content is empty or invalid.');
         done();
       });
     });
 
-    it('Write errors should return be returned as an Error in callback', function(done) {
+    it('Should return an Error if an error occurs while writing the file', function(done) {
       tools.writeToFile({ content: { 'start_url': 'url' } }, outputFiles.invalidManifestPath, function(err){
         should.exist(err);
         done();
@@ -118,7 +118,7 @@ describe('Tools', function () {
       server.listen(8042);
     });
 
-    it('Invalid url should return an Error in callback', function(done) {
+    it('Should return an Error if url is invalid', function(done) {
       responseFunction = function() {
         should.fail('This function should not be called in this test');
       };
@@ -130,7 +130,7 @@ describe('Tools', function () {
       });
     });
 
-    it('Valid url but returning 404 should return an Error in callback', function(done) {
+    it('Should return an Error if server returns 404', function(done) {
       responseFunction = function(req, res) {
         res.writeHead(404);
         res.end();
@@ -143,7 +143,7 @@ describe('Tools', function () {
       });
     });
 
-    it('Should retrieve undefined from a site that does not contains the manifest tag', function(done) {
+    it('Should return undefined if no manifest tag is found', function(done) {
       responseFunction = function(req, res) {
         res.writeHead(200, { 'Content-Type': 'text/html' });
 
@@ -163,7 +163,7 @@ describe('Tools', function () {
       });
     });
 
-    it('Should retrieve the manifest url from a site that contains the manifest tag with relative manifest url', function(done) {
+    it('Should return the manifest url if the manifest tag has a relative url', function(done) {
       responseFunction = function(req, res) {
         res.writeHead(200, { 'Content-Type': 'text/html' });
 
@@ -185,7 +185,7 @@ describe('Tools', function () {
       });
     });
 
-    it('Should retrieve the manifest url from a site that contains the manifest tag with absolute manifest url', function(done) {
+    it('Should return the manifest url if the manifest tag has an absolute url', function(done) {
       responseFunction = function(req, res) {
         res.writeHead(200, { 'Content-Type': 'text/html' });
 
@@ -221,7 +221,7 @@ describe('Tools', function () {
       server.listen(8042);
     });
 
-    it('Invalid url should return an Error in callback', function(done) {
+    it('Should return an Error if url is invalid', function(done) {
       responseFunction = function() {
         should.fail('This function should not be called in this test');
       };
@@ -233,7 +233,7 @@ describe('Tools', function () {
       });
     });
 
-    it('Valid url but returning 404 should return an Error in callback', function(done) {
+    it('Should return an Error if server returns 404', function(done) {
       responseFunction = function(req, res) {
         res.writeHead(404);
         res.end();
@@ -246,7 +246,7 @@ describe('Tools', function () {
       });
     });
 
-    it('Valid url but invalid manifest format should return an Error in callback', function(done) {
+    it('Should return an Error if downloaded manifest is invalid', function(done) {
       responseFunction = function(req, res) {
         res.writeHead(200, { 'Content-Type': 'application/json' });
 
@@ -260,7 +260,7 @@ describe('Tools', function () {
       });
     });
 
-    it('Should retrieve the manifest info object from a site', function(done) {
+    it('Should return the manifest info object from a site', function(done) {
       responseFunction = function(req, res) {
         res.writeHead(200, { 'Content-Type': 'application/json' });
 
@@ -289,7 +289,7 @@ describe('Tools', function () {
       server.listen(8042);
     });
 
-    it('Invalid url should return an Error in callback', function(done) {
+    it('Should return an Error if url is invalid', function(done) {
       responseFunction = function() {
         should.fail('This function should not be called in this test');
       };
@@ -301,7 +301,7 @@ describe('Tools', function () {
       });
     });
 
-    it('Valid url but returning 404 should return an Error in callback', function(done) {
+    it('Should return an Error if server returns 404', function(done) {
       responseFunction = function(req, res) {
         res.writeHead(404);
         res.end();
@@ -314,7 +314,7 @@ describe('Tools', function () {
       });
     });
 
-    it('Should retrieve the manifest info object from a site that contains the manifest tag', function(done) {
+    it('Should return the manifest info object from a site', function(done) {
       responseFunction = function(req, res) {
         var url_parts = url.parse(req.url);
         var route = url_parts.pathname;
@@ -346,7 +346,7 @@ describe('Tools', function () {
       });
     });
 
-    it('Should create the manifest info object from a site that does not contains the manifest tag', function(done) {
+    it('Should create a manifest info object if no manifest tag is found', function(done) {
       responseFunction = function(req, res) {
         res.writeHead(200, { 'Content-Type': 'text/html' });
 
@@ -380,7 +380,7 @@ describe('Tools', function () {
   });
 
   describe('convertTo()', function () {
-    it('Should should return an Error in callback if manifestInfo is undefined', function(done) {
+    it('Should return an Error if manifest info is undefined', function(done) {
       tools.convertTo(undefined, 'W3C', function(err){
         should.exist(err);
         err.should.have.property('message', 'Manifest content is empty or not initialized.');
@@ -388,7 +388,7 @@ describe('Tools', function () {
       });
     });
 
-    it('Should should return an Error in callback if manifestInfo does not contains content property', function(done) {
+    it('Should return an Error if content property is undefined', function(done) {
       tools.convertTo({ key: 'value' }, 'W3C', function(err) {
         should.exist(err);
         err.should.have.property('message', 'Manifest content is empty or not initialized.');
@@ -396,7 +396,7 @@ describe('Tools', function () {
       });
     });
 
-    it('Should return the same object and no error if the format is the same', function (done) {
+    it('Should return the same object if the format is the same', function (done) {
       var manifestInfo = { content: { 'start_url': 'url' }, format: 'W3C' };
       tools.convertTo(manifestInfo, 'W3C', function(err, result) {
         should.not.exist(err);
@@ -415,7 +415,7 @@ describe('Tools', function () {
       });
     });
 
-    it('Should return an Error in callback if input format is invalid', function(done) {
+    it('Should return an Error if input format is invalid', function(done) {
       var manifestInfo = { content: { 'start_url': 'url' }, format: 'invalid format' };
       tools.convertTo(manifestInfo, 'W3C', function(err) {
         should.exist(err);
@@ -424,7 +424,7 @@ describe('Tools', function () {
       });
     });
 
-    it('Should return an Error in callback if output format is invalid', function(done) {
+    it('Should return an Error if output format is invalid', function(done) {
       var manifestInfo = { content: { 'start_url': 'url' }, format: 'W3C' };
       tools.convertTo(manifestInfo, 'invalid format', function(err) {
         should.exist(err);

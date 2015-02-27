@@ -40,9 +40,7 @@ describe('transformation: W3C Manifest', function () {
 
   describe('convertFromBase()', function () {
     it('Should return an Error if manifest info is undefined', function(done) {
-      var originalManifest;
-
-      transformation.convertFromBase(originalManifest, function(err) {
+      transformation.convertFromBase(undefined, function(err) {
         should.exist(err);
         err.should.have.property('message', 'Manifest content is empty or not initialized.');
         done();

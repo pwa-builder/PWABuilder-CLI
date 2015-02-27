@@ -13,7 +13,7 @@ describe('utils', function () {
       result.should.have.property('number', 42);
     });
 
-    it('undefined should return undefined', function() {
+    it('Should return undefined if input is undefined', function() {
       var result = utils.parseJSON(undefined);
       should.not.exist(result);
     });

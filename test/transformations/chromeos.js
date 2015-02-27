@@ -5,17 +5,15 @@ var should = require('should');
 
 describe('transformation: ChromeOS Manifest', function () {
   describe('convertToBase()', function () {
-    it('Should return an Error in callback if manifestInfo is undefined', function(done) {
-      var originalManifest;
-
-      transformation.convertToBase(originalManifest, function(err){
+    it('Should return an Error if manifest info is undefined', function(done) {
+      transformation.convertToBase(undefined, function(err){
         should.exist(err);
         err.should.have.property('message', 'Manifest content is empty or not initialized.');
         done();
       });
     });
 
-    it('Should return an Error in callback if manifestInfo does not contains content property', function(done) {
+    it('Should return an Error if content property is undefined', function(done) {
       var originalManifest = { key: 'value' };
 
       transformation.convertToBase(originalManifest, function(err) {
@@ -25,7 +23,7 @@ describe('transformation: ChromeOS Manifest', function () {
       });
     });
 
-    it('Should return the transformed object with no error', function (done) {
+    it('Should return the transformed object', function (done) {
       var name = 'name';
       var siteUrl = 'url';
       var originalManifestInfo = {
@@ -58,7 +56,7 @@ describe('transformation: ChromeOS Manifest', function () {
       });
     });
 
-    it('Should return the transformed object with icons and no error', function (done) {
+    it('Should return the transformed object with icons', function (done) {
       var name = 'name';
       var siteUrl = 'url';
       var icon128 = 'icon_128.png';
@@ -104,17 +102,15 @@ describe('transformation: ChromeOS Manifest', function () {
   });
 
   describe('convertFromBase()', function () {
-    it('Should return an Error in callback if manifestInfo is undefined', function(done) {
-      var originalManifest;
-
-      transformation.convertFromBase(originalManifest, function(err) {
+    it('Should return an Error if manifest info is undefined', function(done) {
+      transformation.convertFromBase(undefined, function(err) {
         should.exist(err);
         err.should.have.property('message', 'Manifest content is empty or not initialized.');
         done();
       });
     });
 
-    it('Should return an Error in callback if manifestInfo does not contains content property', function(done) {
+    it('Should return an Error if content property is undefined', function(done) {
       var originalManifest = { key: 'value' };
 
       transformation.convertFromBase(originalManifest, function(err) {
@@ -124,7 +120,7 @@ describe('transformation: ChromeOS Manifest', function () {
       });
     });
 
-    it('Should return an Error in callback if base manifest does not have start_url', function (done) {
+    it('Should return an Error if start_url is missing', function (done) {
       var originalManifestInfo = {
         content: {}
       };
@@ -136,7 +132,7 @@ describe('transformation: ChromeOS Manifest', function () {
       });
     });
 
-    it('Should return the transformed object and no error', function (done) {
+    it('Should return the transformed object', function (done) {
       var name = 'name';
       var siteUrl = 'url';
 
@@ -172,7 +168,7 @@ describe('transformation: ChromeOS Manifest', function () {
       });
     });
 
-    it('Should return the transformed object with icons and no error', function (done) {
+    it('Should return the transformed object with icons', function (done) {
       var name = 'name';
       var siteUrl = 'url';
 
