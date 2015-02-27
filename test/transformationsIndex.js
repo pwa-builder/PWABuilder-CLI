@@ -1,6 +1,6 @@
 'use strict';
 
-var transformations = require('../lib/transformationsIndex');
+var transformations = require('../lib/transformations');
 var path = require('path');
 var fs = require('fs');
 require('should');
