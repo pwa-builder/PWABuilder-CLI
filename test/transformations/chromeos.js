@@ -223,86 +223,139 @@ describe('transformation: ChromeOS Manifest', function () {
   });
 
   describe('matchFormat()', function () {
-    // it('Should return true if manifestObj is a empty object', function() {
-    //   var manifestObj = {};
-    //
-    //   var result = transformation.matchFormat(manifestObj);
-    //   should.exist(result);
-    //   /*jshint -W030 */
-    //   result.should.be.true;
-    // });
-    //
-    // it('Should return true if manifestObj is a valid W3C manifest', function() {
-    //   var manifestObj ={
-    //     'start_url': 'url',
-    //     'name': 'test'
-    //   };
-    //
-    //   var result = transformation.matchFormat(manifestObj);
-    //   should.exist(result);
-    //   /*jshint -W030 */
-    //   result.should.be.true;
-    // });
-    //
-    // it('Should return true if manifestObj is a valid W3C manifest with extensions', function() {
-    //   var manifestObj = {
-    //     'start_url': 'url',
-    //     'name': 'test',
-    //     'extension_test': 'test',
-    //     'extension_obj': { 'key': 'value' }
-    //   };
-    //
-    //   var result = transformation.matchFormat(manifestObj);
-    //   should.exist(result);
-    //   /*jshint -W030 */
-    //   result.should.be.true;
-    // });
-    //
-    // it('Should return false if manifestObj is an invalid W3C manifest', function() {
-    //   var manifestObj = {
-    //     'start_url': 'url',
-    //     'name': 'test',
-    //     'invalid': 'test'
-    //   };
-    //
-    //   var result = transformation.matchFormat(manifestObj);
-    //   should.exist(result);
-    //   /*jshint -W030 */
-    //   result.should.be.false;
-    // });
-    //
-    // it('Should return true if manifestObj is an valid W3C manifest with icons', function() {
-    //   var manifestObj = {
-    //     'start_url': 'url',
-    //     'name': 'test',
-    //     'icons': [{
-    //       'src': 'icon/lowres',
-    //       'sizes': '64x64',
-    //       'type': 'image/webp'
-    //     }]
-    //   };
-    //
-    //   var result = transformation.matchFormat(manifestObj);
-    //   should.exist(result);
-    //   /*jshint -W030 */
-    //   result.should.be.true;
-    // });
-    //
-    // it('Should return false if manifestInfo is an invalid W3C manifest with invalid icons', function() {
-    //   var manifestObj = {
-    //     'start_url': 'url',
-    //     'name': 'test',
-    //     'icons': [{
-    //       'src': 'icon/lowres',
-    //       'invalid': 'test',
-    //       'type': 'image/webp'
-    //     }]
-    //   };
-    //
-    //   var result = transformation.matchFormat(manifestObj);
-    //   should.exist(result);
-    //   /*jshint -W030 */
-    //   result.should.be.false;
-    // });
+    it('Should return false if required properties are not present', function() {
+      var manifestObj = {};
+
+      var result = transformation.matchFormat(manifestObj);
+      should.exist(result);
+      /*jshint -W030 */
+      result.should.be.false;
+    });
+
+    it('Should return false if required internal properties are not present', function() {
+      var manifestObj = {
+        'app': {
+          'urls': [ 'url' ],
+          'launch': {
+          }
+        },
+        'version': '0.0.1',
+        'name': 'test'
+      };
+
+      var result = transformation.matchFormat(manifestObj);
+      should.exist(result);
+      /*jshint -W030 */
+      result.should.be.false;
+    });
+
+    it('Should return true if manifestObj is a valid manifest', function() {
+      var manifestObj = {
+        'app': {
+          'urls': [ 'url' ],
+          'launch': {
+            'web_url': 'url'
+          }
+        },
+        'version': '0.0.1',
+        'name': 'test'
+      };
+
+      var result = transformation.matchFormat(manifestObj);
+      should.exist(result);
+      /*jshint -W030 */
+      result.should.be.true;
+    });
+
+    it('Should return false if manifestObj is an invalid manifest', function() {
+      var manifestObj = {
+        'app': {
+          'urls': [ 'url' ],
+          'launch': {
+            'web_url': 'url'
+          }
+        },
+        'version': '0.0.1',
+        'name': 'test',
+        'invalid': 'test'
+      };
+
+      var result = transformation.matchFormat(manifestObj);
+      should.exist(result);
+      /*jshint -W030 */
+      result.should.be.false;
+    });
+
+    it('Should return true if manifestObj is a valid complex manifest', function() {
+      var manifestObj = {
+        'name': 'Google Mail',
+        'description': 'Read your gmail',
+        'version': '1',
+        'app': {
+          'urls': [
+            '*://mail.google.com/mail/',
+            '*://www.google.com/mail/'
+          ],
+          'launch': {
+            'web_url': 'http://mail.google.com/mail/'
+          }
+        },
+        'icons': {
+          '128': 'icon_128.png'
+        },
+        'permissions': [ 'unlimitedStorage', 'notifications']
+      };
+
+      var result = transformation.matchFormat(manifestObj);
+      should.exist(result);
+      /*jshint -W030 */
+      result.should.be.true;
+    });
+
+    it('Should return false if app object contains invalid properties', function() {
+      var manifestObj = {
+        'app': {
+          'urls': [ 'url' ],
+          'launch': {
+            'web_url': 'url'
+          },
+          'invalid': 42
+        },
+        'version': '0.0.1',
+        'name': 'test'
+      };
+
+      var result = transformation.matchFormat(manifestObj);
+      should.exist(result);
+      /*jshint -W030 */
+      result.should.be.false;
+    });
+
+    it('Should return false if manifestObj is an invalid complex manifest', function() {
+      var manifestObj = {
+        'name': 'Google Mail',
+        'description': 'Read your gmail',
+        'version': '1',
+        'app': {
+          'urls': [
+          '*://mail.google.com/mail/',
+          '*://www.google.com/mail/'
+          ],
+          'launch': {
+            'web_url': 'http://mail.google.com/mail/',
+            'invalid' : 42
+          }
+        },
+        'icons': {
+          '128': 'icon_128.png'
+        },
+        'permissions': [ 'unlimitedStorage', 'notifications']
+      };
+
+      var result = transformation.matchFormat(manifestObj);
+      should.exist(result);
+      /*jshint -W030 */
+      result.should.be.false;
+    });
   });
 });
