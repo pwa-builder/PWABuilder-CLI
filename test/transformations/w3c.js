@@ -5,17 +5,15 @@ var should = require('should');
 
 describe('transformation: W3C Manifest', function () {
   describe('convertToBase()', function () {
-    it('Should return an Error in callback if manifestInfo is undefined', function(done) {
-      var originalManifest;
-
-      transformation.convertToBase(originalManifest, function(err){
+    it('Should return an Error if manifest info is undefined', function(done) {
+      transformation.convertToBase(undefined, function(err){
         should.exist(err);
         err.should.have.property('message', 'Manifest content is empty or not initialized.');
         done();
       });
     });
 
-    it('Should return an Error in callback if manifestInfo does not contains content property', function(done) {
+    it('Should return an Error if content property is undefined', function(done) {
       var originalManifest = { key: 'value' };
 
       transformation.convertToBase(originalManifest, function(err) {
@@ -25,7 +23,7 @@ describe('transformation: W3C Manifest', function () {
       });
     });
 
-    it('Should return the same object and no error', function (done) {
+    it('Should return the same object if manifest info is valid', function (done) {
       var originalManifest = {
         content: {
           'start_url' : 'url'
@@ -41,7 +39,7 @@ describe('transformation: W3C Manifest', function () {
   });
 
   describe('convertFromBase()', function () {
-    it('Should return an Error in callback if manifestInfo is undefined', function(done) {
+    it('Should return an Error if manifest info is undefined', function(done) {
       var originalManifest;
 
       transformation.convertFromBase(originalManifest, function(err) {
@@ -51,7 +49,7 @@ describe('transformation: W3C Manifest', function () {
       });
     });
 
-    it('Should return an Error in callback if manifestInfo does not contains content property', function(done) {
+    it('Should return an Error if content property is undefined', function(done) {
       var originalManifest = { key: 'value' };
 
       transformation.convertFromBase(originalManifest, function(err) {
@@ -61,7 +59,7 @@ describe('transformation: W3C Manifest', function () {
       });
     });
 
-    it('Should return the same object and no error', function (done) {
+    it('Should return the same object if manifest info is valid', function (done) {
       var originalManifest = {
         content: {
           'start_url' : 'url'
@@ -77,28 +75,30 @@ describe('transformation: W3C Manifest', function () {
   });
 
   describe('matchFormat()', function () {
-    it('Should return true if manifestObj is a empty object', function() {
+    it('Should return true if manifest is a empty object', function() {
       var manifestObj = {};
 
       var result = transformation.matchFormat(manifestObj);
+
       should.exist(result);
       /*jshint -W030 */
       result.should.be.true;
     });
 
-    it('Should return true if manifestObj is a valid W3C manifest', function() {
+    it('Should return true if manifest is a valid W3C manifest', function() {
       var manifestObj ={
         'start_url': 'url',
         'name': 'test'
       };
 
       var result = transformation.matchFormat(manifestObj);
+
       should.exist(result);
       /*jshint -W030 */
       result.should.be.true;
     });
 
-    it('Should return true if manifestObj is a valid W3C manifest with extensions', function() {
+    it('Should return true if manifest has valid extensions', function() {
       var manifestObj = {
         'start_url': 'url',
         'name': 'test',
@@ -107,12 +107,13 @@ describe('transformation: W3C Manifest', function () {
       };
 
       var result = transformation.matchFormat(manifestObj);
+
       should.exist(result);
       /*jshint -W030 */
       result.should.be.true;
     });
 
-    it('Should return false if manifestObj is an invalid W3C manifest', function() {
+    it('Should return false if manifest is an invalid W3C manifest', function() {
       var manifestObj = {
         'start_url': 'url',
         'name': 'test',
@@ -120,12 +121,13 @@ describe('transformation: W3C Manifest', function () {
       };
 
       var result = transformation.matchFormat(manifestObj);
+
       should.exist(result);
       /*jshint -W030 */
       result.should.be.false;
     });
 
-    it('Should return true if manifestObj is an valid W3C manifest with icons', function() {
+    it('Should return true if manifest has valid icons definition', function() {
       var manifestObj = {
         'start_url': 'url',
         'name': 'test',
@@ -137,12 +139,13 @@ describe('transformation: W3C Manifest', function () {
       };
 
       var result = transformation.matchFormat(manifestObj);
+
       should.exist(result);
       /*jshint -W030 */
       result.should.be.true;
     });
 
-    it('Should return false if manifestInfo is an invalid W3C manifest with invalid icons', function() {
+    it('Should return false if manifest has invalid icons definition', function() {
       var manifestObj = {
         'start_url': 'url',
         'name': 'test',
@@ -154,6 +157,7 @@ describe('transformation: W3C Manifest', function () {
       };
 
       var result = transformation.matchFormat(manifestObj);
+
       should.exist(result);
       /*jshint -W030 */
       result.should.be.false;

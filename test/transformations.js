@@ -7,13 +7,17 @@ require('should');
 
 var transformationsPath = path.join(__dirname, '..', 'lib', 'transformations');
 
-describe('Transformations Index', function () {
+describe('Transformations', function () {
   describe('Loaded modules', function () {
-    it('Should at least load the chromeos transformation module', function() {
+    it('Should load the chromeos transformation module', function() {
       transformations.should.have.property('chromeos');
     });
 
-    it('Should load the same number of modules as files in the transformation folder', function(done) {
+    it('Should load the w3c transformation module', function() {
+      transformations.should.have.property('w3c');
+    });
+
+    it('Should load all modules (files) in the transformation folder', function(done) {
       fs.readdir(transformationsPath, function (err, files) {
         var transformationLoadedLength = Object.keys(transformations).length;
         transformationLoadedLength.should.be.above(0);

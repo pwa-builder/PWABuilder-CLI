@@ -5,7 +5,7 @@ var should = require('should');
 
 describe('utils', function () {
   describe('parseJSON()', function () {
-    it('Return the parsed JSON', function() {
+    it('Should parse valid JSON', function() {
       var inputJSON = '{"key": "value", "number": 42 }';
       var result = utils.parseJSON(inputJSON);
       should.exist(result);
@@ -56,6 +56,43 @@ describe('utils', function () {
     it('Should return false if parameter is an object', function() {
       var inputValue = { key : 'value'};
       var result = utils.isFunction(inputValue);
+      /*jshint -W030 */
+      result.should.be.false;
+    });
+  });
+
+  describe('isString()', function () {
+    it('Should return true if parameter is a string', function() {
+      var inputValue = 'this is a string';
+      var result = utils.isString(inputValue);
+      /*jshint -W030 */
+      result.should.be.true;
+    });
+
+    it('Should return false if parameter is a boolean', function() {
+      var inputValue = true;
+      var result = utils.isString(inputValue);
+      /*jshint -W030 */
+      result.should.be.false;
+    });
+
+    it('Should return false if parameter is a function', function() {
+      var inputValue = function () {};
+      var result = utils.isString(inputValue);
+      /*jshint -W030 */
+      result.should.be.false;
+    });
+
+    it('Should return false if parameter is a number', function() {
+      var inputValue = 42;
+      var result = utils.isString(inputValue);
+      /*jshint -W030 */
+      result.should.be.false;
+    });
+
+    it('Should return false if parameter is an object', function() {
+      var inputValue = { key : 'value'};
+      var result = utils.isString(inputValue);
       /*jshint -W030 */
       result.should.be.false;
     });
