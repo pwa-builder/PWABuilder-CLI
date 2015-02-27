@@ -5,7 +5,7 @@ var should = require('should');
 
 describe('transformation: W3C Manifest', function () {
   describe('convertToBase()', function () {
-    it('Should should return an Error in callback if manifestInfo is undefined', function(done) {
+    it('Should return an Error in callback if manifestInfo is undefined', function(done) {
       var originalManifest;
 
       transformation.convertToBase(originalManifest, function(err){
@@ -15,7 +15,7 @@ describe('transformation: W3C Manifest', function () {
       });
     });
 
-    it('Should should return an Error in callback if manifestInfo does not contains content property', function(done) {
+    it('Should return an Error in callback if manifestInfo does not contains content property', function(done) {
       var originalManifest = { key: 'value' };
 
       transformation.convertToBase(originalManifest, function(err) {
@@ -41,7 +41,7 @@ describe('transformation: W3C Manifest', function () {
   });
 
   describe('convertFromBase()', function () {
-    it('Should should return an Error in callback if manifestInfo is undefined', function(done) {
+    it('Should return an Error in callback if manifestInfo is undefined', function(done) {
       var originalManifest;
 
       transformation.convertFromBase(originalManifest, function(err) {
@@ -51,7 +51,7 @@ describe('transformation: W3C Manifest', function () {
       });
     });
 
-    it('Should should return an Error in callback if manifestInfo does not contains content property', function(done) {
+    it('Should return an Error in callback if manifestInfo does not contains content property', function(done) {
       var originalManifest = { key: 'value' };
 
       transformation.convertFromBase(originalManifest, function(err) {
