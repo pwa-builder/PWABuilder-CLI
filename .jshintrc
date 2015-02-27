@@ -22,7 +22,6 @@
     "describe": false,
     "it": false,
     "mocha": false,
-    "expect": false,
-    "ManifestConverter": false
+    "expect": false
   }
 }
