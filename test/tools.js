@@ -71,7 +71,7 @@ describe('Tools', function () {
     it('if manifestInfo is undefined, it should should return an Error in callback', function(done) {
       tools.writeToFile(undefined, outputFiles.invalidManifestPath, function(err){
         should.exist(err);
-        err.should.have.property('message', 'Manifest content is empty or not initialized.');
+        err.should.have.property('message', 'Manifest content is empty or invalid.');
         done();
       });
     });
@@ -79,7 +79,7 @@ describe('Tools', function () {
     it('if manifestInfo does not contains content property, it should should return an Error in callback', function(done) {
       tools.writeToFile({ key: 'value' }, outputFiles.invalidManifestPath, function(err){
         should.exist(err);
-        err.should.have.property('message', 'Manifest content is empty or not initialized.');
+        err.should.have.property('message', 'Manifest content is empty or invalid.');
         done();
       });
     });
