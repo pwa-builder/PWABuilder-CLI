@@ -21,6 +21,12 @@ In the terminal execute:
 npm install
 ````
 
+Install grunt task runner
+
+````
+npm install -g grunt-cli
+````
+
 In order to run tests and jshint execute:
 
 ````
