@@ -63,7 +63,7 @@ manifestTools.getManifestFromSite(siteUrl, function (err, manifestInfo) {
 
                     // build the platform-specific projects
                     console.log('Running cordova build...');
-                    exec('cordova build', function (err, stdout, stderr) {
+                    exec('cordova build windows android', function (err, stdout, stderr) {
                         if (err) {
                             console.error(err);
                             return;
