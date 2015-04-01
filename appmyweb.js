@@ -3,9 +3,13 @@
 var manifestTools = require('./lib/tools');
 var projectBuilder = require('./lib/projectBuilder.js');
 
-// scan a site to retrieve its manifest 
 var siteUrl = process.argv[2];
+var rootDir = process.argv[3];
+var platforms = process.argv[4];
+
+// scan a site to retrieve its manifest 
 console.log('Scanning ' + siteUrl + ' for manifest...');
+
 manifestTools.getManifestFromSite(siteUrl, function (err, manifestInfo) {
     if (err) {
         console.error(err);
@@ -20,7 +24,7 @@ manifestTools.getManifestFromSite(siteUrl, function (err, manifestInfo) {
     //console.log(JSON.stringify(manifestInfo.content, null, 4));
 
     // create the cordova application
-    projectBuilder.createCordovaApp(manifestInfo, function (err) {
+    projectBuilder.createCordovaApp(manifestInfo, rootDir, platforms, function (err) {
         if (err) {
             console.error(err);
             return err;
