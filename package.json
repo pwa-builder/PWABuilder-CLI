@@ -19,6 +19,7 @@
   ],
   "dependencies": {
     "cheerio": "^0.18.0",
+    "loglevel": "^1.2.0",
     "request": "^2.53.0"
   },
   "devDependencies": {
