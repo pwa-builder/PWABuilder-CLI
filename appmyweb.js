@@ -3,8 +3,8 @@
 var manifestTools = require('./lib/tools');
 var projectBuilder = require('./lib/projectBuilder.js');
 var parameters = require('optimist')
-                .usage('Usage: node appmyweb.js <web site URL> <app directory> [-p <platforms>]')
-                .alias('p', 'platform')
+                .usage('Usage: node appmyweb.js <website URL> <app directory> [-p <platforms>]')
+                .alias('p', 'platforms')
                 .default('p', 'windows,android,ios')
                 .check(checkParameters)
                 .argv;
