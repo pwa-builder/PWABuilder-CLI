@@ -1,32 +1,16 @@
 ﻿'use strict';
 
+// main flow
+
+var validations = require('./lib/validations');
 var manifestTools = require('./lib/tools');
-var projectBuilder = require('./lib/projectBuilder.js');
+var projectBuilder = require('./lib/projectBuilder');
 var parameters = require('optimist')
                 .usage('Usage: node appmyweb.js <website URL> <app directory> [-p <platforms>]')
                 .alias('p', 'platforms')
                 .default('p', 'windows,android,ios')
-                .check(checkParameters)
+                .check(validations.checkParameters)
                 .argv;
-
-function checkParameters(argv) {
-    var availablePlatforms = ['windows', 'ios', 'android'];
-    
-    if (argv._.length < 2) {
-        throw 'Error: Missing required arguments.';
-    }
-
-    // Check platforms
-    if (argv.p) {
-        argv.p.split(',').forEach(function (platform) {
-            if (availablePlatforms.indexOf(platform) < 0) {
-                throw 'Error: Invalid platform(s) specified.';
-            }
-        });
-    }
-}
-
-// main flow
 
 var siteUrl = parameters._[0];
 var rootDir = parameters._[1];
