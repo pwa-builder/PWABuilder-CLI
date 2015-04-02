@@ -2,9 +2,11 @@
 
 // main flow
 
-var validations = require('./lib/validations');
-var manifestTools = require('./lib/tools');
-var projectBuilder = require('./lib/projectBuilder');
+var validations = require('./lib/validations'),
+    manifestTools = require('./lib/tools'),
+    projectBuilder = require('./lib/projectBuilder'),
+    log = require('loglevel');
+
 var parameters = require('optimist')
                 .usage('Usage: node appmyweb.js <website URL> <app directory> [-p <platforms>]')
                 .alias('p', 'platforms')
@@ -14,19 +16,21 @@ var parameters = require('optimist')
 
 var siteUrl = parameters._[0];
 var rootDir = parameters._[1];
-var platforms = parameters.p;
+var platforms = parameters.p.split(/[\s,]+/);
+
+log.setLevel('info');
 
 // scan a site to retrieve its manifest 
-console.log('Scanning ' + siteUrl + ' for manifest...');
+log.info('Scanning ' + siteUrl + ' for manifest...');
 
 manifestTools.getManifestFromSite(siteUrl, function (err, manifestInfo) {
     if (err) {
-        console.error(err);
+        log.error("ERROR: " + err.message);
         return err;
     }
 
     // query manifest info and retrieve its app name
-    console.log('Found a ' + manifestInfo.format.toUpperCase() + ' manifest');
+    log.info('Found a ' + manifestInfo.format.toUpperCase() + ' manifest...');
     
     // TODO: implement log level logic to decide when to show these messages
     //console.log();
@@ -35,10 +39,10 @@ manifestTools.getManifestFromSite(siteUrl, function (err, manifestInfo) {
     // create the cordova application
     projectBuilder.createCordovaApp(manifestInfo, rootDir, platforms, function (err) {
         if (err) {
-            console.error(err);
+            log.error("ERROR: " + err.message);
             return err;
         }
 
-        console.log('The Cordova application is ready!');
+        log.info('The Cordova application is ready!');
     });
 });
