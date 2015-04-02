@@ -19,6 +19,7 @@
   ],
   "dependencies": {
     "cheerio": "^0.18.0",
+    "cordova": "^4.3.0",
     "loglevel": "^1.2.0",
     "optimist": "^0.6.1",
     "request": "^2.53.0"
