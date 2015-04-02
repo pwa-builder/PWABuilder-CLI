@@ -2,10 +2,35 @@
 
 var manifestTools = require('./lib/tools');
 var projectBuilder = require('./lib/projectBuilder.js');
+var parameters = require('optimist')
+                .usage('Usage: node appmyweb.js <web site URL> <app directory> [-p <platforms>]')
+                .alias('p', 'platform')
+                .default('p', 'windows,android,ios')
+                .check(checkParameters)
+                .argv;
 
-var siteUrl = process.argv[2];
-var rootDir = process.argv[3];
-var platforms = process.argv[4];
+function checkParameters(argv) {
+    var availablePlatforms = ['windows', 'ios', 'android'];
+    
+    if (argv._.length < 2) {
+        throw 'Error: Missing required arguments.';
+    }
+
+    // Check platforms
+    if (argv.p) {
+        argv.p.split(',').forEach(function (platform) {
+            if (availablePlatforms.indexOf(platform) < 0) {
+                throw 'Error: Invalid platform(s) specified.';
+            }
+        });
+    }
+}
+
+// main flow
+
+var siteUrl = parameters._[0];
+var rootDir = parameters._[1];
+var platforms = parameters.p;
 
 // scan a site to retrieve its manifest 
 console.log('Scanning ' + siteUrl + ' for manifest...');
