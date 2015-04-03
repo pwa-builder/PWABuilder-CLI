@@ -1,6 +1,7 @@
 ﻿'use strict';
 
 var validations = require('./lib/validations'),
+    constants = require('./lib/constants'),
     manifestTools = require('./lib/tools'),
     projectBuilder = require('./lib/projectBuilder'),
     log = require('loglevel');
@@ -50,6 +51,12 @@ log.setLevel(global.logLevel);
 
 function manifestRetrieved(err, manifestInfo) {
     if (err) {
+        log.error('ERROR: ' + err.message);
+        return err;
+    }
+    
+    if (manifestInfo.format !== constants.BASE_MANIFEST_FORMAT) {
+        err = new Error("The manifest found is not a W3C manifest.");
         log.error('ERROR: ' + err.message);
         return err;
     }
