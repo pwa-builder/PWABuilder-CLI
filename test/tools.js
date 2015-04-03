@@ -44,7 +44,7 @@ describe('Tools', function () {
     it('Should return an Error if JSON format is invalid', function (done) {
       tools.getManifestFromFile(inputFiles.invalidManifest, function (err){
         should.exist(err);
-        err.should.have.property('message', 'Invalid manifest format');
+        err.should.have.property('message', 'Invalid manifest format.');
         done();
       });
     });
@@ -52,7 +52,7 @@ describe('Tools', function () {
     it('Should return an Error if manifest format is invalid', function (done) {
       tools.getManifestFromFile(inputFiles.invalidManifestFormat, function (err){
         should.exist(err);
-        err.should.have.property('message', 'Invalid manifest format');
+        err.should.have.property('message', 'Invalid manifest format.');
         done();
       });
     });
