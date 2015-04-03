@@ -79,11 +79,11 @@ function manifestRetrieved(err, manifestInfo) {
 if (parameters.manifest) {
     var parsedManifestUrl = url.parse(parameters.manifest);
     if (parsedManifestUrl && parsedManifestUrl.host) {
-        // Download manifest from remote location 
+        // download manifest from remote location 
         log.info('Downloading manifest from ' + parameters.manifest + '...');
         manifestTools.downloadManifestFromUrl(parameters.manifest, manifestRetrieved);
     } else {
-        // Read local manifest file
+        // read local manifest file
         log.info('Reading manifest file ' + parameters.manifest + '...');
         manifestTools.getManifestFromFile(parameters.manifest, manifestRetrieved);
     }   
