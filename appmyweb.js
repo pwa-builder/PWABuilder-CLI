@@ -62,6 +62,9 @@ function manifestRetrieved(err, manifestInfo) {
         return err;
     }
     
+    // Make sure the manifest's start_url is an absolute URL
+    manifestInfo.content.start_url = url.resolve(siteUrl, manifestInfo.content.start_url);
+            
     log.debug('Manifest contents:');
     log.debug(JSON.stringify(manifestInfo.content, null, 4));
     
