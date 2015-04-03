@@ -90,6 +90,5 @@ if (parameters.manifest) {
 } else {
     // scan a site to retrieve its manifest 
     log.info('Scanning ' + siteUrl + ' for manifest...');
-
     manifestTools.getManifestFromSite(siteUrl, manifestRetrieved);
 }
