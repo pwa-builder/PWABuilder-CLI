@@ -28,11 +28,13 @@ function checkParameters(argv) {
 }
 
 var parameters = require('optimist')
-                .usage('Usage: node appmyweb.js <website URL> <app directory> [-p <platforms>] [-l <loglevel>]')
+                .usage('Usage: node appmyweb.js <website URL> <app directory> [-p <platforms>] [-l <loglevel>] [-b]')
                 .alias('p', 'platforms')
                 .alias('l', 'loglevel')
+                .alias('b', 'build')
                 .default('p', 'windows,android,ios')
                 .default('l', 'warn')
+                .default('b', false)
                 .describe('p', '[windows][,android][,ios]')
                 .describe('l', 'debug|trace|info|warn|error')
                 .check(checkParameters)
@@ -42,7 +44,8 @@ var siteUrl = parameters._[0];
 var rootDir = parameters._[1];
 var platforms = parameters.platforms.split(/[\s,]+/);
 
-log.setLevel(parameters.loglevel);
+global.logLevel = parameters.loglevel;
+log.setLevel(global.logLevel);
 
 // scan a site to retrieve its manifest 
 log.info('Scanning ' + siteUrl + ' for manifest...');
@@ -59,7 +62,7 @@ manifestTools.getManifestFromSite(siteUrl, function (err, manifestInfo) {
     log.debug(JSON.stringify(manifestInfo.content, null, 4));
 
     // create the cordova application
-    projectBuilder.createCordovaApp(manifestInfo, rootDir, platforms, function (err) {
+    projectBuilder.createCordovaApp(manifestInfo, rootDir, platforms, parameters.build, function (err) {
         if (err) {
             log.error("ERROR: " + err.message);
             return err;
