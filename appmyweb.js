@@ -41,9 +41,6 @@ manifestTools.getManifestFromSite(siteUrl, function (err, manifestInfo) {
         log.error("ERROR: " + err.message);
         return err;
     }
-
-    // query manifest info and retrieve its app name
-    log.info('Found a ' + manifestInfo.format.toUpperCase() + ' manifest...');
     
     // TODO: implement log level logic to decide when to show these messages
     //console.log();
