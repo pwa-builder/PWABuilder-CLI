@@ -11,27 +11,38 @@ function checkParameters(argv) {
         throw 'ERROR: Missing required arguments.';
     }
     
-    // Check platforms
-    if (argv.p) {
-        var platforms = argv.p.split(/[\s,]+/);
+    // check platforms
+    if (argv.platforms) {
+        var platforms = argv.platforms.split(/[\s,]+/);
         if (!validations.platformsValid(platforms)) {
             throw 'ERROR: Invalid platform(s) specified.';
+        }
+    }
+
+    // check log level
+    if (argv.loglevel) {
+        if (!validations.logLevelValid(argv.loglevel)) {
+            throw 'ERROR: Invalid loglevel specified. Valid values are: debug, trace, info, warn, error';
         }
     }
 }
 
 var parameters = require('optimist')
-                .usage('Usage: node appmyweb.js <website URL> <app directory> [-p <platforms>]')
+                .usage('Usage: node appmyweb.js <website URL> <app directory> [-p <platforms>] [-l <loglevel>]')
                 .alias('p', 'platforms')
+                .alias('l', 'loglevel')
                 .default('p', 'windows,android,ios')
+                .default('l', 'warn')
+                .describe('p', '[windows][,android][,ios]')
+                .describe('l', 'debug|trace|info|warn|error')
                 .check(checkParameters)
                 .argv;
 
 var siteUrl = parameters._[0];
 var rootDir = parameters._[1];
-var platforms = parameters.p.split(/[\s,]+/);
+var platforms = parameters.platforms.split(/[\s,]+/);
 
-log.setLevel('info');
+log.setLevel(parameters.loglevel);
 
 // scan a site to retrieve its manifest 
 log.info('Scanning ' + siteUrl + ' for manifest...');
