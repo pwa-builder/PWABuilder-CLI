@@ -28,10 +28,11 @@ function checkParameters(argv) {
 }
 
 var parameters = require('optimist')
-                .usage('Usage: node appmyweb.js <website URL> <app directory> [-p <platforms>] [-l <loglevel>] [-b]')
+                .usage('Usage: node appmyweb.js <website URL> <app directory> [-p <platforms>] [-l <loglevel>] [-b] [-m <manifest file>]')
                 .alias('p', 'platforms')
                 .alias('l', 'loglevel')
                 .alias('b', 'build')
+                .alias('m', 'manifest')
                 .default('p', 'windows,android,ios')
                 .default('l', 'warn')
                 .default('b', false)
@@ -47,25 +48,36 @@ var platforms = parameters.platforms.split(/[\s,]+/);
 global.logLevel = parameters.loglevel;
 log.setLevel(global.logLevel);
 
-// scan a site to retrieve its manifest 
-log.info('Scanning ' + siteUrl + ' for manifest...');
-
-manifestTools.getManifestFromSite(siteUrl, function (err, manifestInfo) {
+function manifestRetrieved(err, manifestInfo) {
     if (err) {
-        log.error("ERROR: " + err.message);
+        log.error('ERROR: ' + err.message);
         return err;
     }
     
     log.debug('Manifest contents:');
     log.debug(JSON.stringify(manifestInfo.content, null, 4));
-
+    
     // create the cordova application
     projectBuilder.createCordovaApp(manifestInfo, rootDir, platforms, parameters.build, function (err) {
         if (err) {
-            log.error("ERROR: " + err.message);
+            log.error('ERROR: ' + err.message);
             return err;
         }
-
+        
         log.info('The Cordova application is ready!');
     });
-});
+}
+
+// scan a site to retrieve its manifest 
+log.info('Scanning ' + siteUrl + ' for manifest...');
+
+if (parameters.manifest) {
+    if (parameters.manifest.toLowerCase().indexOf('http://') === 0 
+     || parameters.manifest.toLowerCase().indexOf('https://') === 0) {
+        manifestTools.downloadManifestFromUrl(parameters.manifest, manifestRetrieved);
+    } else {
+        manifestTools.getManifestFromFile(parameters.manifest, manifestRetrieved);
+    }   
+} else {
+    manifestTools.getManifestFromSite(siteUrl, manifestRetrieved);
+}
