@@ -4,6 +4,7 @@ var validations = require('./lib/validations'),
     constants = require('./lib/constants'),
     manifestTools = require('./lib/tools'),
     projectBuilder = require('./lib/projectBuilder'),
+    url = require('url'),
     log = require('loglevel');
 
 
@@ -29,7 +30,7 @@ function checkParameters(argv) {
 }
 
 var parameters = require('optimist')
-                .usage('Usage: node appmyweb.js <website URL> <app directory> [-p <platforms>] [-l <loglevel>] [-b] [-m <manifest file>]')
+                .usage('Usage: node appmyweb <website URL> <app directory> [-p <platforms>] [-l <loglevel>] [-b] [-m <manifest file>]')
                 .alias('p', 'platforms')
                 .alias('l', 'loglevel')
                 .alias('b', 'build')
@@ -75,16 +76,20 @@ function manifestRetrieved(err, manifestInfo) {
     });
 }
 
-// scan a site to retrieve its manifest 
-log.info('Scanning ' + siteUrl + ' for manifest...');
-
 if (parameters.manifest) {
-    if (parameters.manifest.toLowerCase().indexOf('http://') === 0 
-     || parameters.manifest.toLowerCase().indexOf('https://') === 0) {
+    var parsedManifestUrl = url.parse(parameters.manifest);
+    if (parsedManifestUrl && parsedManifestUrl.host) {
+        // Download manifest from remote location 
+        log.info('Downloading manifest from ' + parameters.manifest + '...');
         manifestTools.downloadManifestFromUrl(parameters.manifest, manifestRetrieved);
     } else {
+        // Read local manifest file
+        log.info('Reading manifest file ' + parameters.manifest + '...');
         manifestTools.getManifestFromFile(parameters.manifest, manifestRetrieved);
     }   
 } else {
+    // scan a site to retrieve its manifest 
+    log.info('Scanning ' + siteUrl + ' for manifest...');
+
     manifestTools.getManifestFromSite(siteUrl, manifestRetrieved);
 }
