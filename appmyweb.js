@@ -9,7 +9,7 @@ var validations = require('./lib/validations'),
 
 
 function checkParameters(argv) {   
-    if (argv._.length < 2) {
+    if (argv._.length < 1) {
         throw 'ERROR: Missing required arguments.';
     }
     
@@ -30,7 +30,8 @@ function checkParameters(argv) {
 }
 
 var parameters = require('optimist')
-                .usage('Usage: node appmyweb <website URL> <app directory> [-p <platforms>] [-l <loglevel>] [-b] [-m <manifest file>]')
+                .usage('Usage: node appmyweb <website URL> -d [<app directory>[ [-p <platforms>] [-l <loglevel>] [-b] [-m <manifest file>]')
+                .alias('d', 'directory')
                 .alias('p', 'platforms')
                 .alias('l', 'loglevel')
                 .alias('b', 'build')
@@ -44,7 +45,7 @@ var parameters = require('optimist')
                 .argv;
 
 var siteUrl = parameters._[0];
-var rootDir = parameters._[1];
+var rootDir = parameters.directory ? parameters.directory : process.cwd();
 var platforms = parameters.platforms.split(/[\s,]+/);
 
 global.logLevel = parameters.loglevel;
