@@ -32,10 +32,10 @@ var parameters = require('optimist')
                 .alias('p', 'platforms')
                 .alias('l', 'loglevel')
                 .alias('b', 'build')
-                .default('p', 'windows,android,ios')
+                .default('p', 'windows,android,ios,chrome')
                 .default('l', 'warn')
                 .default('b', false)
-                .describe('p', '[windows][,android][,ios]')
+                .describe('p', '[windows][,android][,ios][,chrome]')
                 .describe('l', 'debug|trace|info|warn|error')
                 .check(checkParameters)
                 .argv;
@@ -60,7 +60,7 @@ manifestTools.getManifestFromSite(siteUrl, function (err, manifestInfo) {
     log.debug(JSON.stringify(manifestInfo.content, null, 4));
 
     // create the cordova application
-    projectBuilder.createCordovaApp(manifestInfo, rootDir, platforms, parameters.build, function (err) {
+    projectBuilder.createApps(manifestInfo, rootDir, platforms, parameters.build, function (err) {
         if (err) {
             log.error("ERROR: " + err.message);
             return err;
