@@ -29,7 +29,7 @@ node appmyweb <website-url> [-d <app-directory>] [-s <short-name>] [-p <platform
 ### Example
 
 ````
-node appmyweb http://meteorite.azurewebsites.net -D:\Projects -l info -p windows,android -b
+node appmyweb http://meteorite.azurewebsites.net -d C:\Projects -l info -p windows,android -b
 ````
 
 ## Unit Tests
