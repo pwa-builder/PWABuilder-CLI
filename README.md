@@ -16,7 +16,7 @@ node appmyweb <website URL> [-d <app directory>]  [-p <platforms>]  [-l <log lev
 
 ### Parameters
 
-- <website URL> (required): URL of the hosted website
+- website URL (required): URL of the hosted website
 - -d|--directory (optional): Path to the generated project files (default value: the current directory)
 - -l|--loglevel (optional): Tracing log level options Available log levels: debug,trace,info,warn,error (default value: warn)
 - -p|--platforms (optional): Platforms to generate. Supported platforms: windows,android,ios,chrome (default value: all platforms)
@@ -31,13 +31,13 @@ node appmyweb http://meteorite.azurewebsites.net -D:\Projects -l info -p windows
 
 ## Unit Tests
 
-In the terminal, install grunt task runner
+In the terminal, install the Grunt task runner:
 
 ````
 npm install -g grunt-cli
 ````
 
-In order to run tests and jshint execute:
+In order to run tests and jshint, execute the following command:
 
 ````
 grunt
