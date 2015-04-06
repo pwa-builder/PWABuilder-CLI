@@ -1,6 +1,6 @@
-﻿# Manifest Tools
+﻿# Hosted Web Application Tool
 
-This tool is used for obtaining and converting manifest for different platforms.
+This tool is used to create hosted web applications based on a [W3C Web App manifest](http://www.w3.org/TR/appmanifest/).
 
 ## Installation
 
@@ -11,7 +11,7 @@ npm install
 ## Usage
 
 ````
-node appmyweb <website URL> [-d <app directory>]  [-p <platforms>]  [-l <log level>]  [-b]  [-m <manifest file>]
+node appmyweb <website URL> [-d <app directory>] [-p <platforms>] [-l <log level>] [-b] [-m <manifest file>]
 ````
 
 ### Parameters
@@ -21,7 +21,7 @@ node appmyweb <website URL> [-d <app directory>]  [-p <platforms>]  [-l <log lev
 - -l|--loglevel (optional): Tracing log level options Available log levels: debug,trace,info,warn,error (default value: warn)
 - -p|--platforms (optional): Platforms to generate. Supported platforms: windows,android,ios,chrome (default value: all platforms)
 - -b|--build (optional): Forces the building process
-- -m|--manifest (optional): Manifest location (URL or local path). If not specified, the tool looks for a manifest in the site URL. Otherwise, a new manifest will be created pointing to the site URL.
+- -m|--manifest (optional): Location of the W3C Web App manifest file (URL or local path). If not specified, the tool looks for a manifest in the site URL. Otherwise, a new manifest will be created pointing to the site URL.
 
 ### Example
 
@@ -43,9 +43,11 @@ In order to run tests and jshint, execute the following command:
 grunt
 ````
 
-## Supported Platform Manifests
+## Supported Input Manifests
 
-- [W3C](http://www.w3.org/TR/appmanifest/)
+- [W3C Web App](http://www.w3.org/TR/appmanifest/)
+
+We plan to support the following manifest files in the future:
 - [Web App Template] (http://wat-docs.azurewebsites.net/JsonWindows)
 - [Chrome Hosted Apps](https://developers.google.com/chrome/apps/docs/developers_guide)
 - [Firefox Open Web Apps](https://developer.mozilla.org/Apps/Build/Manifest)
