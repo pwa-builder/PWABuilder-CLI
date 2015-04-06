@@ -11,15 +11,16 @@ npm install
 ## Usage
 
 ````
-node appmyweb <website URL> [-d <app directory>] [-p <platforms>] [-l <log level>] [-b] [-m <manifest file>]
+node appmyweb <website-url> [-d <app-directory>] [-s <short-name>] [-p <platforms>] [-l <log-level>] [-b] [-m <manifest-file>]
 ````
 
 ### Parameters
 
-| **Parameter**    | **Description** |
-| ---------------- | --------------- |
-| `<website URL>`  | **(required)** URL of the hosted website |
-| `-d|--directory` | **(optional)** Path to the generated project files (default value: the current directory) |
+|  **&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Parameter&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;** | **Description** |
+| ----------------- | --------------- |
+| `<website-url>` | **(required)** URL of the hosted website |
+| `-d|--directory` | **(optional)** Path to the generated project files (default value: current directory) |
+| `-s|--shortname` | **(optional)** Application short name. When specified, it overrides the short_name value of the manifest |
 | `-l|--loglevel`  | **(optional)** Tracing log level options Available log levels: _debug,trace,info,warn,error_ (default value: _warn_) |
 | `-p|--platforms` | **(optional)** Platforms to generate. Supported platforms: _windows,android,ios,chrome_ (default value: all platforms) |
 | `-b|--build`     | **(optional)** Forces the building process |
@@ -28,7 +29,7 @@ node appmyweb <website URL> [-d <app directory>] [-p <platforms>] [-l <log level
 ### Example
 
 ````
-node appmyweb http://meteorite.azurewebsites.net -D:\Projects -l info -p windows,android -b
+node appmyweb http://meteorite.azurewebsites.net -d C:\Projects -l info -p windows,android -b
 ````
 
 ## Unit Tests
