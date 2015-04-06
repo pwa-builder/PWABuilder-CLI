@@ -10,7 +10,7 @@ var validations = require('./lib/validations'),
 
 function checkParameters(argv) {   
     if (argv._.length < 1) {
-        throw 'ERROR: Missing required <website URL> parameter.';
+        throw 'ERROR: Missing required <website-url> parameter.';
     } else if (argv._.length > 1) {
         throw 'ERROR: Unexpected parameters.';      
     }
@@ -32,8 +32,9 @@ function checkParameters(argv) {
 }
 
 var parameters = require('optimist')
-                .usage('Usage: node appmyweb <website URL> -d [<app directory>[ [-p <platforms>] [-l <loglevel>] [-b] [-m <manifest file>]')
+                .usage('Usage: node appmyweb <website-url> [-d <app-directory>] [-s <short-name>] [-p <platforms>] [-l <log-level>] [-b] [-m <manifest-file>]')
                 .alias('d', 'directory')
+                .alias('s', 'shortname')
                 .alias('p', 'platforms')
                 .alias('l', 'loglevel')
                 .alias('b', 'build')
@@ -65,8 +66,13 @@ function manifestRetrieved(err, manifestInfo) {
         return err;
     }
     
-    // Make sure the manifest's start_url is an absolute URL
+    // make sure the manifest's start_url is an absolute URL
     manifestInfo.content.start_url = url.resolve(siteUrl, manifestInfo.content.start_url);
+    
+    // if specified as a parameter, override the app's short name
+    if (parameters.s) {
+        manifestInfo.content.short_name = parameters.s;
+    }
             
     log.debug('Manifest contents:');
     log.debug(JSON.stringify(manifestInfo.content, null, 4));
