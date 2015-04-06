@@ -10,7 +10,9 @@ var validations = require('./lib/validations'),
 
 function checkParameters(argv) {   
     if (argv._.length < 1) {
-        throw 'ERROR: Missing required arguments.';
+        throw 'ERROR: Missing required <website URL> parameter.';
+    } else if (argv._.length > 1) {
+        throw 'ERROR: Unexpected parameters.';      
     }
     
     // check platforms
@@ -76,7 +78,7 @@ function manifestRetrieved(err, manifestInfo) {
             return err;
         }
         
-        log.info('The Cordova application is ready!');
+        log.info('The application(s) are ready!');
     });
 }
 
