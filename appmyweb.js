@@ -80,7 +80,7 @@ function manifestRetrieved(err, manifestInfo) {
     // create the cordova application
     projectBuilder.createApps(manifestInfo, rootDir, platforms, parameters.build, function (err) {
         if (err) {
-            log.error('ERROR: ' + err.message);
+            log.warning('WARNING: ' + err.message);
             return err;
         }
         
