@@ -1,24 +1,24 @@
-﻿# Hosted Web Application Tool
+﻿# ManifoldJS
 
 This tool is used to create hosted web applications based on a [W3C Web App manifest](http://www.w3.org/TR/appmanifest/).
 
 ## Installation
 
 ````
-npm install
+npm install -g https://github.com/manifoldjs/ManifoldJS
 ````
 
 ## Usage
 
 ````
-node manifoldjs <website-url> [-d <app-directory>] [-s <short-name>] [-p <platforms>] [-l <log-level>] [-b] [-m <manifest-file>]
+manifoldjs <website-url> [-d <app-directory>] [-s <short-name>] [-p <platforms>] [-l <log-level>] [-b] [-m <manifest-file>]
 ````
 
 ### Parameters
 
 |  **&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Parameter&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;** | **Description** |
-| ----------------- | --------------- |
-| `<website-url>` | **(required)** URL of the hosted website |
+| ---------------- | --------------- |
+| `<website-url>`  | **(required)** URL of the hosted website |
 | `-d|--directory` | **(optional)** Path to the generated project files (default value: current directory) |
 | `-s|--shortname` | **(optional)** Application short name. When specified, it overrides the short_name value of the manifest |
 | `-l|--loglevel`  | **(optional)** Tracing log level options Available log levels: _debug,trace,info,warn,error_ (default value: _warn_) |
@@ -29,7 +29,7 @@ node manifoldjs <website-url> [-d <app-directory>] [-s <short-name>] [-p <platfo
 ### Example
 
 ````
-node manifoldjs http://meteorite.azurewebsites.net -d C:\Projects -l info -p windows,android -b
+manifoldjs http://meteorite.azurewebsites.net -d C:\Projects -l info -p windows,android -b
 ````
 
 ## Unit Tests

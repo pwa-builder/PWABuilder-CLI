@@ -1,7 +1,7 @@
 {
-  "name": "manifest-tools",
+  "name": "manifoldjs",
   "version": "0.0.1",
-  "description": "Tool for obtaining and converting Manifests for different platforms",
+  "description": "Node.js tool for App Generation",
   "author": {
     "name": "TBD",
     "email": "TBD",
@@ -45,7 +45,7 @@
   "scripts": {
     "test": "grunt"
   },
-  "bin": "cli.js",
+  "bin": "manifoldjs.js",
   "config": {
     "travis-cov": {
       "threshold": 80
