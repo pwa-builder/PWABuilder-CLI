@@ -11,7 +11,7 @@ npm install
 ## Usage
 
 ````
-node appmyweb <website-url> [-d <app-directory>] [-s <short-name>] [-p <platforms>] [-l <log-level>] [-b] [-m <manifest-file>]
+node manifoldjs <website-url> [-d <app-directory>] [-s <short-name>] [-p <platforms>] [-l <log-level>] [-b] [-m <manifest-file>]
 ````
 
 ### Parameters
@@ -29,7 +29,7 @@ node appmyweb <website-url> [-d <app-directory>] [-s <short-name>] [-p <platform
 ### Example
 
 ````
-node appmyweb http://meteorite.azurewebsites.net -d C:\Projects -l info -p windows,android -b
+node manifoldjs http://meteorite.azurewebsites.net -d C:\Projects -l info -p windows,android -b
 ````
 
 ## Unit Tests
