@@ -5,7 +5,7 @@ This tool is used to create hosted web applications based on a [W3C Web App mani
 ## Installation
 
 ````
-npm install -g https://github.com/manifoldjs/ManifoldJS
+npm install -g git://github.com/manifoldjs/ManifoldJS.git
 ````
 
 ## Usage
