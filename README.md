@@ -4,6 +4,8 @@ This tool is used to create hosted web applications based on a [W3C Web App mani
 
 ## Installation
 
+> **Note:** These are temporary installation steps until the node package is published to the npm registry.
+
 ````
 npm install -g git://github.com/manifoldjs/ManifoldJS.git
 ````
