@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 
-var validations = require('./lib/validations'),
-    constants = require('./lib/constants'),
+var validations = require('./lib/common/validations'),
+    constants = require('./lib/manifestTools/constants'),
     manifestTools = require('./lib/manifestTools'),
     projectBuilder = require('./lib/projectBuilder'),
     url = require('url'),

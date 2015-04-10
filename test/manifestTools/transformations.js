@@ -1,11 +1,11 @@
 'use strict';
 
-var transformations = require('../lib/transformations');
+var transformations = require('../../lib/manifestTools/transformations');
 var path = require('path');
 var fs = require('fs');
 require('should');
 
-var transformationsPath = path.join(__dirname, '..', 'lib', 'transformations');
+var transformationsPath = path.join(__dirname, '..', '..', 'lib', 'manifestTools', 'transformations');
 
 describe('Transformations', function () {
   describe('Loaded modules', function () {

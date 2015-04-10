@@ -1,6 +1,6 @@
 'use strict';
 
-var transformation = require('../../lib/transformations/chromeos');
+var transformation = require('../../../lib/manifestTools/transformations/chromeos');
 var should = require('should');
 
 describe('transformation: ChromeOS Manifest', function () {
