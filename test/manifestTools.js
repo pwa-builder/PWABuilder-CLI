@@ -1,6 +1,6 @@
 'use strict';
 
-var tools = require('../lib/tools');
+var tools = require('../lib/manifestTools');
 var path = require('path');
 var fs = require('fs');
 var should = require('should');
@@ -32,7 +32,7 @@ var outputFiles = {
   validManifestPath: path.join(assetsDirectory, 'output-manifest.json')
 };
 
-describe('Tools', function () {
+describe('Manifest Tools', function () {
   describe('getManifestFromFile()', function () {
     it('Should return an Error if path is invalid', function (done) {
       tools.getManifestFromFile(inputFiles.notExistingFile, function (err){
