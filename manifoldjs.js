@@ -1,6 +1,4 @@
-﻿#!/usr/bin/env node
-
-'use strict';
+#!/usr/bin/env node
 
 var validations = require('./lib/validations'),
     constants = require('./lib/constants'),
