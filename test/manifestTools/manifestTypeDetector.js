@@ -1,6 +1,6 @@
 'use strict';
 
-var manifestTypeDetector = require('../lib/manifestTypeDetector');
+var manifestTypeDetector = require('../../lib/manifestTools/manifestTypeDetector');
 var should = require('should');
 
 describe('Manifest Type Detector', function () {
