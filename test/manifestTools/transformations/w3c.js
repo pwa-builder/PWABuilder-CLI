@@ -1,6 +1,6 @@
 'use strict';
 
-var transformation = require('../../lib/transformations/w3c');
+var transformation = require('../../../lib/manifestTools/transformations/w3c');
 var should = require('should');
 
 describe('transformation: W3C Manifest', function () {

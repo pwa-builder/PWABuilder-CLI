@@ -1,8 +1,8 @@
 #!/usr/bin/env node
 
-var validations = require('./lib/validations'),
-    constants = require('./lib/constants'),
-    manifestTools = require('./lib/tools'),
+var validations = require('./lib/common/validations'),
+    constants = require('./lib/manifestTools/constants'),
+    manifestTools = require('./lib/manifestTools'),
     projectBuilder = require('./lib/projectBuilder'),
     url = require('url'),
     log = require('loglevel');
@@ -54,26 +54,17 @@ var platforms = parameters.platforms.split(/[\s,]+/);
 global.logLevel = parameters.loglevel;
 log.setLevel(global.logLevel);
 
-function manifestRetrieved(err, manifestInfo) {
+manifestTools.getW3cManifest(siteUrl, parameters.manifest, function (err, manifestInfo) {
     if (err) {
         log.error('ERROR: ' + err.message);
         return err;
     }
-    
-    if (manifestInfo.format !== constants.BASE_MANIFEST_FORMAT) {
-        err = new Error("The manifest found is not a W3C manifest.");
-        log.error('ERROR: ' + err.message);
-        return err;
-    }
-    
-    // make sure the manifest's start_url is an absolute URL
-    manifestInfo.content.start_url = url.resolve(siteUrl, manifestInfo.content.start_url);
-    
+        
     // if specified as a parameter, override the app's short name
     if (parameters.s) {
         manifestInfo.content.short_name = parameters.s;
     }
-            
+    
     log.debug('Manifest contents:');
     log.debug(JSON.stringify(manifestInfo.content, null, 4));
     
@@ -86,21 +77,4 @@ function manifestRetrieved(err, manifestInfo) {
         
         log.info('The application(s) are ready!');
     });
-}
-
-if (parameters.manifest) {
-    var parsedManifestUrl = url.parse(parameters.manifest);
-    if (parsedManifestUrl && parsedManifestUrl.host) {
-        // download manifest from remote location 
-        log.info('Downloading manifest from ' + parameters.manifest + '...');
-        manifestTools.downloadManifestFromUrl(parameters.manifest, manifestRetrieved);
-    } else {
-        // read local manifest file
-        log.info('Reading manifest file ' + parameters.manifest + '...');
-        manifestTools.getManifestFromFile(parameters.manifest, manifestRetrieved);
-    }   
-} else {
-    // scan a site to retrieve its manifest 
-    log.info('Scanning ' + siteUrl + ' for manifest...');
-    manifestTools.getManifestFromSite(siteUrl, manifestRetrieved);
-}
+});
