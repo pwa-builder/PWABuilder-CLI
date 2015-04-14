@@ -532,4 +532,30 @@ describe('Manifest Tools', function () {
       });
     });
   });
+
+
+  describe('validateManifest()', function () {
+    it('Simple manifest.', function (done) {
+      var manifestInfo = {
+        content: {
+          'name': 'Google Mail',
+          'start_url': 'http://mail.google.com/mail/',
+          'icons': [{
+            'src': 'icon_64.png',
+            'sizes': '64x64'
+          }, {
+            'src': 'icon_128.png',
+            'sizes': '128x128'
+          }]
+        },
+        format: 'w3c'
+      };
+
+      tools.validateManifest(manifestInfo, ['android']);
+      //tools.validateManifest(manifestInfo, function(err) {
+        //should.not.exist(err);
+        done();
+      //});
+    });
+  });
 });
