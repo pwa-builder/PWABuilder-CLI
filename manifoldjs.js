@@ -59,7 +59,17 @@ manifestTools.getW3cManifest(siteUrl, parameters.manifest, function (err, manife
         log.error('ERROR: ' + err.message);
         return err;
     }
-        
+  
+    var validationResults = manifestTools.validateManifest(manifestInfo, platforms);
+    validationResults.forEach(function (validationResult) {
+        var validationMessage = 'Validation ' + validationResult.level + ' (' + validationResult.platform + '): ' + validationResult.description;
+        if (validationResult.level === 'error') {
+            log.error(validationMessage);
+        } else if (validationResult.level === 'suggestion') {
+            log.info(validationMessage);            
+        }
+    });
+
     // if specified as a parameter, override the app's short name
     if (parameters.s) {
         manifestInfo.content.short_name = parameters.s;
