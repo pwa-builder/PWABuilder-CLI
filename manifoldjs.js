@@ -63,8 +63,8 @@ manifestTools.getW3cManifest(siteUrl, parameters.manifest, function (err, manife
     var validationResults = manifestTools.validateManifest(manifestInfo, platforms);
     validationResults.forEach(function (validationResult) {
         var validationMessage = 'Validation ' + validationResult.level + ' (' + validationResult.platform + '): ' + validationResult.description;
-        if (validationResult.level === 'error') {
-            log.error(validationMessage);
+        if (validationResult.level === 'warning') {
+            log.warn(validationMessage);
         } else if (validationResult.level === 'suggestion') {
             log.info(validationMessage);            
         }
