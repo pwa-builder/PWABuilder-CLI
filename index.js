@@ -11,6 +11,7 @@
 
 module.exports = {
   manifestTools: require('./lib/manifestTools'),
-  
+  validationConstants : require('./lib/manifestTools/validationConstants'),
+
   projectBuilder: require('./lib/projectBuilder')
 }

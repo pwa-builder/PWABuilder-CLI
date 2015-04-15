@@ -1,6 +1,7 @@
 'use strict';
 
 var tools = require('../lib/manifestTools');
+var validationConstants = require('../lib/manifestTools/validationConstants');
 var path = require('path');
 var fs = require('fs');
 var should = require('should');
@@ -442,7 +443,7 @@ describe('Manifest Tools', function () {
       });
     });
 
-    it('Convert from W3C to chromeOS.', function (done) {
+    it('Convert from W3C to chromeOS', function (done) {
       var manifestInfo = {
         content: {
           'name': 'Google Mail',
@@ -486,7 +487,7 @@ describe('Manifest Tools', function () {
       });
     });
 
-    it('Convert from chromeOS to W3C.', function (done) {
+    it('Convert from chromeOS to W3C', function (done) {
       var manifestInfo = {
         content: {
           'name': 'Google Mail',
@@ -528,6 +529,123 @@ describe('Manifest Tools', function () {
       tools.convertTo(manifestInfo, 'W3C', function(err, result) {
         should.not.exist(err);
         result.should.be.eql(expectedManifestInfo);
+        done();
+      });
+    });
+  });
+
+
+  describe('validateManifest()', function () {
+    it('Should validate only the general rules if no platforms are passed', function (done) {
+      var manifestInfo = {
+        content: {
+          'name': 'Google Mail',
+          'start_url': 'http://mail.google.com/mail/',
+          'icons': [{
+            'src': 'icon_64.png',
+            'sizes': '64x64'
+          }, {
+            'src': 'icon_128.png',
+            'sizes': '128x128'
+          }]
+        },
+        format: 'w3c'
+      };
+
+      tools.validateManifest(manifestInfo, undefined, function(){
+        done();
+      });
+    });
+
+    it('Should validate platforms that are passed as parameter', function (done) {
+      var manifestInfo = {
+        content: {
+          'name': 'Google Mail',
+          'start_url': 'http://example.com/',
+          'icons': [{
+            'src': 'icon_64.png',
+            'sizes': '64x64'
+          }, {
+            'src': 'icon_128.png',
+            'sizes': '128x128'
+          }]
+        },
+        format: 'w3c'
+      };
+
+      tools.validateManifest(manifestInfo, ['ios', 'windows', 'firefox', 'chrome', 'android'], function() {
+        done();
+      });
+    });
+
+    it('Should validate short name is required', function (done) {
+      var manifestInfo = {
+        content: {
+          'short_name': '',
+          'start_url': 'http://example.com/'
+        },
+        format: 'w3c'
+      };
+
+      var expectedValidation = {
+        'description': 'A short name for the application is required',
+        'platform': validationConstants.platforms.all,
+        'level': validationConstants.levels.error,
+        'member': validationConstants.manifestMembers.short_name,
+        'code': validationConstants.codes.requiredValue
+      };
+
+      tools.validateManifest(manifestInfo, ['ios', 'windows', 'firefox', 'chrome', 'android'], function (err, validationResults) {
+        should.not.exist(err);
+        validationResults.should.containEql(expectedValidation);
+        done();
+      });
+    });
+
+    it('Should validate start url is required', function (done) {
+      var manifestInfo = {
+        content: {
+          'short_name': 'MyApp',
+          'start_url': ''
+        },
+        format: 'w3c'
+      };
+
+      var expectedValidation = {
+        'description': 'The start URL for the target web site is required',
+        'platform': validationConstants.platforms.all,
+        'level': validationConstants.levels.error,
+        'member': validationConstants.manifestMembers.start_url,
+        'code': validationConstants.codes.requiredValue
+      };
+
+      tools.validateManifest(manifestInfo, ['ios', 'windows', 'firefox', 'chrome', 'android'], function (err, validationResults) {
+        should.not.exist(err);
+        validationResults.should.containEql(expectedValidation);
+        done();
+      });
+    });
+
+    it('Should recommend to specify access rules', function (done) {
+      var manifestInfo = {
+        content: {
+          'short_name': 'MyApp',
+          'start_url': 'http://example.com/'
+        },
+        format: 'w3c'
+      };
+
+      var expectedValidation = {
+        'description': 'It is recommended to specify a set of access rules that represent the navigation scope of the application',
+        'platform': validationConstants.platforms.all,
+        'level': validationConstants.levels.suggestion,
+        'member': validationConstants.manifestMembers.hap_urlAccess,
+        'code': validationConstants.codes.requiredValue
+      };
+
+      tools.validateManifest(manifestInfo, ['ios', 'windows', 'firefox', 'chrome', 'android'], function (err, validationResults) {
+        should.not.exist(err);
+        validationResults.should.containEql(expectedValidation);
         done();
       });
     });
