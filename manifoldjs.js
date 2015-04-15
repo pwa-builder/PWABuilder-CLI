@@ -4,6 +4,7 @@ var validations = require('./lib/common/validations'),
     constants = require('./lib/manifestTools/constants'),
     manifestTools = require('./lib/manifestTools'),
     projectBuilder = require('./lib/projectBuilder'),
+    validationConstants = require('./lib/validationConstants');
     url = require('url'),
     log = require('loglevel');
 
@@ -59,7 +60,7 @@ manifestTools.getW3cManifest(siteUrl, parameters.manifest, function (err, manife
         log.error('ERROR: ' + err.message);
         return;
     }
-    
+
     manifestTools.validateManifest(manifestInfo, platforms, function (err, validationResults) {
       if (err) {
         log.warn('ERROR: ' + err.message);
@@ -68,9 +69,9 @@ manifestTools.getW3cManifest(siteUrl, parameters.manifest, function (err, manife
 
       validationResults.forEach(function (validationResult) {
         var validationMessage = 'Validation ' + validationResult.level + ' (' + validationResult.platform + '): ' + validationResult.description;
-        if (validationResult.level === 'warning') {
+        if (validationResult.level === validationConstants.levels.warning) {
           log.warn(validationMessage);
-        } else if (validationResult.level === 'suggestion') {
+        } else if (validationResult.level === validationConstants.levels.suggestion) {
           log.info(validationMessage);
         }
       });
