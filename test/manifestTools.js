@@ -535,7 +535,7 @@ describe('Manifest Tools', function () {
 
 
   describe('validateManifest()', function () {
-    it('Should validate only the general rules if no platforms are passed.', function () {
+    it('Should validate only the general rules if no platforms are passed.', function (done) {
       var manifestInfo = {
         content: {
           'name': 'Google Mail',
@@ -551,10 +551,12 @@ describe('Manifest Tools', function () {
         format: 'w3c'
       };
 
-      tools.validateManifest(manifestInfo);
+      tools.validateManifest(manifestInfo, undefined, function(){
+        done();
+      });
     });
 
-    it('Should validate platforms that are passed as parameter.', function () {
+    it('Should validate platforms that are passed as parameter.', function (done) {
       var manifestInfo = {
         content: {
           'name': 'Google Mail',
@@ -570,7 +572,9 @@ describe('Manifest Tools', function () {
         format: 'w3c'
       };
 
-      tools.validateManifest(manifestInfo, ['ios', 'windows', 'firefox', 'chrome', 'android']);
+      tools.validateManifest(manifestInfo, ['ios', 'windows', 'firefox', 'chrome', 'android'], function() {
+        done();
+      });
     });
   });
 });

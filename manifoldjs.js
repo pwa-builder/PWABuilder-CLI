@@ -8,13 +8,13 @@ var validations = require('./lib/common/validations'),
     log = require('loglevel');
 
 
-function checkParameters(argv) {   
+function checkParameters(argv) {
     if (argv._.length < 1) {
         throw 'ERROR: Missing required <website-url> parameter.';
     } else if (argv._.length > 1) {
-        throw 'ERROR: Unexpected parameters.';      
+        throw 'ERROR: Unexpected parameters.';
     }
-    
+
     // check platforms
     if (argv.platforms) {
         var platforms = argv.platforms.split(/[\s,]+/);
@@ -57,34 +57,40 @@ log.setLevel(global.logLevel);
 manifestTools.getW3cManifest(siteUrl, parameters.manifest, function (err, manifestInfo) {
     if (err) {
         log.error('ERROR: ' + err.message);
-        return err;
+        return;
     }
-  
-    var validationResults = manifestTools.validateManifest(manifestInfo, platforms);
-    validationResults.forEach(function (validationResult) {
+    
+    manifestTools.validateManifest(manifestInfo, platforms, function (err, validationResults) {
+      if (err) {
+        log.warn('ERROR: ' + err.message);
+        return;
+      }
+
+      validationResults.forEach(function (validationResult) {
         var validationMessage = 'Validation ' + validationResult.level + ' (' + validationResult.platform + '): ' + validationResult.description;
         if (validationResult.level === 'warning') {
-            log.warn(validationMessage);
+          log.warn(validationMessage);
         } else if (validationResult.level === 'suggestion') {
-            log.info(validationMessage);            
+          log.info(validationMessage);
         }
-    });
+      });
 
-    // if specified as a parameter, override the app's short name
-    if (parameters.s) {
+      // if specified as a parameter, override the app's short name
+      if (parameters.s) {
         manifestInfo.content.short_name = parameters.s;
-    }
-    
-    log.debug('Manifest contents:');
-    log.debug(JSON.stringify(manifestInfo.content, null, 4));
-    
-    // create the cordova application
-    projectBuilder.createApps(manifestInfo, rootDir, platforms, parameters.build, function (err) {
+      }
+
+      log.debug('Manifest contents:');
+      log.debug(JSON.stringify(manifestInfo.content, null, 4));
+
+      // create the cordova application
+      projectBuilder.createApps(manifestInfo, rootDir, platforms, parameters.build, function (err) {
         if (err) {
-            log.warn('WARNING: ' + err.message);
-            return err;
+          log.warn('WARNING: ' + err.message);
+          return;
         }
-        
+
         log.info('The application(s) are ready!');
+      });
     });
 });
