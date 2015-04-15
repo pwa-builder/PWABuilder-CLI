@@ -4,7 +4,7 @@ var validations = require('./lib/common/validations'),
     constants = require('./lib/manifestTools/constants'),
     manifestTools = require('./lib/manifestTools'),
     projectBuilder = require('./lib/projectBuilder'),
-    validationConstants = require('./lib/validationConstants');
+    validationConstants = require('./lib/manifestTools/validationConstants');
     url = require('url'),
     log = require('loglevel');
 

@@ -1,6 +1,7 @@
 'use strict';
 
 var tools = require('../lib/manifestTools');
+var validationConstants = require('../lib/manifestTools/validationConstants');
 var path = require('path');
 var fs = require('fs');
 var should = require('should');
@@ -585,15 +586,15 @@ describe('Manifest Tools', function () {
         },
         format: 'w3c'
       };
-      
+
       var expectedValidation = {
         'description': 'A short name for the application is required',
-        'platform': 'general',
-        'level': 'error',
-        'member': 'short_name',
-        'code': 'required-value'
+        'platform': validationConstants.platforms.all,
+        'level': validationConstants.levels.error,
+        'member': validationConstants.manifestMembers.short_name,
+        'code': validationConstants.codes.requiredValue
       };
-      
+
       tools.validateManifest(manifestInfo, ['ios', 'windows', 'firefox', 'chrome', 'android'], function (err, validationResults) {
         should.not.exist(err);
         validationResults.should.containEql(expectedValidation);
@@ -609,15 +610,15 @@ describe('Manifest Tools', function () {
         },
         format: 'w3c'
       };
-      
+
       var expectedValidation = {
         'description': 'The start URL for the target web site is required',
-        'platform': 'general',
-        'level': 'error',
-        'member': 'start_url',
-        'code': 'required-value'
+        'platform': validationConstants.platforms.all,
+        'level': validationConstants.levels.error,
+        'member': validationConstants.manifestMembers.start_url,
+        'code': validationConstants.codes.requiredValue
       };
-      
+
       tools.validateManifest(manifestInfo, ['ios', 'windows', 'firefox', 'chrome', 'android'], function (err, validationResults) {
         should.not.exist(err);
         validationResults.should.containEql(expectedValidation);
@@ -633,20 +634,20 @@ describe('Manifest Tools', function () {
         },
         format: 'w3c'
       };
-      
+
       var expectedValidation = {
         'description': 'It is recommended to specify a set of access rules that represent the navigation scope of the application',
-        'platform': 'general',
-        'level': 'suggestion',
-        'member': 'hap_urlAccess',
-        'code': 'required-value'
+        'platform': validationConstants.platforms.all,
+        'level': validationConstants.levels.suggestion,
+        'member': validationConstants.manifestMembers.hap_urlAccess,
+        'code': validationConstants.codes.requiredValue
       };
-      
+
       tools.validateManifest(manifestInfo, ['ios', 'windows', 'firefox', 'chrome', 'android'], function (err, validationResults) {
         should.not.exist(err);
         validationResults.should.containEql(expectedValidation);
         done();
       });
-    })
+    });
   });
 });
