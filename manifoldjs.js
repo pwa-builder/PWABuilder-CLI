@@ -68,7 +68,7 @@ var parameters = require('optimist')
 global.logLevel = parameters.loglevel;
 log.setLevel(global.logLevel);
 
-if (parameters._[0].toLowerCase() === "run") {
+if (parameters._[0].toLowerCase() === 'run') {
   // Run the cordova app for the specified platform
 
   var platform = parameters._[1];
@@ -79,6 +79,17 @@ if (parameters._[0].toLowerCase() === "run") {
     }
 
     log.info('The application was launched successfully!');
+  });
+
+} else if (parameters._[0].toLowerCase() === 'visualstudio') {
+
+  projectTools.openVisualStudioSolution(function (err) {
+    if (err) {
+      log.error('ERROR: ' + err.message);
+      return;
+    }
+    
+    log.info('The Visual Studio project was opened successfully!');
   });
 
 } else {
