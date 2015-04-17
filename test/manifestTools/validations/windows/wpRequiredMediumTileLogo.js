@@ -66,7 +66,7 @@ describe('Validation - Windows', function () {
     it('Should not return a warning if manifest icons contains one of the required sizes and others at the end', function(done) {
       var icons = validIconSizes.slice(1,3);
       icons.push('1x1');
-      validation({ icons: validIconSizes.slice(1,2) }, function(err, warning) {
+      validation({ icons: icons }, function(err, warning) {
         should.not.exist(err);
         should.not.exist(warning);
         done();
@@ -77,7 +77,7 @@ describe('Validation - Windows', function () {
       var icons = ['1x1'];
       icons.push(validIconSizes[1]);
 
-      validation({ icons: validIconSizes.slice(1,2) }, function(err, warning) {
+      validation({ icons: icons }, function(err, warning) {
         should.not.exist(err);
         should.not.exist(warning);
         done();
