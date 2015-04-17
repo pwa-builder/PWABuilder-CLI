@@ -28,7 +28,7 @@ function checkParameters(argv) {
   } else {
     throw 'ERROR: Unexpected parameters.';
   }
-  
+
   // check platforms
   if (argv.platforms) {
     var platforms = argv.platforms.split(/[\s,]+/);
@@ -36,7 +36,7 @@ function checkParameters(argv) {
       throw 'ERROR: Invalid platform(s) specified.';
     }
   }
-  
+
   // check log level
   if (argv.loglevel) {
     if (!validations.logLevelValid(argv.loglevel)) {
@@ -70,14 +70,14 @@ log.setLevel(global.logLevel);
 
 if (parameters._[0].toLowerCase() === "run") {
   // Run the cordova app for the specified platform
-  
+
   var platform = parameters._[1];
   projectTools.runCordovaApp(platform, function (err) {
     if (err) {
       log.error('ERROR: ' + err.message);
       return;
     }
-    
+
     log.info('The application was launched successfully!');
   });
 
@@ -92,13 +92,13 @@ if (parameters._[0].toLowerCase() === "run") {
       log.error('ERROR: ' + err.message);
       return;
     }
-    
+
     manifestTools.validateManifest(manifestInfo, platforms, function (err, validationResults) {
       if (err) {
         log.warn('ERROR: ' + err.message);
         return;
       }
-      
+
       validationResults.forEach(function (validationResult) {
         var validationMessage = 'Validation ' + validationResult.level + ' (' + validationResult.platform + '): ' + validationResult.description;
         if (validationResult.level === validationConstants.levels.warning) {
@@ -107,22 +107,22 @@ if (parameters._[0].toLowerCase() === "run") {
           log.info(validationMessage);
         }
       });
-      
+
       // if specified as a parameter, override the app's short name
       if (parameters.s) {
         manifestInfo.content.short_name = parameters.s;
       }
-      
+
       log.debug('Manifest contents:');
       log.debug(JSON.stringify(manifestInfo.content, null, 4));
-      
+
       // create the cordova application
       projectBuilder.createApps(manifestInfo, rootDir, platforms, parameters.build, function (err) {
         if (err) {
           log.warn('WARNING: ' + err.message);
           return;
         }
-        
+
         log.info('The application(s) are ready!');
       });
     });
