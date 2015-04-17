@@ -21,12 +21,12 @@ manifoldjs <website-url> [-d <app-directory>] [-s <short-name>] [-p <platforms>]
 |  **&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Parameter&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;** | **Description** |
 | ---------------- | --------------- |
 | `<website-url>`  | **(required)** URL of the hosted website |
+| `-m|--manifest`  | **(optional)** Location of the W3C Web App manifest file (URL or local path). If not specified, the tool looks for a manifest in the site URL. Otherwise, a new manifest will be created pointing to the site URL. |
 | `-d|--directory` | **(optional)** Path to the generated project files (default value: current directory) |
 | `-s|--shortname` | **(optional)** Application short name. When specified, it overrides the short_name value of the manifest |
 | `-l|--loglevel`  | **(optional)** Tracing log level options Available log levels: _debug,trace,info,warn,error_ (default value: _warn_) |
 | `-p|--platforms` | **(optional)** Platforms to generate. Supported platforms: _windows,android,ios,chrome_ (default value: all platforms) |
 | `-b|--build`     | **(optional)** Forces the building process |
-| `-m|--manifest`  | **(optional)** Location of the W3C Web App manifest file (URL or local path). If not specified, the tool looks for a manifest in the site URL. Otherwise, a new manifest will be created pointing to the site URL. |
 
 ### Example
 
