@@ -88,7 +88,7 @@ if (parameters._[0].toLowerCase() === 'run') {
       log.error('ERROR: ' + err.message);
       return;
     }
-    
+
     log.info('The Visual Studio project was opened successfully!');
   });
 
@@ -116,6 +116,8 @@ if (parameters._[0].toLowerCase() === 'run') {
           log.warn(validationMessage);
         } else if (validationResult.level === validationConstants.levels.suggestion) {
           log.info(validationMessage);
+        } else if (validationResult.level === validationConstants.levels.error) {
+          log.error(validationMessage);
         }
       });
 
