@@ -1,6 +1,6 @@
 {
   "name": "manifoldjs",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "Node.js tool for App Generation",
   "author": {
     "name": "TBD",
@@ -18,6 +18,7 @@
     "iOS"
   ],
   "dependencies": {
+    "ManifoldCordova": "git://github.com/manifoldjs/ManifoldCordova.git",
     "cheerio": "^0.18.0",
     "cordova": "^4.3.0",
     "loglevel": "^1.2.0",
