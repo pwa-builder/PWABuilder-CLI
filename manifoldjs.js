@@ -149,6 +149,8 @@ if (parameters._[0].toLowerCase() === 'run') {
           log.warn(validationMessage);
         } else if (validationResult.level === validationConstants.levels.suggestion) {
           log.info(validationMessage);
+        } else if (validationResult.level === validationConstants.levels.error) {
+          log.error(validationMessage);
         }
       });
 
