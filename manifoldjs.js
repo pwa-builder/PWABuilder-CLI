@@ -45,6 +45,39 @@ function checkParameters(argv) {
   }
 }
 
+function getW3cManifest(siteUrl, manifestLocation, callback) {
+  function resolveStartURL(err, manifestInfo) {
+    if (err) {
+      return callback(err, manifestInfo);
+    }
+
+    return manifestTools.validateAndNormalizeStartUrl(siteUrl, manifestInfo, callback);
+  }
+
+  var parsedSiteUrl = url.parse(siteUrl);
+
+  if (!parsedSiteUrl.hostname) {
+    return callback(new Error("The site URL is not a valid URL."));
+  }
+
+  if (manifestLocation) {
+    var parsedManifestUrl = url.parse(manifestLocation);
+    if (parsedManifestUrl && parsedManifestUrl.host) {
+      // download manifest from remote location
+      log.info('Downloading manifest from ' + manifestLocation + '...');
+      manifestTools.downloadManifestFromUrl(manifestLocation, resolveStartURL);
+    } else {
+      // read local manifest file
+      log.info('Reading manifest file ' + manifestLocation + '...');
+      manifestTools.getManifestFromFile(manifestLocation, resolveStartURL);
+    }
+  } else {
+    // scan a site to retrieve its manifest
+    log.info('Scanning ' + siteUrl + ' for manifest...');
+    manifestTools.getManifestFromSite(siteUrl, resolveStartURL);
+  }
+}
+
 var parameters = require('optimist')
                 .usage('Usage: manifoldjs <website-url> [-d <app-directory>] [-s <short-name>]\n' +
                        '                                [-p <platforms>] [-l <log-level>]\n' +
@@ -98,7 +131,7 @@ if (parameters._[0].toLowerCase() === 'run') {
   var siteUrl = parameters._[0];
   var rootDir = parameters.directory ? parameters.directory : process.cwd();
   var platforms = parameters.platforms.split(/[\s,]+/);
-  manifestTools.getW3cManifest(siteUrl, parameters.manifest, function (err, manifestInfo) {
+  getW3cManifest(siteUrl, parameters.manifest, function (err, manifestInfo) {
     if (err) {
       log.error('ERROR: ' + err.message);
       return;
