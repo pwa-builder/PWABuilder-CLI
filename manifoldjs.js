@@ -60,7 +60,7 @@ var parameters = require('optimist')
                 .alias('m', 'manifest')
                 .default('l', 'warn')
                 .default('b', false)
-                .describe('p', '[windows][,android][,ios][,chrome][,firefox]')
+                .describe('p', '[windows][,windowsuniversal][,android][,ios][,chrome][,firefox]')
                 .describe('l', 'debug|trace|info|warn|error')
                 .check(checkParameters)
                 .argv;
