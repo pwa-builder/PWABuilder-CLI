@@ -7,7 +7,7 @@ IgnorableNamespaces="uap mp">
 	<mp:PhoneIdentity PhoneProductId="A7629D10-20C8-4F55-BF1A-0FB1916865B4" PhonePublisherId="00000000-0000-0000-0000-000000000000"/> 
 
 	<Properties> 
-		<DisplayName>{DisaplayName}</DisplayName> 
+		<DisplayName>{DisplayName}</DisplayName> 
 		<PublisherDisplayName>webdeveloper</PublisherDisplayName> 
 		<Logo>{Square150x150Logo}</Logo> 
 	</Properties> 
@@ -35,8 +35,8 @@ IgnorableNamespaces="uap mp">
 				</uap:InitialRotationPreference> 
 			</uap:VisualElements> 
 			<uap:ApplicationContentUriRules>
-        {ApplicationContentUriRules}
-      </uap:ApplicationContentUriRules> 
+				{ApplicationContentUriRules}
+			</uap:ApplicationContentUriRules>
 		</Application> 
 	</Applications> 
 
