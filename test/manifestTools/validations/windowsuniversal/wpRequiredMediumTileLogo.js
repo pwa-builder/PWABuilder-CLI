@@ -1,6 +1,6 @@
 'use strict';
 
-var validation = require('../../../../lib/manifestTools/validationRules/windows/wpRequiredMediumTileLogo');
+var validation = require('../../../../lib/manifestTools/validationRules/windowsuniversal/wpRequiredMediumTileLogo');
 var validationConstants = require('../../../../lib/manifestTools/validationConstants');
 var should = require('should');
 

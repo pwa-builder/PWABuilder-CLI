@@ -1,14 +1,14 @@
 'use strict';
 
-var validation = require('../../../../lib/manifestTools/validationRules/windows/wpRequiredAppIcon');
+var validation = require('../../../../lib/manifestTools/validationRules/windowsuniversal/wpRequiredSmallTileLogo');
 var validationConstants = require('../../../../lib/manifestTools/validationConstants');
 var should = require('should');
 
-var validIconSizes = ['44x44', '62x62', '106x106'];
-var manifestWithValidIconSizes = [{sizes : '44x44'}, {sizes : '62x62'}, {sizes : '106x106'}];
+var validIconSizes = ['71x71', '99x99', '170x170'];
+var manifestWithValidIconSizes = [{sizes : '71x71'}, {sizes : '99x99'}, {sizes : '170x170'}];
 
 describe('Validation - Windows', function () {
-  describe('wpRequiredAppIcon', function () {
+  describe('wpRequiredSmallTileLogo', function () {
     it('Should return a warning if manifest does not contains icons', function(done) {
       validation({}, function(err, warning) {
         should.not.exist(err);

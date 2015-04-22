@@ -1,6 +1,6 @@
 'use strict';
 
-var validation = require('../../../../lib/manifestTools/validationRules/windows/requiredSplashScreenLogo');
+var validation = require('../../../../lib/manifestTools/validationRules/windowsuniversal/requiredSplashScreenLogo');
 var validationConstants = require('../../../../lib/manifestTools/validationConstants');
 var should = require('should');
 

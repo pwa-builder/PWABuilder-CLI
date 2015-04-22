@@ -1,14 +1,14 @@
 'use strict';
 
-var validation = require('../../../../lib/manifestTools/validationRules/windows/requiredStoreLogo');
+var validation = require('../../../../lib/manifestTools/validationRules/windowsuniversal/requiredSquareLogo');
 var validationConstants = require('../../../../lib/manifestTools/validationConstants');
 var should = require('should');
 
-var validIconSizes = ['50x50', '70x70', '90x90'];
-var manifestWithValidIconSizes = [{sizes : '50x50'}, {sizes : '70x70'}, {sizes : '90x90'}];
+var validIconSizes = ['120x120', '150x150', '210x210', '270x270'];
+var manifestWithValidIconSizes = [{sizes : '120x120'}, {sizes : '150x150'}, {sizes : '210x210'}, {sizes : '270x270'}];
 
 describe('Validation - Windows', function () {
-  describe('requiredStoreLogo', function () {
+  describe('requiredSquareLogo', function () {
     it('Should return a warning if manifest does not contains icons', function(done) {
       validation({}, function(err, warning) {
         should.not.exist(err);
