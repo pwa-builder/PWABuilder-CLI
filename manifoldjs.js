@@ -1,7 +1,6 @@
 #!/usr/bin/env node
 
 var validations = require('./lib/common/validations'),
-    constants = require('./lib/manifestTools/constants'),
     manifestTools = require('./lib/manifestTools'),
     projectBuilder = require('./lib/projectBuilder'),
     projectTools = require('./lib/projectTools'),
@@ -57,7 +56,7 @@ function getW3cManifest(siteUrl, manifestLocation, callback) {
   var parsedSiteUrl = url.parse(siteUrl);
 
   if (!parsedSiteUrl.hostname) {
-    return callback(new Error("The site URL is not a valid URL."));
+    return callback(new Error('The site URL is not a valid URL.'));
   }
 
   if (manifestLocation) {
