@@ -111,7 +111,8 @@ describe('transformation: Windows 10 Manifest', function () {
           'short_name': shortName,
           'scope': scopeUrl,
           'hap_urlAccess': [
-            { 'url': accessUrl }
+            { 'url': accessUrl },
+            { 'url': 'externalRule', 'external': true },
           ]
         }
       };
