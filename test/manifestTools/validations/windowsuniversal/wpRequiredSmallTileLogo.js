@@ -13,7 +13,7 @@ describe('Validation - Windows', function () {
       validation({}, function(err, warning) {
         should.not.exist(err);
         should.exist(warning);
-        warning.should.have.property('platform', validationConstants.platforms.windows);
+        warning.should.have.property('platform', validationConstants.platforms.windowsuniversal);
         warning.should.have.property('level', validationConstants.levels.warning);
         warning.should.have.property('member', validationConstants.manifestMembers.icons);
         warning.should.have.property('code', validationConstants.codes.missingImageGroup);
@@ -26,7 +26,7 @@ describe('Validation - Windows', function () {
       validation({ icons: [] }, function(err, warning) {
         should.not.exist(err);
         should.exist(warning);
-        warning.should.have.property('platform', validationConstants.platforms.windows);
+        warning.should.have.property('platform', validationConstants.platforms.windowsuniversal);
         warning.should.have.property('level', validationConstants.levels.warning);
         warning.should.have.property('member', validationConstants.manifestMembers.icons);
         warning.should.have.property('code', validationConstants.codes.missingImageGroup);
@@ -39,7 +39,7 @@ describe('Validation - Windows', function () {
       validation({ icons: [{sizes : '1x1'}] }, function(err, warning) {
         should.not.exist(err);
         should.exist(warning);
-        warning.should.have.property('platform', validationConstants.platforms.windows);
+        warning.should.have.property('platform', validationConstants.platforms.windowsuniversal);
         warning.should.have.property('level', validationConstants.levels.warning);
         warning.should.have.property('member', validationConstants.manifestMembers.icons);
         warning.should.have.property('code', validationConstants.codes.missingImageGroup);
