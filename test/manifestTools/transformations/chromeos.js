@@ -158,8 +158,8 @@ describe('transformation: ChromeOS Manifest', function () {
         manifest.should.have.property('name', name);
         manifest.should.not.have.properties('orientation', 'display', 'icons');
 
-        manifest.app.should.have.property('urls').which.is.an.Array;
-        manifest.app.urls.should.containEql(siteUrl);
+        //manifest.app.should.have.property('urls').which.is.an.Array;
+        //manifest.app.urls.should.containEql(siteUrl);
 
         manifest.app.should.have.property('launch').which.is.an.Object;
         manifest.app.launch.should.have.property('web_url', siteUrl);
@@ -208,8 +208,8 @@ describe('transformation: ChromeOS Manifest', function () {
         manifest.should.not.have.properties('orientation', 'display');
 
         manifest.should.have.property('app');
-        manifest.app.should.have.property('urls').which.is.an.Array;
-        manifest.app.urls.should.containEql(siteUrl);
+        //manifest.app.should.have.property('urls').which.is.an.Array;
+        //manifest.app.urls.should.containEql(siteUrl);
         manifest.app.should.have.property('launch').which.is.an.Object;
         manifest.app.launch.should.have.property('web_url', siteUrl);
 

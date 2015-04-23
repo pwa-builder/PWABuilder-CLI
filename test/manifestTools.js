@@ -467,7 +467,7 @@ describe('Manifest Tools', function () {
           'name': 'Google Mail',
           'version': '0.0.1',
           'app': {
-            'urls': [ 'http://mail.google.com/mail/' ],
+            // 'urls': [ 'http://mail.google.com/mail/' ],
             'launch': {
               'web_url': 'http://mail.google.com/mail/'
             }
@@ -475,7 +475,8 @@ describe('Manifest Tools', function () {
           'icons': {
             '64': 'icon_64.png',
             '128': 'icon_128.png'
-          }
+          },
+          'manifest_version': 2
         },
         format: 'chromeos'
       };
