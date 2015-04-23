@@ -104,7 +104,7 @@ if (parameters._[0].toLowerCase() === 'run') {
   // Run the cordova app for the specified platform
 
   var platform = parameters._[1];
-  projectTools.runCordovaApp(platform, function (err) {
+  projectTools.runApp(platform, function (err) {
     if (err) {
       log.error('ERROR: ' + err.message);
       return;
