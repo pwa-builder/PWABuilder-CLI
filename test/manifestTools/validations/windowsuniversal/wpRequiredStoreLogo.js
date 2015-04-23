@@ -1,19 +1,19 @@
 'use strict';
 
-var validation = require('../../../../lib/manifestTools/validationRules/windows/wpRequiredSmallTileLogo');
+var validation = require('../../../../lib/manifestTools/validationRules/windowsuniversal/wpRequiredStoreLogo');
 var validationConstants = require('../../../../lib/manifestTools/validationConstants');
 var should = require('should');
 
-var validIconSizes = ['71x71', '99x99', '170x170'];
-var manifestWithValidIconSizes = [{sizes : '71x71'}, {sizes : '99x99'}, {sizes : '170x170'}];
+var validIconSizes = ['50x50', '70x70', '120x120'];
+var manifestWithValidIconSizes = [{sizes : '50x50'}, {sizes : '70x70'}, {sizes : '120x120'}];
 
 describe('Validation - Windows', function () {
-  describe('wpRequiredSmallTileLogo', function () {
+  describe('wpRequiredStoreLogo', function () {
     it('Should return a warning if manifest does not contains icons', function(done) {
       validation({}, function(err, warning) {
         should.not.exist(err);
         should.exist(warning);
-        warning.should.have.property('platform', validationConstants.platforms.windows);
+        warning.should.have.property('platform', validationConstants.platforms.windowsuniversal);
         warning.should.have.property('level', validationConstants.levels.warning);
         warning.should.have.property('member', validationConstants.manifestMembers.icons);
         warning.should.have.property('code', validationConstants.codes.missingImageGroup);
@@ -26,7 +26,7 @@ describe('Validation - Windows', function () {
       validation({ icons: [] }, function(err, warning) {
         should.not.exist(err);
         should.exist(warning);
-        warning.should.have.property('platform', validationConstants.platforms.windows);
+        warning.should.have.property('platform', validationConstants.platforms.windowsuniversal);
         warning.should.have.property('level', validationConstants.levels.warning);
         warning.should.have.property('member', validationConstants.manifestMembers.icons);
         warning.should.have.property('code', validationConstants.codes.missingImageGroup);
@@ -39,7 +39,7 @@ describe('Validation - Windows', function () {
       validation({ icons: [{sizes : '1x1'}] }, function(err, warning) {
         should.not.exist(err);
         should.exist(warning);
-        warning.should.have.property('platform', validationConstants.platforms.windows);
+        warning.should.have.property('platform', validationConstants.platforms.windowsuniversal);
         warning.should.have.property('level', validationConstants.levels.warning);
         warning.should.have.property('member', validationConstants.manifestMembers.icons);
         warning.should.have.property('code', validationConstants.codes.missingImageGroup);

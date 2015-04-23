@@ -9,12 +9,12 @@ var validationRulesPath = path.join(__dirname, '..', '..', 'lib', 'manifestTools
 
 describe('validationRules', function () {
   describe('Loaded modules', function () {
-    it('Should load the android validationRules module', function() {
+    it('Should load all validationRules modules', function() {
       validationRules.should.have.property('all');
       validationRules.should.have.property('android');
       validationRules.should.have.property('chrome');
       validationRules.should.have.property('firefox');
-      validationRules.should.have.property('windows');
+      validationRules.should.have.property('windowsuniversal');
       validationRules.should.have.property('ios');
     });
 

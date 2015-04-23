@@ -1,0 +1,48 @@
+﻿<?xml version="1.0" encoding="utf-8"?> 
+<Package xmlns="http://schemas.microsoft.com/appx/manifest/foundation/windows10"
+xmlns:mp="http://schemas.microsoft.com/appx/2014/phone/manifest"
+xmlns:uap="http://schemas.microsoft.com/appx/manifest/uap/windows10"
+IgnorableNamespaces="uap mp"> 
+	<Identity Name="A7629D10-20C8-4F55-BF1A-0FB1916865B4" Publisher="CN=webdeveloper" Version="1.0.0.0" ProcessorArchitecture="neutral" /> 
+	<mp:PhoneIdentity PhoneProductId="A7629D10-20C8-4F55-BF1A-0FB1916865B4" PhonePublisherId="00000000-0000-0000-0000-000000000000"/> 
+
+	<Properties> 
+		<DisplayName>{DisplayName}</DisplayName> 
+		<PublisherDisplayName>webdeveloper</PublisherDisplayName> 
+		<Logo>{Square150x150Logo}</Logo> 
+	</Properties> 
+
+	<Dependencies> 
+		<TargetPlatform Name="Windows.Universal" MinVersion="0.0.0.0" MaxVersionTested="10.0.0.0" /> 
+	</Dependencies> 
+
+	<Resources>
+	<Resource Language="en-us" /> 
+	 </Resources> 
+
+	<Applications> 
+		<Application Id="WebApp" StartPage="{StartPage}"> 
+			<uap:VisualElements 
+				DisplayName="{DisplayName}" 
+				Square150x150Logo="{Square150x150Logo}" 
+				Square44x44Logo="{Square44x44Logo}" 
+				Description="{Description}" 
+				ForegroundText="light" 
+				BackgroundColor="blue"> 
+				<uap:SplashScreen Image="{SplashScreenImage}" /> 
+				<uap:InitialRotationPreference> 
+					<uap:Rotation Preference="{RotationPreference}" /> 
+				</uap:InitialRotationPreference> 
+			</uap:VisualElements> 
+			<uap:ApplicationContentUriRules>
+				{ApplicationContentUriRules}
+			</uap:ApplicationContentUriRules>
+		</Application> 
+	</Applications> 
+
+	<Capabilities>
+		<Capability Name="internetClient" />
+		<Capability Name="privateNetworkClientServer" />
+	</Capabilities>
+
+</Package>
