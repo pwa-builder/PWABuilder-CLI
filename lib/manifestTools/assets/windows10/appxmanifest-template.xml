@@ -8,8 +8,8 @@ IgnorableNamespaces="uap mp">
 
 	<Properties> 
 		<DisplayName>{DisplayName}</DisplayName> 
-		<PublisherDisplayName>webdeveloper</PublisherDisplayName> 
-		<Logo>{Logo}</Logo> 
+		<PublisherDisplayName>user</PublisherDisplayName> 
+		<Logo>images\storelogo.png</Logo> 
 	</Properties> 
 
 	<Dependencies> 
