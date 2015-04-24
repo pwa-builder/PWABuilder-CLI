@@ -101,16 +101,15 @@ global.logLevel = parameters.loglevel;
 log.setLevel(global.logLevel);
 
 if (parameters._[0].toLowerCase() === 'run') {
-  // Run the cordova app for the specified platform
+  // Run the app for the specified platform
 
   var platform = parameters._[1];
   projectTools.runApp(platform, function (err) {
     if (err) {
       log.error('ERROR: ' + err.message);
-      return;
+    } else {
+      log.info('The application was launched successfully!');
     }
-
-    log.info('The application was launched successfully!');
   });
 
 } else if (parameters._[0].toLowerCase() === 'visualstudio') {
@@ -118,10 +117,9 @@ if (parameters._[0].toLowerCase() === 'run') {
   projectTools.openVisualStudioSolution(function (err) {
     if (err) {
       log.error('ERROR: ' + err.message);
-      return;
+    } else {
+      log.info('The Visual Studio project was opened successfully!');
     }
-
-    log.info('The Visual Studio project was opened successfully!');
   });
 
 } else {
