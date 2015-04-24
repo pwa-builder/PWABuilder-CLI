@@ -107,8 +107,6 @@ if (parameters._[0].toLowerCase() === 'run') {
   projectTools.runApp(platform, function (err) {
     if (err) {
       log.error('ERROR: ' + err.message);
-    } else {
-      log.info('The application was launched successfully!');
     }
   });
 
