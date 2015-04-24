@@ -53,7 +53,7 @@ describe('transformation: Windows 10 Manifest', function () {
           'icons': [
             {
               'src': smallLogoSrc,
-              'sizes': '44x44',
+              'sizes': '30x30',
               'type': 'image/png'
             },
             {
@@ -91,7 +91,7 @@ describe('transformation: Windows 10 Manifest', function () {
         manifest.rawData.replace(/[\t\n\r]/g, '').indexOf('<uap:ApplicationContentUriRules></uap:ApplicationContentUriRules>').should.be.above(-1);
         
         manifest.should.have.property('icons').which.is.an.Object;
-        manifest.icons.should.containEql({ '44x44': smallLogoSrc });
+        manifest.icons.should.containEql({ '30x30': smallLogoSrc });
         manifest.icons.should.containEql({ '150x150': mediumLogoSrc });
         manifest.icons.should.containEql({ '620x300': splashLogoSrc });
 
