@@ -15,7 +15,7 @@
   <Properties>
     <DisplayName>{DisplayName}</DisplayName>
     <PublisherDisplayName>user</PublisherDisplayName>
-    <Logo>images\storelogo.png</Logo>
+    <Logo>{Logo}</Logo>
   </Properties>
 
   <Dependencies>
@@ -36,10 +36,10 @@
         Description="App1"
         ForegroundText="light"
         BackgroundColor="#464646"
-        Square150x150Logo="images\Logo.png"
-        Square44x44Logo="images\SmallLogo.png">
+        Square150x150Logo="{Logo}"
+        Square44x44Logo="{SmallLogo}">
 
-        <uap:SplashScreen Image="images\splashscreen.png" />
+        <uap:SplashScreen Image="{SplashScreen}" />
 
       </uap:VisualElements>
     </Application>

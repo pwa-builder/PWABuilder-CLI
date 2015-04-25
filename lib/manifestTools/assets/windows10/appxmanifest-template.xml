@@ -9,7 +9,7 @@ IgnorableNamespaces="uap mp">
 	<Properties> 
 		<DisplayName>{DisplayName}</DisplayName> 
 		<PublisherDisplayName>user</PublisherDisplayName> 
-		<Logo>images\storelogo.png</Logo> 
+		<Logo>{StoreLogo}</Logo> 
 	</Properties> 
 
 	<Dependencies> 
@@ -24,12 +24,12 @@ IgnorableNamespaces="uap mp">
 		<Application Id="WebApp" StartPage="{StartPage}"> 
 			<uap:VisualElements 
 				DisplayName="{DisplayName}" 
-				Square150x150Logo="{Square150x150Logo}" 
-				Square44x44Logo="{Square44x44Logo}" 
+				Square150x150Logo="{Logo}" 
+				Square44x44Logo="{SmallLogo}" 
 				Description="{Description}" 
 				ForegroundText="light" 
 				BackgroundColor="blue"> 
-				<uap:SplashScreen Image="{SplashScreenImage}" /> 
+				<uap:SplashScreen Image="{SplashScreen}" /> 
 				<uap:InitialRotationPreference> 
 					<uap:Rotation Preference="{RotationPreference}" /> 
 				</uap:InitialRotationPreference> 
