@@ -28,7 +28,7 @@
 
   <Applications>
     <Application
-      Id="App"
+      Id="{ApplicationId}"
       StartPage="{StartPage}">
 
       <uap:VisualElements
