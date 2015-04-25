@@ -15,7 +15,7 @@
   <Properties>
     <DisplayName>{DisplayName}</DisplayName>
     <PublisherDisplayName>user</PublisherDisplayName>
-    <Logo>{Logo}</Logo>
+    <Logo>images\storelogo.png</Logo>
   </Properties>
 
   <Dependencies>
@@ -23,7 +23,7 @@
   </Dependencies>
 
   <Resources>
-    <Resource Language="en-us" />
+    <Resource Language="x-generate" />
   </Resources>
 
   <Applications>
@@ -32,14 +32,14 @@
       StartPage="{StartPage}">
 
       <uap:VisualElements
-        DisplayName="App1"
-        Description="App1"
+        DisplayName="{DisplayName}"
+        Description="{Description}"
         ForegroundText="light"
         BackgroundColor="#464646"
-        Square150x150Logo="{Logo}"
-        Square44x44Logo="{SmallLogo}">
+        Square150x150Logo="images\logo.png"
+        Square44x44Logo="images\smalllogo.png}">
 
-        <uap:SplashScreen Image="{SplashScreen}" />
+        <uap:SplashScreen Image="images\splashscreen.png" />
 
       </uap:VisualElements>
     </Application>

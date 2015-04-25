@@ -40,9 +40,10 @@ describe('transformation: Windows 10 Manifest', function () {
       var siteUrl = 'url';
       var shortName = 'shortName';
       var orientation = 'landscape';
+      var storeLogoSrc = 'icon/store.png';
       var smallLogoSrc = 'icon/small';
-      var mediumLogoSrc = 'icon/medium';
-      var splashLogoSrc = 'icon/splash';
+      var logoSrc = 'icon/medium.png';
+      var splashScreenSrc = 'icon/splash.png';
 
       var originalManifestInfo = {
         content: {
@@ -52,16 +53,20 @@ describe('transformation: Windows 10 Manifest', function () {
           'orientation' : orientation,
           'icons': [
             {
+              'src': storeLogoSrc,
+              'sizes': '50x50',
+            },
+            {
               'src': smallLogoSrc,
               'sizes': '30x30',
               'type': 'image/png'
             },
             {
-              'src': mediumLogoSrc,
+              'src': logoSrc,
               'sizes': '150x150'
             },
             {
-              'src': splashLogoSrc,
+              'src': splashScreenSrc,
               'sizes': '620x300',
               'density': '2'
             }]
@@ -79,21 +84,16 @@ describe('transformation: Windows 10 Manifest', function () {
 
         manifest.should.have.property('rawData');
         manifest.rawData.indexOf('<DisplayName>' + shortName + '</DisplayName>').should.be.above(-1);
-        manifest.rawData.indexOf('<Logo>{StoreLogo}</Logo>').should.be.above(-1);
         manifest.rawData.indexOf('DisplayName="' + shortName + '"').should.be.above(-1);
-        manifest.rawData.indexOf('Square150x150Logo="' + mediumLogoSrc + '"').should.be.above(-1);
-        manifest.rawData.indexOf('Square44x44Logo="' + smallLogoSrc + '"').should.be.above(-1);
         manifest.rawData.indexOf('Description="' + name + '"').should.be.above(-1);
-        manifest.rawData.indexOf('<uap:SplashScreen Image="' + splashLogoSrc + '" />').should.be.above(-1);
-        manifest.rawData.indexOf('<uap:Rotation Preference="' + orientation + '"/>');
-        manifest.rawData.indexOf('<uap:Rotation Preference="' + orientation + '"/>');
-
-        manifest.rawData.replace(/[\t\n\r]/g, '').indexOf('<uap:ApplicationContentUriRules></uap:ApplicationContentUriRules>').should.be.above(-1);
+        manifest.rawData.indexOf('<uap:Rotation Preference="' + orientation + '" />').should.be.above(-1);
+        manifest.rawData.replace(/[\t\r\n]/g, '').indexOf('<uap:ApplicationContentUriRules></uap:ApplicationContentUriRules>').should.be.above(-1);
 
         manifest.should.have.property('icons').which.is.an.Object;
-        manifest.icons.should.containEql({ '30x30': smallLogoSrc });
-        manifest.icons.should.containEql({ '150x150': mediumLogoSrc });
-        manifest.icons.should.containEql({ '620x300': splashLogoSrc });
+        manifest.icons.should.containEql({ '30x30': { 'url': smallLogoSrc, 'fileName': 'smalllogo.scale-100.png' } });
+        manifest.icons.should.containEql({ '50x50': { 'url': storeLogoSrc, 'filName': 'storelogo.scale-100.png' } });
+        manifest.icons.should.containEql({ '150x150': { 'url': logoSrc, 'fileName': 'logo.scale-100.png' } });
+        manifest.icons.should.containEql({ '620x300': { 'url': splashScreenSrc, 'fileName': 'splashscreen.scale-100.png' } });
 
         done();
       });
