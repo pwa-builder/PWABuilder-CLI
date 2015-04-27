@@ -112,7 +112,7 @@ describe('transformation: Windows 10 Manifest', function () {
           'start_url': siteUrl,
           'short_name': shortName,
           'scope': scopeUrl,
-          'hap_urlAccess': [
+          'mjs_urlAccess': [
             { 'url': accessUrl },
             { 'url': 'externalRule', 'external': true },
           ]
@@ -150,7 +150,7 @@ describe('transformation: Windows 10 Manifest', function () {
           'start_url': siteUrl,
           'short_name': shortName,
           'scope': '*',
-          'hap_urlAccess': [
+          'mjs_urlAccess': [
             { 'url': '*' }
           ]
         }
