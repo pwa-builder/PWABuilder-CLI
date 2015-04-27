@@ -37,7 +37,7 @@
         ForegroundText="light"
         BackgroundColor="#464646"
         Square150x150Logo="images\logo.png"
-        Square44x44Logo="images\smalllogo.png}">
+        Square44x44Logo="images\smalllogo.png">
 
         <uap:SplashScreen Image="images\splashscreen.png" />
 
