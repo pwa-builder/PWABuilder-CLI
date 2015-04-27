@@ -3,13 +3,13 @@
 xmlns:mp="http://schemas.microsoft.com/appx/2014/phone/manifest"
 xmlns:uap="http://schemas.microsoft.com/appx/manifest/uap/windows10"
 IgnorableNamespaces="uap mp"> 
-	<Identity Name="{IdentityName}" Publisher="CN=webdeveloper" Version="1.0.0.0" ProcessorArchitecture="neutral" /> 
+	<Identity Name="{IdentityName}" Publisher="CN=user" Version="1.0.0.0" ProcessorArchitecture="neutral" /> 
 	<mp:PhoneIdentity PhoneProductId="{PhoneProductId}" PhonePublisherId="00000000-0000-0000-0000-000000000000"/> 
 
 	<Properties> 
 		<DisplayName>{DisplayName}</DisplayName> 
-		<PublisherDisplayName>webdeveloper</PublisherDisplayName> 
-		<Logo>{Logo}</Logo> 
+		<PublisherDisplayName>user</PublisherDisplayName> 
+		<Logo>images\storelogo.scale-100.png</Logo> 
 	</Properties> 
 
 	<Dependencies> 
@@ -21,15 +21,15 @@ IgnorableNamespaces="uap mp">
 	 </Resources> 
 
 	<Applications> 
-		<Application Id="WebApp" StartPage="{StartPage}"> 
+		<Application Id="{ApplicationId}" StartPage="{StartPage}"> 
 			<uap:VisualElements 
 				DisplayName="{DisplayName}" 
-				Square150x150Logo="{Square150x150Logo}" 
-				Square44x44Logo="{Square44x44Logo}" 
+				Square150x150Logo="images\logo.scale-100.png" 
+				Square44x44Logo="images\smalllogo.scale-100.png" 
 				Description="{Description}" 
 				ForegroundText="light" 
 				BackgroundColor="blue"> 
-				<uap:SplashScreen Image="{SplashScreenImage}" /> 
+				<uap:SplashScreen Image="images\splashscreen.scale-100.png" /> 
 				<uap:InitialRotationPreference> 
 					<uap:Rotation Preference="{RotationPreference}" /> 
 				</uap:InitialRotationPreference> 

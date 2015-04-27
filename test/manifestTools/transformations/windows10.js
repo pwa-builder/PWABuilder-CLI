@@ -15,7 +15,7 @@ describe('transformation: Windows 10 Manifest', function () {
 
     it('Should return an Error if content property is undefined', function (done) {
       var originalManifest = { key: 'value' };
-      
+
       transformation.convertFromBase(originalManifest, function (err) {
         should.exist(err);
         err.should.have.property('message', 'Manifest content is empty or not initialized.');
@@ -27,7 +27,7 @@ describe('transformation: Windows 10 Manifest', function () {
       var originalManifestInfo = {
         content: {}
       };
-      
+
       transformation.convertFromBase(originalManifestInfo, function (err) {
         should.exist(err);
         err.should.have.property('message', 'Start url is required.');
@@ -40,10 +40,11 @@ describe('transformation: Windows 10 Manifest', function () {
       var siteUrl = 'url';
       var shortName = 'shortName';
       var orientation = 'landscape';
+      var storeLogoSrc = 'icon/store.png';
       var smallLogoSrc = 'icon/small';
-      var mediumLogoSrc = 'icon/medium';
-      var splashLogoSrc = 'icon/splash';
-      
+      var logoSrc = 'icon/medium.png';
+      var splashScreenSrc = 'icon/splash.png';
+
       var originalManifestInfo = {
         content: {
           'start_url': siteUrl,
@@ -52,48 +53,49 @@ describe('transformation: Windows 10 Manifest', function () {
           'orientation' : orientation,
           'icons': [
             {
+              'src': storeLogoSrc,
+              'sizes': '50x50',
+            },
+            {
               'src': smallLogoSrc,
               'sizes': '30x30',
               'type': 'image/png'
             },
             {
-              'src': mediumLogoSrc,
+              'src': logoSrc,
               'sizes': '150x150'
             },
             {
-              'src': splashLogoSrc,
+              'src': splashScreenSrc,
               'sizes': '620x300',
               'density': '2'
             }]
         }
       };
-      
+
       transformation.convertFromBase(originalManifestInfo, function (err, result) {
         should.not.exist(err);
         should.exist(result);
         /*jshint -W030 */
         result.should.have.property('content').which.is.an.Object;
         result.should.have.property('format', 'windows10');
-        
+
         var manifest = result.content;
-        
+
         manifest.should.have.property('rawData');
         manifest.rawData.indexOf('<DisplayName>' + shortName + '</DisplayName>').should.be.above(-1);
-        manifest.rawData.indexOf('<Logo>' + mediumLogoSrc + '</Logo>').should.be.above(-1);
         manifest.rawData.indexOf('DisplayName="' + shortName + '"').should.be.above(-1);
-        manifest.rawData.indexOf('Square150x150Logo="' + mediumLogoSrc + '"').should.be.above(-1);        
-        manifest.rawData.indexOf('Square44x44Logo="' + smallLogoSrc + '"').should.be.above(-1);           
-        manifest.rawData.indexOf('Description="' + name + '"').should.be.above(-1);           
-        manifest.rawData.indexOf('<uap:SplashScreen Image="' + splashLogoSrc + '" />').should.be.above(-1);
-        manifest.rawData.indexOf('<uap:Rotation Preference="' + orientation + '"/>');
-        manifest.rawData.indexOf('<uap:Rotation Preference="' + orientation + '"/>');
-        
-        manifest.rawData.replace(/[\t\n\r]/g, '').indexOf('<uap:ApplicationContentUriRules></uap:ApplicationContentUriRules>').should.be.above(-1);
-        
+        manifest.rawData.indexOf('<Application Id="' + shortName + '"').should.be.above(-1);
+        manifest.rawData.indexOf('StartPage="' + siteUrl + '"').should.be.above(-1);
+        manifest.rawData.indexOf('Description="' + name + '"').should.be.above(-1);
+        manifest.rawData.indexOf('<uap:Rotation Preference="' + orientation + '" />').should.be.above(-1);
+        manifest.rawData.replace(/[\t\r\n]/g, '').indexOf('<uap:ApplicationContentUriRules></uap:ApplicationContentUriRules>').should.be.above(-1);
+
         manifest.should.have.property('icons').which.is.an.Object;
-        manifest.icons.should.containEql({ '30x30': smallLogoSrc });
-        manifest.icons.should.containEql({ '150x150': mediumLogoSrc });
-        manifest.icons.should.containEql({ '620x300': splashLogoSrc });
+        manifest.icons.should.containEql({ '30x30': { 'url': smallLogoSrc, 'fileName': 'smalllogo.scale-100.png' } });
+        manifest.icons.should.containEql({ '50x50': { 'url': storeLogoSrc, 'fileName': 'storelogo.scale-100.png' } });
+        manifest.icons.should.containEql({ '150x150': { 'url': logoSrc, 'fileName': 'logo.scale-100.png' } });
+        manifest.icons.should.containEql({ '620x300': { 'url': splashScreenSrc, 'fileName': 'splashscreen.scale-100.png' } });
 
         done();
       });
@@ -104,7 +106,7 @@ describe('transformation: Windows 10 Manifest', function () {
       var shortName = 'shortName';
       var scopeUrl = 'scopeUrl';
       var accessUrl = 'accessUrl';
-      
+
       var originalManifestInfo = {
         content: {
           'start_url': siteUrl,
@@ -113,6 +115,43 @@ describe('transformation: Windows 10 Manifest', function () {
           'hap_urlAccess': [
             { 'url': accessUrl },
             { 'url': 'externalRule', 'external': true },
+          ]
+        }
+      };
+
+      transformation.convertFromBase(originalManifestInfo, function (err, result) {
+        should.not.exist(err);
+        should.exist(result);
+        /*jshint -W030 */
+        result.should.have.property('content').which.is.an.Object;
+        result.should.have.property('format', 'windows10');
+
+        var manifest = result.content;
+
+        manifest.should.have.property('rawData');
+
+        var expectedContentUriRules = '<uap:ApplicationContentUriRules>' +
+                                          '<uap:Rule Type="include" Match="' + scopeUrl + '" />' +
+                                          '<uap:Rule Type="include" Match="' + accessUrl + '" />' +
+                                      '</uap:ApplicationContentUriRules>';
+
+        manifest.rawData.replace(/[\t\r\n]/g, '').indexOf(expectedContentUriRules).should.be.above(-1);
+
+        done();
+      });
+    });
+
+    it('Should ignore wildcard access rule ("*")', function (done) {
+      var siteUrl = 'url';
+      var shortName = 'shortName';
+      
+      var originalManifestInfo = {
+        content: {
+          'start_url': siteUrl,
+          'short_name': shortName,
+          'scope': '*',
+          'hap_urlAccess': [
+            { 'url': '*' }
           ]
         }
       };
@@ -128,11 +167,8 @@ describe('transformation: Windows 10 Manifest', function () {
         
         manifest.should.have.property('rawData');
         
-        var expectedContentUriRules = '<uap:ApplicationContentUriRules>' +
-                                          '<uap:Rule Type="include" Match="' + scopeUrl + '" />' +
-                                          '<uap:Rule Type="include" Match="' + accessUrl + '" />' +
-                                      '</uap:ApplicationContentUriRules>';
-
+        var expectedContentUriRules = '<uap:ApplicationContentUriRules></uap:ApplicationContentUriRules>';
+        
         manifest.rawData.replace(/[\t\r\n]/g, '').indexOf(expectedContentUriRules).should.be.above(-1);
         
         done();
