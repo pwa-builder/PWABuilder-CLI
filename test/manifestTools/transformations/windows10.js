@@ -141,5 +141,39 @@ describe('transformation: Windows 10 Manifest', function () {
       });
     });
 
+    it('Should ignore wildcard access rule ("*")', function (done) {
+      var siteUrl = 'url';
+      var shortName = 'shortName';
+      
+      var originalManifestInfo = {
+        content: {
+          'start_url': siteUrl,
+          'short_name': shortName,
+          'scope': '*',
+          'hap_urlAccess': [
+            { 'url': '*' }
+          ]
+        }
+      };
+      
+      transformation.convertFromBase(originalManifestInfo, function (err, result) {
+        should.not.exist(err);
+        should.exist(result);
+        /*jshint -W030 */
+        result.should.have.property('content').which.is.an.Object;
+        result.should.have.property('format', 'windows10');
+        
+        var manifest = result.content;
+        
+        manifest.should.have.property('rawData');
+        
+        var expectedContentUriRules = '<uap:ApplicationContentUriRules></uap:ApplicationContentUriRules>';
+        
+        manifest.rawData.replace(/[\t\r\n]/g, '').indexOf(expectedContentUriRules).should.be.above(-1);
+        
+        done();
+      });
+    });
+
   });
 });
