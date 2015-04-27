@@ -41,7 +41,14 @@
 
         <uap:SplashScreen Image="images\splashscreen.png" />
 
+        <uap:InitialRotationPreference>
+          <uap:Rotation Preference="{RotationPreference}" />
+        </uap:InitialRotationPreference>
       </uap:VisualElements>
+      
+      <uap:ApplicationContentUriRules>
+        {ApplicationContentUriRules}
+      </uap:ApplicationContentUriRules>
     </Application>
   </Applications>
 
