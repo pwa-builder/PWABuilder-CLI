@@ -112,7 +112,7 @@ if (parameters._[0].toLowerCase() === 'run') {
 
 } else if (parameters._[0].toLowerCase() === 'visualstudio') {
 
-  projectTools.openVisualStudioSolution(function (err) {
+  projectTools.openVisualStudio(function (err) {
     if (err) {
       log.error('ERROR: ' + err.message);
     } else {
