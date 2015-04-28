@@ -88,11 +88,11 @@ var parameters = require('optimist')
                 .alias('p', 'platforms')
                 .alias('l', 'loglevel')
                 .alias('b', 'build')
-                .default('p', 'windows,windowsuniversal,android,ios,chrome,web,firefox')
+                .default('p', 'windows10,windows81,android,ios,chrome,web,firefox')
                 .alias('m', 'manifest')
                 .default('l', 'warn')
                 .default('b', false)
-                .describe('p', '[windows][,windowsuniversal][,android][,ios][,chrome][,web][,firefox]')
+                .describe('p', '[windows10][,windows81][,android][,ios][,chrome][,web][,firefox]')
                 .describe('l', 'debug|trace|info|warn|error')
                 .check(checkParameters)
                 .argv;
@@ -112,7 +112,7 @@ if (parameters._[0].toLowerCase() === 'run') {
 
 } else if (parameters._[0].toLowerCase() === 'visualstudio') {
 
-  projectTools.openVisualStudioSolution(function (err) {
+  projectTools.openVisualStudio(function (err) {
     if (err) {
       log.error('ERROR: ' + err.message);
     } else {
