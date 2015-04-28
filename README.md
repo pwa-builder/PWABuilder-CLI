@@ -30,7 +30,7 @@ manifoldjs <website-url> [-d <app-directory>] [-s <short-name>] [-p <platforms>]
 ### Example
 
 ````
-manifoldjs http://meteorite.azurewebsites.net -d C:\Projects -l info -p windows,android -b
+manifoldjs http://meteorite.azurewebsites.net -d C:\Projects -l info -p windows10,android -b
 ````
 
 ## Unit Tests
