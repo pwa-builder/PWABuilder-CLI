@@ -5,7 +5,8 @@ This tool is used to create hosted web applications based on a [W3C Web App mani
 ## Installation
 
 ````
-npm install -g ManifoldJS````
+npm install -g ManifoldJS
+````
 
 ## Command Line Interface
 
