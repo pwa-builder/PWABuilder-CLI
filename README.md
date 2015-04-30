@@ -4,13 +4,15 @@ This tool is used to create hosted web applications based on a [W3C Web App mani
 
 ## Installation
 
-````npm install -g ManifoldJS````
+````
+npm install -g ManifoldJS````
 
 ## Command Line Interface
 
 ### Usage
 
-````manifoldjs <website-url> [-d <app-directory>] [-s <short-name>] [-p <platforms>] [-l <log-level>] [-b] [-m <manifest-file>]
+````
+manifoldjs <website-url> [-d <app-directory>] [-s <short-name>] [-p <platforms>] [-l <log-level>] [-b] [-m <manifest-file>]
 ````
 
 ### Parameters
@@ -27,14 +29,16 @@ This tool is used to create hosted web applications based on a [W3C Web App mani
 
 ### Example
 
-````manifoldjs http://meteorite.azurewebsites.net -d C:\Projects -l info -p windows10,android -b
+````
+manifoldjs http://meteorite.azurewebsites.net -d C:\Projects -l info -p windows10,android -b
 ````
 
 ## Client Library
 
 ### Manifest Module
 
-````var manifesTools = require('manifestTools');
+````
+var manifesTools = require('manifestTools');
 ````
 
 #### getManifestFromSite(siteUrl, callback)
@@ -112,7 +116,8 @@ Makes sure the manifest is valid for the specified target platforms.
 ---
 
 ###Builder Module
-````var projectBuilder = require('projectBuilder');
+````
+var projectBuilder = require('projectBuilder');
 ````
 ####createApps(w3cManifestInfo, rootDir, platforms, build, callback)
 Generates the applications for the specified platforms.
@@ -169,7 +174,8 @@ Creates the corresponding Cordova apps for the specified platforms.
 ---
 
 ###Project Tools module
-````var projectTools = require('projectTools');
+````
+var projectTools = require('projectTools');
 ````
 ####runApp(platform, callback)
 Execute the app for the chosen platform.
@@ -188,12 +194,14 @@ Open´s the Visual Studio project.
 
 In the terminal, install the Grunt task runner:
 
-````npm install -g grunt-cli
+````
+npm install -g grunt-cli
 ````
 
 In order to run tests and jshint, execute the following command:
 
-````grunt
+````
+grunt
 ````
 
 ## Supported Input Manifests
