@@ -134,35 +134,35 @@ Generates the applications for the specified platforms.
 `callback(err)` returns an error, if any.
 
 ####createChromeApp(w3cManifestInfo, generatedAppDir)
-Generates the application for the Chrome platform.
+Returns a promise that generates the application for the Chrome platform.
 
 `w3cManifestInfo` is the manifest´s data in JSON format.
 
 `generatedAppDir` is the destination directory of the generated app.
 
 ####creteFireFox(w3cManifestInfo, generatedAppDir)
-Generates the application for the FireFox platform.
+Returns a promise that generates the application for the FireFox platform.
 
 `w3cManifestInfo` is the manifest´s data in JSON format.
 
 `generatedAppDir` is the destination directory of the generated app.
 
 ####createWindows10app(w3cManifestInfo, generatedAppDir)
-Generates the application for the Windows 10 platform.
+Returns a promise that generates Generates the application for the Windows 10 platform.
 
 `w3cManifestInfo` is the manifest´s data in JSON format.
 
 `generatedAppDir` is the destination directory of the generated app.
 
 ####createWebApp(w3cManifestInfo, generatedAppDir)
-Generates the application for the web platform.
+Returns a promise that generates the application for the web platform.
 
 `w3cManifestInfo` is the manifest´s data in JSON format.
 
 `generatedAppDir` is the destination directory of the generated app.
 
 ####createCordovaApp(w3cManifestInfo, generatedAppDir)
-Creates the corresponding Cordova apps for the specified platforms.
+Returns a promise that creates the corresponding Cordova apps for the specified platforms.
 
 `w3cManifestInfo` is the manifest´s data in JSON format.
 
@@ -186,7 +186,7 @@ Execute the app for the chosen platform.
 `callback` returns an error, if any.
 
 ####openVisualStudio(callback)
-Open´s the Visual Studio project.
+Opens the Visual Studio project.
 
 `callback` returns an error, if any.
 
