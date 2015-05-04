@@ -1,4 +1,4 @@
-
+﻿
 # ManifoldJS
 
 This tool is used to create hosted web applications based on a [W3C Web App manifest](http://www.w3.org/TR/appmanifest/).
@@ -52,7 +52,8 @@ grunt
 - [W3C Web App](http://www.w3.org/TR/appmanifest/)
 
 We plan to support the following manifest files in the future:
-- [Web App Template] (http://wat-docs.azurewebsites.net/JsonWindows)
+
+- [Web App Template](http://wat-docs.azurewebsites.net/JsonWindows)
 - [Chrome Hosted Apps](https://developers.google.com/chrome/apps/docs/developers_guide)
 - [Firefox Open Web Apps](https://developer.mozilla.org/Apps/Build/Manifest)
 
