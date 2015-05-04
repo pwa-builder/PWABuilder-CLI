@@ -1,5 +1,6 @@
 #!/usr/bin/env node
 
+
 var validations = require('./lib/common/validations'),
     manifestTools = require('./lib/manifestTools'),
     projectBuilder = require('./lib/projectBuilder'),
