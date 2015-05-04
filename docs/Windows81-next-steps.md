@@ -18,8 +18,8 @@
 
 ## Submit to Store
 
-1. Register as an Apple developer [here](https://developer.apple.com/register/).
+1. Set up a Microsoft Developer account [here](http://dev.windows.com/).
 
 2. Reserve the name of your app.
 
-3. Submit app package from store.
+3. Upload your appx package.
