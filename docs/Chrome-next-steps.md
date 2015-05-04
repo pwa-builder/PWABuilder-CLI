@@ -8,7 +8,7 @@
 
 3. To test locally, open chrome and open the settings. Then open extensions. Check the button that says "developer mode" then select "Load unpacked extension". Navigate to the Chrome folder and load it.
 
-  > **Note:** Looking for some debugging tools that work on all your platforms? Try [Vorlon.js](http://www.vorlonjs.io). It makes mobile testing a breeze, and works inside the app ManifoldJS apps.
+  > **Note:** Looking for some debugging tools that work on all your platforms? Try [Vorlon.js](http://www.vorlonjs.com/). It makes mobile testing a breeze, and works inside the app ManifoldJS apps.
 
 ## Submit to Store
 

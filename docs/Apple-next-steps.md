@@ -6,7 +6,7 @@
 
 2. To test your application on a device, download the ManifoldJS test harness from the Store, and follow the directions. _Coming soon!_
 
-> **Note:** Looking for some debugging tools that work on all your platforms? Try [Vorlon.js](http://www.vorlonjs.io). It makes mobile testing a breeze, and works inside the app ManifoldJS apps.
+> **Note:** Looking for some debugging tools that work on all your platforms? Try [Vorlon.js](http://www.vorlonjs.com/). It makes mobile testing a breeze, and works inside the app ManifoldJS apps.
 
 ## Build
 
