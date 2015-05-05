@@ -6,8 +6,8 @@ var validations = require('./lib/common/validations'),
     projectTools = require('./lib/projectTools'),
     validationConstants = require('./lib/manifestTools/validationConstants'),
     url = require('url'),
-    log = require('loglevel');
-
+    log = require('loglevel'),
+    path = require('path');
 
 function checkParameters(argv) {
   if (argv._.length < 1) {
@@ -124,7 +124,7 @@ if (parameters._[0].toLowerCase() === 'run') {
   // Create the apps for the specified platforms
 
   var siteUrl = parameters._[0];
-  var rootDir = parameters.directory ? parameters.directory : process.cwd();
+  var rootDir = parameters.directory ? path.resolve(parameters.directory) : process.cwd();
   var platforms = parameters.platforms.split(/[\s,]+/);
   getW3cManifest(siteUrl, parameters.manifest, function (err, manifestInfo) {
     if (err) {
