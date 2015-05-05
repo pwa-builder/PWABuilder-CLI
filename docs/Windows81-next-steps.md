@@ -6,7 +6,7 @@
 
 2. To test your application on a device, download the ManifoldJS test harness from the Store, and follow the directions. _Coming soon!_
 
-> **Note:** Looking for some debugging tools that work on all your platforms? Try [Vorlon.js](http://www.vorlonjs.io). It makes mobile testing a breeze, and works inside the app ManifoldJS apps.
+> **Note:** Looking for some debugging tools that work on all your platforms? Try [Vorlon.js](http://www.vorlonjs.com/). It makes mobile testing a breeze, and works inside the app ManifoldJS apps.
 
 ## Build
 
@@ -18,8 +18,8 @@
 
 ## Submit to Store
 
-1. Register as an Apple developer [here](https://developer.apple.com/register/).
+1. Set up a Microsoft Developer account [here](http://dev.windows.com/).
 
 2. Reserve the name of your app.
 
-3. Submit app package from store.
+3. Upload your appx package.

@@ -1,4 +1,4 @@
-﻿'use strict';
+'use strict';
 
 var transformation = require('../../../lib/manifestTools/transformations/windows10');
 var should = require('should');
@@ -114,7 +114,7 @@ describe('transformation: Windows 10 Manifest', function () {
           'scope': scopeUrl,
           'mjs_access_whitelist': [
             { 'url': accessUrl },
-            { 'url': 'externalRule', 'external': true },
+            { 'url': 'externalRule', 'external': true }
           ]
         }
       };
@@ -136,7 +136,6 @@ describe('transformation: Windows 10 Manifest', function () {
                                           '<uap:Rule Type="include" Match="' + accessUrl + '" />' +
                                       '</uap:ApplicationContentUriRules>';
 
-                                      console.log(manifest.rawData);
         manifest.rawData.replace(/[\t\r\n]/g, '').indexOf(expectedContentUriRules).should.be.above(-1);
 
         done();
@@ -155,8 +154,8 @@ describe('transformation: Windows 10 Manifest', function () {
           'short_name': shortName,
           'scope': scopeUrl,
           'mjs_access_whitelist': [
-          { 'url': accessUrl },
-          { 'url': 'externalRule', 'external': true },
+            { 'url': accessUrl },
+            { 'url': 'externalRule', 'external': true }
           ]
         }
       };
@@ -177,7 +176,6 @@ describe('transformation: Windows 10 Manifest', function () {
                                         '<uap:Rule Type="include" Match="' + scopeUrl + '" />' +
                                       '</uap:ApplicationContentUriRules>';
 
-        console.log(manifest.rawData);
         manifest.rawData.replace(/[\t\r\n]/g, '').indexOf(expectedContentUriRules).should.be.above(-1);
 
         done();
@@ -196,8 +194,8 @@ describe('transformation: Windows 10 Manifest', function () {
           'short_name': shortName,
           'scope': scopeUrl,
           'mjs_access_whitelist': [
-          { 'url': accessUrl },
-          { 'url': 'externalRule', 'external': true },
+            { 'url': accessUrl },
+            { 'url': 'externalRule', 'external': true }
           ]
         }
       };
@@ -217,8 +215,7 @@ describe('transformation: Windows 10 Manifest', function () {
                                         '<uap:Rule Type="include" Match="http://url.com/*" />' +
                                         '<uap:Rule Type="include" Match="' + accessUrl + '" />' +
                                       '</uap:ApplicationContentUriRules>';
-
-        console.log(manifest.rawData);
+        
         manifest.rawData.replace(/[\t\r\n]/g, '').indexOf(expectedContentUriRules).should.be.above(-1);
 
         done();
@@ -258,6 +255,5 @@ describe('transformation: Windows 10 Manifest', function () {
         done();
       });
     });
-
   });
 });
