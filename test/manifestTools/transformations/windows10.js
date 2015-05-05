@@ -112,7 +112,7 @@ describe('transformation: Windows 10 Manifest', function () {
           'start_url': siteUrl,
           'short_name': shortName,
           'scope': scopeUrl,
-          'mjs_urlAccess': [
+          'mjs_access_whitelist': [
             { 'url': accessUrl },
             { 'url': 'externalRule', 'external': true },
           ]
@@ -154,7 +154,7 @@ describe('transformation: Windows 10 Manifest', function () {
           'start_url': siteUrl,
           'short_name': shortName,
           'scope': scopeUrl,
-          'mjs_urlAccess': [
+          'mjs_access_whitelist': [
           { 'url': accessUrl },
           { 'url': 'externalRule', 'external': true },
           ]
@@ -195,7 +195,7 @@ describe('transformation: Windows 10 Manifest', function () {
           'start_url': siteUrl,
           'short_name': shortName,
           'scope': scopeUrl,
-          'mjs_urlAccess': [
+          'mjs_access_whitelist': [
           { 'url': accessUrl },
           { 'url': 'externalRule', 'external': true },
           ]
@@ -234,7 +234,7 @@ describe('transformation: Windows 10 Manifest', function () {
           'start_url': siteUrl,
           'short_name': shortName,
           'scope': '*',
-          'mjs_urlAccess': [
+          'mjs_access_whitelist': [
             { 'url': '*' }
           ]
         }
