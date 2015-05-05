@@ -1,11 +1,11 @@
 'use strict';
 
-var validation = require('../../../../lib/manifestTools/validationRules/all/fullStartUrlRequired');
+var validation = require('../../../../lib/manifestTools/validationRules/all/absoluteStartUrlRequired');
 var validationConstants = require('../../../../lib/manifestTools/validationConstants');
 var should = require('should');
 
 describe('Validation - All', function () {
-  describe('fullStartUrlRequired', function () {
+  describe('absoluteStartUrlRequired', function () {
     it('Should return an error if manifest does not contains start url', function(done) {
       validation({}, function(err, error) {
         should.not.exist(err);
@@ -13,7 +13,7 @@ describe('Validation - All', function () {
         error.should.have.property('platform', validationConstants.platforms.all);
         error.should.have.property('level', validationConstants.levels.error);
         error.should.have.property('member', validationConstants.manifestMembers.start_url);
-        error.should.have.property('code', validationConstants.codes.requiredFullUrl);
+        error.should.have.property('code', validationConstants.codes.requiredAbsoluteUrl);
         done();
       });
     });
@@ -25,7 +25,7 @@ describe('Validation - All', function () {
         error.should.have.property('platform', validationConstants.platforms.all);
         error.should.have.property('level', validationConstants.levels.error);
         error.should.have.property('member', validationConstants.manifestMembers.start_url);
-        error.should.have.property('code', validationConstants.codes.requiredFullUrl);
+        error.should.have.property('code', validationConstants.codes.requiredAbsoluteUrl);
         done();
       });
     });
@@ -37,7 +37,7 @@ describe('Validation - All', function () {
         error.should.have.property('platform', validationConstants.platforms.all);
         error.should.have.property('level', validationConstants.levels.error);
         error.should.have.property('member', validationConstants.manifestMembers.start_url);
-        error.should.have.property('code', validationConstants.codes.requiredFullUrl);
+        error.should.have.property('code', validationConstants.codes.requiredAbsoluteUrl);
         done();
       });
     });
@@ -49,7 +49,7 @@ describe('Validation - All', function () {
         error.should.have.property('platform', validationConstants.platforms.all);
         error.should.have.property('level', validationConstants.levels.error);
         error.should.have.property('member', validationConstants.manifestMembers.start_url);
-        error.should.have.property('code', validationConstants.codes.requiredFullUrl);
+        error.should.have.property('code', validationConstants.codes.requiredAbsoluteUrl);
         done();
       });
     });
@@ -61,7 +61,7 @@ describe('Validation - All', function () {
         error.should.have.property('platform', validationConstants.platforms.all);
         error.should.have.property('level', validationConstants.levels.error);
         error.should.have.property('member', validationConstants.manifestMembers.start_url);
-        error.should.have.property('code', validationConstants.codes.requiredFullUrl);
+        error.should.have.property('code', validationConstants.codes.requiredAbsoluteUrl);
         done();
       });
     });
