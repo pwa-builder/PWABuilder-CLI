@@ -11,6 +11,13 @@
     "email": "TBD",
     "url": "TBD"
   },
+  "license" : "MIT",
+  "licenses": [
+    {
+      "type": "MIT",
+      "url": "https://github.com/manifoldjs/ManifoldJS/blob/master/LICENSE.txt"
+    }
+  ],
   "keywords": [
     "convert manifest",
     "manifest",
