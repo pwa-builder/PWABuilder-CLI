@@ -140,8 +140,8 @@ Returns a promise that generates the application for the Chrome platform.
 
 `generatedAppDir` is the destination directory of the generated app.
 
-####createFireFoxOSApp(w3cManifestInfo, generatedAppDir)
-Returns a promise that generates the application for the FireFox OS platform.
+####createFirefoxOSApp(w3cManifestInfo, generatedAppDir)
+Returns a promise that generates the application for the Firefox OS platform.
 
 `w3cManifestInfo` is the manifest's data in JSON format.
 
