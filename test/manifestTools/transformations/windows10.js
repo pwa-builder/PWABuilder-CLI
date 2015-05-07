@@ -1,4 +1,4 @@
-﻿'use strict';
+'use strict';
 
 var transformation = require('../../../lib/manifestTools/transformations/windows10');
 var should = require('should');
@@ -37,7 +37,7 @@ describe('transformation: Windows 10 Manifest', function () {
 
     it('Should return the transformed manifest', function (done) {
       var name = 'name';
-      var siteUrl = 'url';
+      var siteUrl = 'http://url.com/something?query';
       var shortName = 'shortName';
       var orientation = 'landscape';
       var storeLogoSrc = 'icon/store.png';
@@ -89,7 +89,7 @@ describe('transformation: Windows 10 Manifest', function () {
         manifest.rawData.indexOf('StartPage="' + siteUrl + '"').should.be.above(-1);
         manifest.rawData.indexOf('Description="' + name + '"').should.be.above(-1);
         manifest.rawData.indexOf('<uap:Rotation Preference="' + orientation + '" />').should.be.above(-1);
-        manifest.rawData.replace(/[\t\r\n]/g, '').indexOf('<uap:ApplicationContentUriRules></uap:ApplicationContentUriRules>').should.be.above(-1);
+        manifest.rawData.replace(/[\t\r\n]/g, '').indexOf('<uap:ApplicationContentUriRules><uap:Rule Type="include" Match="http://url.com/*" /></uap:ApplicationContentUriRules>').should.be.above(-1);
 
         manifest.should.have.property('icons').which.is.an.Object;
         manifest.icons.should.containEql({ '30x30': { 'url': smallLogoSrc, 'fileName': 'smalllogo.scale-100.png' } });
@@ -102,7 +102,7 @@ describe('transformation: Windows 10 Manifest', function () {
     });
 
     it('Should return the transformed manifest with content uri rules', function (done) {
-      var siteUrl = 'url';
+      var siteUrl = 'http://url.com/something?query';
       var shortName = 'shortName';
       var scopeUrl = 'scopeUrl';
       var accessUrl = 'accessUrl';
@@ -112,9 +112,9 @@ describe('transformation: Windows 10 Manifest', function () {
           'start_url': siteUrl,
           'short_name': shortName,
           'scope': scopeUrl,
-          'mjs_urlAccess': [
+          'mjs_access_whitelist': [
             { 'url': accessUrl },
-            { 'url': 'externalRule', 'external': true },
+            { 'url': 'externalRule', 'external': true }
           ]
         }
       };
@@ -131,6 +131,7 @@ describe('transformation: Windows 10 Manifest', function () {
         manifest.should.have.property('rawData');
 
         var expectedContentUriRules = '<uap:ApplicationContentUriRules>' +
+                                          '<uap:Rule Type="include" Match="http://url.com/*" />' +
                                           '<uap:Rule Type="include" Match="' + scopeUrl + '" />' +
                                           '<uap:Rule Type="include" Match="' + accessUrl + '" />' +
                                       '</uap:ApplicationContentUriRules>';
@@ -141,39 +142,118 @@ describe('transformation: Windows 10 Manifest', function () {
       });
     });
 
-    it('Should ignore wildcard access rule ("*")', function (done) {
-      var siteUrl = 'url';
+    it('Should return the transformed manifest with no duplicated content uri rules', function (done) {
+      var siteUrl = 'http://url.com/something?query';
       var shortName = 'shortName';
-      
+      var scopeUrl = 'scopeUrl';
+      var accessUrl = 'http://url.com/hello/*';
+
       var originalManifestInfo = {
         content: {
           'start_url': siteUrl,
           'short_name': shortName,
-          'scope': '*',
-          'mjs_urlAccess': [
-            { 'url': '*' }
+          'scope': scopeUrl,
+          'mjs_access_whitelist': [
+            { 'url': accessUrl },
+            { 'url': 'externalRule', 'external': true }
           ]
         }
       };
-      
+
       transformation.convertFromBase(originalManifestInfo, function (err, result) {
         should.not.exist(err);
         should.exist(result);
         /*jshint -W030 */
         result.should.have.property('content').which.is.an.Object;
         result.should.have.property('format', 'windows10');
-        
+
         var manifest = result.content;
-        
+
         manifest.should.have.property('rawData');
-        
-        var expectedContentUriRules = '<uap:ApplicationContentUriRules></uap:ApplicationContentUriRules>';
-        
+
+        var expectedContentUriRules = '<uap:ApplicationContentUriRules>' +
+                                        '<uap:Rule Type="include" Match="http://url.com/*" />' +
+                                        '<uap:Rule Type="include" Match="' + scopeUrl + '" />' +
+                                      '</uap:ApplicationContentUriRules>';
+
         manifest.rawData.replace(/[\t\r\n]/g, '').indexOf(expectedContentUriRules).should.be.above(-1);
-        
+
         done();
       });
     });
 
+    it('Should return the transformed manifest with no duplicated content uri rules (scope)', function (done) {
+      var siteUrl = 'http://url.com/something?query';
+      var shortName = 'shortName';
+      var scopeUrl = 'http://url.com/hello/*';
+      var accessUrl = 'accessUrl';
+
+      var originalManifestInfo = {
+        content: {
+          'start_url': siteUrl,
+          'short_name': shortName,
+          'scope': scopeUrl,
+          'mjs_access_whitelist': [
+            { 'url': accessUrl },
+            { 'url': 'externalRule', 'external': true }
+          ]
+        }
+      };
+
+      transformation.convertFromBase(originalManifestInfo, function (err, result) {
+        should.not.exist(err);
+        should.exist(result);
+        /*jshint -W030 */
+        result.should.have.property('content').which.is.an.Object;
+        result.should.have.property('format', 'windows10');
+
+        var manifest = result.content;
+
+        manifest.should.have.property('rawData');
+
+        var expectedContentUriRules = '<uap:ApplicationContentUriRules>' +
+                                        '<uap:Rule Type="include" Match="http://url.com/*" />' +
+                                        '<uap:Rule Type="include" Match="' + accessUrl + '" />' +
+                                      '</uap:ApplicationContentUriRules>';
+        
+        manifest.rawData.replace(/[\t\r\n]/g, '').indexOf(expectedContentUriRules).should.be.above(-1);
+
+        done();
+      });
+    });
+
+    it('Should ignore wildcard access rule ("*")', function (done) {
+      var siteUrl = 'http://url.com/something?query';
+      var shortName = 'shortName';
+
+      var originalManifestInfo = {
+        content: {
+          'start_url': siteUrl,
+          'short_name': shortName,
+          'scope': '*',
+          'mjs_access_whitelist': [
+            { 'url': '*' }
+          ]
+        }
+      };
+
+      transformation.convertFromBase(originalManifestInfo, function (err, result) {
+        should.not.exist(err);
+        should.exist(result);
+        /*jshint -W030 */
+        result.should.have.property('content').which.is.an.Object;
+        result.should.have.property('format', 'windows10');
+
+        var manifest = result.content;
+
+        manifest.should.have.property('rawData');
+
+        var expectedContentUriRules = '<uap:ApplicationContentUriRules><uap:Rule Type="include" Match="http://url.com/*" /></uap:ApplicationContentUriRules>';
+
+        manifest.rawData.replace(/[\t\r\n]/g, '').indexOf(expectedContentUriRules).should.be.above(-1);
+
+        done();
+      });
+    });
   });
 });

@@ -186,6 +186,28 @@ describe('Manifest Tools', function () {
       });
     });
 
+    it('Should return the manifest url if the manifest tag contains other words', function(done) {
+      responseFunction = function(req, res) {
+        res.writeHead(200, { 'Content-Type': 'text/html' });
+
+        res.end('<!doctype>' +
+        '<html>' +
+        '<head>' +
+        '<title>test</title>' +
+        '<link rel="something manifest another thing" href="manifest.json">' +
+        '</head>' +
+        '<body></body>' +
+        '</html>');
+      };
+
+      tools.getManifestUrlFromSite('http://localhost:8042/urlWithManifestTag', function(err, manifestUrl) {
+        should.not.exist(err);
+        should.exist(manifestUrl);
+        manifestUrl.should.be.equal('http://localhost:8042/manifest.json');
+        done();
+      });
+    });
+
     it('Should return the manifest url if the manifest tag has an absolute url', function(done) {
       responseFunction = function(req, res) {
         res.writeHead(200, { 'Content-Type': 'text/html' });
@@ -640,7 +662,7 @@ describe('Manifest Tools', function () {
         'description': 'It is recommended to specify a set of access rules that represent the navigation scope of the application',
         'platform': validationConstants.platforms.all,
         'level': validationConstants.levels.suggestion,
-        'member': validationConstants.manifestMembers.mjs_urlAccess,
+        'member': validationConstants.manifestMembers.mjs_access_whitelist,
         'code': validationConstants.codes.requiredValue
       };
 

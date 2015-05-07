@@ -8,7 +8,7 @@
 
 3. To test locally, in the folder for your app, type "ManifoldJS run windows".
 
-> **Note:** Looking for some debugging tools that work on all your platforms? Try [Vorlon.js](http://www.vorlonjs.io). It makes mobile testing a breeze, and works inside the app ManifoldJS apps.
+> **Note:** Looking for some debugging tools that work on all your platforms? Try [Vorlon.js](http://www.vorlonjs.com/). It makes mobile testing a breeze, and works inside the app ManifoldJS apps.
 
 ## Build
 
