@@ -67,33 +67,33 @@ Writes manifest info to the specified path.
 
 `callback(err, validationResults)` returns an error or an array of validation results.
 
-####getManifestUrlFromSite(siteUrl, callback)
-Gets the manifest url from the specified website url.
+####fetchManifestUrlFromSite(siteUrl, callback)
+If found, gets the manifest URL from the specified website URL.
 
-`siteUrl` is the url of the website.
+`siteUrl` is the URL of the website.
 
 `callback(err, content)` returns an error or a content object with start_url and short_name members.
 
 ####downloadManifestFromUrl(manifestUrl, callback)
-Downloads the manifest from the specified url.
+Downloads the manifest from the specified URL.
 
-`manifestUrl` is the url of the manifest.
+`manifestUrl` is the URL of the manifest.
 
 `callback(err, manifestInfo)` returns an error or the manifest object in `manifestInfo`.
 
 ####validateAndNormalizeStartUrl(siteUrl, manifestInfo, callback)
 Validates the format of the manifest is a W3C manifest format.
 
-`siteUrl` is the url of the website.
+`siteUrl` is the URL of the website.
 
-`manifestInfo` is the manifestÂ´s data in JSON format.
+`manifestInfo` is the manifest's data in JSON format.
 
 `callback` returns an error or the manifest object in `manifestInfo`.
 
 ####convertTo(manifestInfo, outputFormat, callback)
 Converts the manifest data to the specified output format.
 
-`manifestInfo` is the manifestÂ´s data in JSON format.
+`manifestInfo` is the manifest's data in JSON format.
 
 `outputformat` is the format to which the manifest will be converted.
 
@@ -102,7 +102,7 @@ Converts the manifest data to the specified output format.
 ####validateManifest(manifestInfo, targetPlatforms, callback)
 Makes sure the manifest is valid for the specified target platforms.
 
-`manifestInfo` is the manifestÂ´s data in JSON format.
+`manifestInfo` is the manifest's data in JSON format.
 
 `targetPlatforms` are the platforms to validate against.
 
@@ -123,7 +123,7 @@ var projectBuilder = require('projectBuilder');
 ####createApps(w3cManifestInfo, rootDir, platforms, build, callback)
 Generates the applications for the specified platforms.
 
-`w3cManifestInfo` is the manifestÂ´s data in JSON format.
+`w3cManifestInfo` is the manifest's data in JSON format.
 
 `rootDir` is the root directory where the apps will be generated.
 
@@ -136,35 +136,35 @@ Generates the applications for the specified platforms.
 ####createChromeApp(w3cManifestInfo, generatedAppDir)
 Returns a promise that generates the application for the Chrome platform.
 
-`w3cManifestInfo` is the manifestÂ´s data in JSON format.
+`w3cManifestInfo` is the manifest's data in JSON format.
 
 `generatedAppDir` is the destination directory of the generated app.
 
-####creteFireFox(w3cManifestInfo, generatedAppDir)
-Returns a promise that generates the application for the FireFox platform.
+####createFireFoxOSApp(w3cManifestInfo, generatedAppDir)
+Returns a promise that generates the application for the FireFox OS platform.
 
-`w3cManifestInfo` is the manifestÂ´s data in JSON format.
+`w3cManifestInfo` is the manifest's data in JSON format.
 
 `generatedAppDir` is the destination directory of the generated app.
 
 ####createWindows10app(w3cManifestInfo, generatedAppDir)
 Returns a promise that generates Generates the application for the Windows 10 platform.
 
-`w3cManifestInfo` is the manifestÂ´s data in JSON format.
+`w3cManifestInfo` is the manifest's data in JSON format.
 
 `generatedAppDir` is the destination directory of the generated app.
 
 ####createWebApp(w3cManifestInfo, generatedAppDir)
 Returns a promise that generates the application for the web platform.
 
-`w3cManifestInfo` is the manifestÂ´s data in JSON format.
+`w3cManifestInfo` is the manifest's data in JSON format.
 
 `generatedAppDir` is the destination directory of the generated app.
 
 ####createCordovaApp(w3cManifestInfo, generatedAppDir)
 Returns a promise that creates the corresponding Cordova apps for the specified platforms.
 
-`w3cManifestInfo` is the manifestÂ´s data in JSON format.
+`w3cManifestInfo` is the manifest's data in JSON format.
 
 `generatedAppDir` is the destination directory of the generated app.
 

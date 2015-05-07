@@ -114,7 +114,7 @@ describe('Manifest Tools', function () {
     });
   });
 
-  describe('getManifestUrlFromSite()', function () {
+  describe('fetchManifestUrlFromSite()', function () {
     before(function () {
       server.listen(8042);
     });
@@ -124,7 +124,7 @@ describe('Manifest Tools', function () {
         should.fail('This function should not be called in this test');
       };
 
-      tools.getManifestUrlFromSite('invalid url', function(err) {
+      tools.fetchManifestUrlFromSite('invalid url', function(err) {
         should.exist(err);
         err.should.have.property('message', 'Failed to retrieve manifest from site.');
         done();
@@ -137,7 +137,7 @@ describe('Manifest Tools', function () {
         res.end();
       };
 
-      tools.getManifestUrlFromSite('http://localhost:8042/notfound', function(err) {
+      tools.fetchManifestUrlFromSite('http://localhost:8042/notfound', function(err) {
         should.exist(err);
         err.should.have.property('message', 'Failed to retrieve manifest from site.');
         done();
@@ -157,7 +157,7 @@ describe('Manifest Tools', function () {
                 '</html>');
       };
 
-      tools.getManifestUrlFromSite('http://localhost:8042/urlWithoutManifestTag', function(err, manifestUrl) {
+      tools.fetchManifestUrlFromSite('http://localhost:8042/urlWithoutManifestTag', function(err, manifestUrl) {
         should.not.exist(err);
         should.not.exist(manifestUrl);
         done();
@@ -178,7 +178,7 @@ describe('Manifest Tools', function () {
                 '</html>');
       };
 
-      tools.getManifestUrlFromSite('http://localhost:8042/urlWithManifestTag', function(err, manifestUrl) {
+      tools.fetchManifestUrlFromSite('http://localhost:8042/urlWithManifestTag', function(err, manifestUrl) {
         should.not.exist(err);
         should.exist(manifestUrl);
         manifestUrl.should.be.equal('http://localhost:8042/manifest.json');
@@ -200,7 +200,7 @@ describe('Manifest Tools', function () {
         '</html>');
       };
 
-      tools.getManifestUrlFromSite('http://localhost:8042/urlWithManifestTag', function(err, manifestUrl) {
+      tools.fetchManifestUrlFromSite('http://localhost:8042/urlWithManifestTag', function(err, manifestUrl) {
         should.not.exist(err);
         should.exist(manifestUrl);
         manifestUrl.should.be.equal('http://localhost:8042/manifest.json');
@@ -222,7 +222,7 @@ describe('Manifest Tools', function () {
                 '</html>');
       };
 
-      tools.getManifestUrlFromSite('http://localhost:8042/urlWithManifestTag', function(err, manifestUrl) {
+      tools.fetchManifestUrlFromSite('http://localhost:8042/urlWithManifestTag', function(err, manifestUrl) {
         should.not.exist(err);
         should.exist(manifestUrl);
         manifestUrl.should.be.equal('http://www.contoso.com/manifest.json');
