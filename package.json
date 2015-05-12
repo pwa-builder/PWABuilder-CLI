@@ -29,7 +29,6 @@
     "iOS"
   ],
   "dependencies": {
-    "ManifoldCordova": "git://github.com/manifoldjs/ManifoldCordova.git",
     "cheerio": "^0.18.0",
     "cordova": "^4.3.0",
     "loglevel": "^1.2.0",
