@@ -142,7 +142,7 @@ if (parameters._[0].toLowerCase() === 'run') {
     // create the cordova application
     projectBuilder.createApps(manifestInfo, rootDir, platforms, parameters.build, function (err) {
       if (err) {
-        log.warn('WARNING: ' + err.message);
+        log.error('ERROR: ' + err.message);
         return;
       }
       
