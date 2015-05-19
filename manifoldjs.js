@@ -142,7 +142,12 @@ if (parameters._[0].toLowerCase() === 'run') {
     // create the cordova application
     projectBuilder.createApps(manifestInfo, rootDir, platforms, parameters.build, function (err) {
       if (err) {
-        log.error('ERROR: ' + err.message);
+        var errmsg = err.message;
+        if (global.logLevel !== 'debug') {
+          errmsg += ' For more information, run manifoldjs with the diagnostics level set to debug (e.g. manifoldjs [...] -l debug)';
+        }
+
+        log.error(errmsg);
         return;
       }
       
