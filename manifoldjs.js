@@ -120,8 +120,6 @@ if (parameters._[0].toLowerCase() === 'run') {
   });
 
 } else {
-  // Create the apps for the specified platforms
-
   var siteUrl = parameters._[0];
   var rootDir = parameters.directory ? path.resolve(parameters.directory) : process.cwd();
   var platforms = parameters.platforms.split(/[\s,]+/);
@@ -139,7 +137,7 @@ if (parameters._[0].toLowerCase() === 'run') {
     log.debug('Manifest contents:');
     log.debug(JSON.stringify(manifestInfo.content, null, 4));
     
-    // create the cordova application
+    // Create the apps for the specified platforms
     projectBuilder.createApps(manifestInfo, rootDir, platforms, parameters.build, function (err) {
       if (err) {
         var errmsg = err.message;
