@@ -24,7 +24,7 @@ manifoldjs <website-url> [-d <app-directory>] [-s <short-name>] [-p <platforms>]
 | `-d|--directory` | **(optional)** Path to the generated project files (default value: current directory) |
 | `-s|--shortname` | **(optional)** Application short name. When specified, it overrides the short_name value of the manifest |
 | `-l|--loglevel`  | **(optional)** Tracing log level options Available log levels: _debug,trace,info,warn,error_ (default value: _warn_) |
-| `-p|--platforms` | **(optional)** Platforms to generate. Supported platforms: _windows,android,ios,chrome_ (default value: all platforms) |
+| `-p|--platforms` | **(optional)** Platforms to generate. Supported platforms: _windows,windows10,android,ios,chrome_ (default value: all platforms) |
 | `-b|--build`     | **(optional)** Forces the building process |
 
 ### Example
@@ -57,6 +57,9 @@ We plan to support the following manifest files in the future:
 - [Chrome Hosted Apps](https://developers.google.com/chrome/apps/docs/developers_guide)
 - [Firefox Open Web Apps](https://developer.mozilla.org/Apps/Build/Manifest)
 
+## Navigation Scope
+
+The W3C manifest defines a scope that restricts the URLs to which the application can navigate. ManifoldJS supports the scope setting for the Android, iOS and Windows platforms (more details [here](https://github.com/manifoldjs/ManifoldCordova#url-access-rules)).
 
 ## change-log
 
