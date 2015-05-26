@@ -4,7 +4,6 @@ var validations = require('./lib/common/validations'),
     manifestTools = require('./lib/manifestTools'),
     projectBuilder = require('./lib/projectBuilder'),
     projectTools = require('./lib/projectTools'),
-    validationConstants = require('./lib/manifestTools/validationConstants'),
     url = require('url'),
     log = require('loglevel'),
     path = require('path');
@@ -121,8 +120,6 @@ if (parameters._[0].toLowerCase() === 'run') {
   });
 
 } else {
-  // Create the apps for the specified platforms
-
   var siteUrl = parameters._[0];
   var rootDir = parameters.directory ? path.resolve(parameters.directory) : process.cwd();
   var platforms = parameters.platforms.split(/[\s,]+/);
@@ -132,40 +129,27 @@ if (parameters._[0].toLowerCase() === 'run') {
       return;
     }
 
-    manifestTools.validateManifest(manifestInfo, platforms, function (err, validationResults) {
+    // if specified as a parameter, override the app's short name
+    if (parameters.s) {
+      manifestInfo.content.short_name = parameters.s;
+    }
+    
+    log.debug('Manifest contents:');
+    log.debug(JSON.stringify(manifestInfo.content, null, 4));
+    
+    // Create the apps for the specified platforms
+    projectBuilder.createApps(manifestInfo, rootDir, platforms, parameters.build, function (err) {
       if (err) {
-        log.warn('ERROR: ' + err.message);
+        var errmsg = err.message;
+        if (global.logLevel !== 'debug') {
+          errmsg += ' For more information, run manifoldjs with the diagnostics level set to debug (e.g. manifoldjs [...] -l debug)';
+        }
+
+        log.error(errmsg);
         return;
       }
-
-      validationResults.forEach(function (validationResult) {
-        var validationMessage = 'Validation ' + validationResult.level + ' (' + validationResult.platform + '): ' + validationResult.description;
-        if (validationResult.level === validationConstants.levels.warning) {
-          log.warn(validationMessage);
-        } else if (validationResult.level === validationConstants.levels.suggestion) {
-          log.info(validationMessage);
-        } else if (validationResult.level === validationConstants.levels.error) {
-          log.error(validationMessage);
-        }
-      });
-
-      // if specified as a parameter, override the app's short name
-      if (parameters.s) {
-        manifestInfo.content.short_name = parameters.s;
-      }
-
-      log.debug('Manifest contents:');
-      log.debug(JSON.stringify(manifestInfo.content, null, 4));
-
-      // create the cordova application
-      projectBuilder.createApps(manifestInfo, rootDir, platforms, parameters.build, function (err) {
-        if (err) {
-          log.warn('WARNING: ' + err.message);
-          return;
-        }
-
-        log.info('The application(s) are ready!');
-      });
+      
+      log.info('The application(s) are ready!');
     });
   });
 }
