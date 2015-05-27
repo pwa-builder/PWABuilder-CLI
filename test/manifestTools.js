@@ -585,18 +585,11 @@ describe('Manifest Tools', function () {
         content: {
           'name': 'Google Mail',
           'start_url': 'http://example.com/',
-          'icons': [{
-            'src': 'icon_64.png',
-            'sizes': '64x64'
-          }, {
-            'src': 'icon_128.png',
-            'sizes': '128x128'
-          }]
         },
         format: 'w3c'
       };
 
-      tools.validateManifest(manifestInfo, ['ios', 'windows', 'firefox', 'chrome', 'android'], function() {
+      tools.validateManifest(manifestInfo, ['ios', 'windows81', 'firefox', 'chrome', 'android'], function() {
         done();
       });
     });
@@ -618,7 +611,7 @@ describe('Manifest Tools', function () {
         'code': validationConstants.codes.requiredValue
       };
 
-      tools.validateManifest(manifestInfo, ['ios', 'windows', 'firefox', 'chrome', 'android'], function (err, validationResults) {
+      tools.validateManifest(manifestInfo, ['ios', 'windows81', 'firefox', 'chrome', 'android'], function (err, validationResults) {
         should.not.exist(err);
         validationResults.should.containEql(expectedValidation);
         done();
@@ -642,7 +635,7 @@ describe('Manifest Tools', function () {
         'code': validationConstants.codes.requiredValue
       };
 
-      tools.validateManifest(manifestInfo, ['ios', 'windows', 'firefox', 'chrome', 'android'], function (err, validationResults) {
+      tools.validateManifest(manifestInfo, ['ios', 'windows81', 'firefox', 'chrome', 'android'], function (err, validationResults) {
         should.not.exist(err);
         validationResults.should.containEql(expectedValidation);
         done();
@@ -666,7 +659,7 @@ describe('Manifest Tools', function () {
         'code': validationConstants.codes.requiredValue
       };
 
-      tools.validateManifest(manifestInfo, ['ios', 'windows', 'firefox', 'chrome', 'android'], function (err, validationResults) {
+      tools.validateManifest(manifestInfo, ['ios', 'windows81', 'firefox', 'chrome', 'android'], function (err, validationResults) {
         should.not.exist(err);
         validationResults.should.containEql(expectedValidation);
         done();
