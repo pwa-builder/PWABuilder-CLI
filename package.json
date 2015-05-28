@@ -1,6 +1,6 @@
 {
   "name": "manifoldjs",
-  "version": "0.1.4",
+  "version": "0.1.5",
   "description": "Node.js tool for App Generation",
   "repository": {
     "type": "git",
@@ -39,7 +39,7 @@
     "request": "^2.53.0"
   },
   "devDependencies": {
-    "blanket": "^1.1.6",
+    "blanket": "1.1.6",
     "grunt": "^0.4.5",
     "grunt-cli": "^0.1.13",
     "grunt-contrib-jshint": "^0.10.0",
