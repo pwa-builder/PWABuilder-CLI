@@ -114,7 +114,7 @@ describe('Manifest Tools', function () {
     });
   });
 
-  describe('getManifestUrlFromSite()', function () {
+  describe('fetchManifestUrlFromSite()', function () {
     before(function () {
       server.listen(8042);
     });
@@ -124,7 +124,7 @@ describe('Manifest Tools', function () {
         should.fail('This function should not be called in this test');
       };
 
-      tools.getManifestUrlFromSite('invalid url', function(err) {
+      tools.fetchManifestUrlFromSite('invalid url', function(err) {
         should.exist(err);
         err.should.have.property('message', 'Failed to retrieve manifest from site.');
         done();
@@ -137,7 +137,7 @@ describe('Manifest Tools', function () {
         res.end();
       };
 
-      tools.getManifestUrlFromSite('http://localhost:8042/notfound', function(err) {
+      tools.fetchManifestUrlFromSite('http://localhost:8042/notfound', function(err) {
         should.exist(err);
         err.should.have.property('message', 'Failed to retrieve manifest from site.');
         done();
@@ -157,7 +157,7 @@ describe('Manifest Tools', function () {
                 '</html>');
       };
 
-      tools.getManifestUrlFromSite('http://localhost:8042/urlWithoutManifestTag', function(err, manifestUrl) {
+      tools.fetchManifestUrlFromSite('http://localhost:8042/urlWithoutManifestTag', function(err, manifestUrl) {
         should.not.exist(err);
         should.not.exist(manifestUrl);
         done();
@@ -178,7 +178,7 @@ describe('Manifest Tools', function () {
                 '</html>');
       };
 
-      tools.getManifestUrlFromSite('http://localhost:8042/urlWithManifestTag', function(err, manifestUrl) {
+      tools.fetchManifestUrlFromSite('http://localhost:8042/urlWithManifestTag', function(err, manifestUrl) {
         should.not.exist(err);
         should.exist(manifestUrl);
         manifestUrl.should.be.equal('http://localhost:8042/manifest.json');
@@ -200,7 +200,7 @@ describe('Manifest Tools', function () {
         '</html>');
       };
 
-      tools.getManifestUrlFromSite('http://localhost:8042/urlWithManifestTag', function(err, manifestUrl) {
+      tools.fetchManifestUrlFromSite('http://localhost:8042/urlWithManifestTag', function(err, manifestUrl) {
         should.not.exist(err);
         should.exist(manifestUrl);
         manifestUrl.should.be.equal('http://localhost:8042/manifest.json');
@@ -222,7 +222,7 @@ describe('Manifest Tools', function () {
                 '</html>');
       };
 
-      tools.getManifestUrlFromSite('http://localhost:8042/urlWithManifestTag', function(err, manifestUrl) {
+      tools.fetchManifestUrlFromSite('http://localhost:8042/urlWithManifestTag', function(err, manifestUrl) {
         should.not.exist(err);
         should.exist(manifestUrl);
         manifestUrl.should.be.equal('http://www.contoso.com/manifest.json');
@@ -585,18 +585,11 @@ describe('Manifest Tools', function () {
         content: {
           'name': 'Google Mail',
           'start_url': 'http://example.com/',
-          'icons': [{
-            'src': 'icon_64.png',
-            'sizes': '64x64'
-          }, {
-            'src': 'icon_128.png',
-            'sizes': '128x128'
-          }]
         },
         format: 'w3c'
       };
 
-      tools.validateManifest(manifestInfo, ['ios', 'windows', 'firefox', 'chrome', 'android'], function() {
+      tools.validateManifest(manifestInfo, ['ios', 'windows81', 'firefox', 'chrome', 'android'], function() {
         done();
       });
     });
@@ -618,7 +611,7 @@ describe('Manifest Tools', function () {
         'code': validationConstants.codes.requiredValue
       };
 
-      tools.validateManifest(manifestInfo, ['ios', 'windows', 'firefox', 'chrome', 'android'], function (err, validationResults) {
+      tools.validateManifest(manifestInfo, ['ios', 'windows81', 'firefox', 'chrome', 'android'], function (err, validationResults) {
         should.not.exist(err);
         validationResults.should.containEql(expectedValidation);
         done();
@@ -642,7 +635,7 @@ describe('Manifest Tools', function () {
         'code': validationConstants.codes.requiredValue
       };
 
-      tools.validateManifest(manifestInfo, ['ios', 'windows', 'firefox', 'chrome', 'android'], function (err, validationResults) {
+      tools.validateManifest(manifestInfo, ['ios', 'windows81', 'firefox', 'chrome', 'android'], function (err, validationResults) {
         should.not.exist(err);
         validationResults.should.containEql(expectedValidation);
         done();
@@ -662,11 +655,11 @@ describe('Manifest Tools', function () {
         'description': 'It is recommended to specify a set of access rules that represent the navigation scope of the application',
         'platform': validationConstants.platforms.all,
         'level': validationConstants.levels.suggestion,
-        'member': validationConstants.manifestMembers.mjs_urlAccess,
+        'member': validationConstants.manifestMembers.mjs_access_whitelist,
         'code': validationConstants.codes.requiredValue
       };
 
-      tools.validateManifest(manifestInfo, ['ios', 'windows', 'firefox', 'chrome', 'android'], function (err, validationResults) {
+      tools.validateManifest(manifestInfo, ['ios', 'windows81', 'firefox', 'chrome', 'android'], function (err, validationResults) {
         should.not.exist(err);
         validationResults.should.containEql(expectedValidation);
         done();

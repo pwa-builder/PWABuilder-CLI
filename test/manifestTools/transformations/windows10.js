@@ -112,7 +112,7 @@ describe('transformation: Windows 10 Manifest', function () {
           'start_url': siteUrl,
           'short_name': shortName,
           'scope': scope,
-          'mjs_urlAccess': [
+          'mjs_access_whitelist': [
             { 'url': accessUrl }
           ]
         }
@@ -151,7 +151,7 @@ describe('transformation: Windows 10 Manifest', function () {
           'start_url': siteUrl,
           'short_name': shortName,
           'scope': scope,
-          'mjs_urlAccess': [
+          'mjs_access_whitelist': [
             { 'url': accessUrl }
           ]
         }
@@ -187,7 +187,7 @@ describe('transformation: Windows 10 Manifest', function () {
           'start_url': siteUrl,
           'short_name': shortName,
           'scope': '*',
-          'mjs_urlAccess': [
+          'mjs_access_whitelist': [
             { 'url': '*' }
           ]
         }
