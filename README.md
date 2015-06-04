@@ -180,10 +180,11 @@ We plan to support the following manifest files in the future:
 
 The W3C manifest defines a scope that restricts the URLs to which the application can navigate. ManifoldJS supports the scope setting for the Android, iOS and Windows platforms (more details [here](https://github.com/manifoldjs/ManifoldCordova#url-access-rules)).
 
-## change-log
+## Changelog
 
+Releases are documented in [GitHub](https://github.com/manifoldjs/ManifoldJS/releases).
 
-## license
+## License
 
 > ManifoldJS
 
