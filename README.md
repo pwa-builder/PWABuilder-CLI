@@ -1,4 +1,4 @@
-﻿# ManifoldJS
+# ManifoldJS
 
 This tool is used to create hosted web applications based on a [W3C Web App manifest](http://www.w3.org/TR/appmanifest/).
 
