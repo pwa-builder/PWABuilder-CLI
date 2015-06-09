@@ -1,4 +1,4 @@
-# ManifoldJS
+﻿# ManifoldJS
 
 This tool is used to create hosted web applications based on a [W3C Web App manifest](http://www.w3.org/TR/appmanifest/).
 
@@ -59,7 +59,7 @@ Retrieves a manifest from a local path.
 `callback(err, manifestInfo)` returns an error or the manifest object in `manifestInfo`.
 
 
-#### writeToFile(manifestInfo, filePath, callback)
+####writeToFile(manifestInfo, filePath, callback)
 Writes manifest info to the specified path.
 `manifestInfo` Manifest data in JSON format.
 
@@ -67,21 +67,21 @@ Writes manifest info to the specified path.
 
 `callback(err, validationResults)` returns an error or an array of validation results.
 
-#### fetchManifestUrlFromSite(siteUrl, callback)
+####fetchManifestUrlFromSite(siteUrl, callback)
 If found, gets the manifest URL from the specified website URL.
 
 `siteUrl` is the URL of the website.
 
 `callback(err, content)` returns an error or a content object with start_url and short_name members.
 
-#### downloadManifestFromUrl(manifestUrl, callback)
+####downloadManifestFromUrl(manifestUrl, callback)
 Downloads the manifest from the specified URL.
 
 `manifestUrl` is the URL of the manifest.
 
 `callback(err, manifestInfo)` returns an error or the manifest object in `manifestInfo`.
 
-#### validateAndNormalizeStartUrl(siteUrl, manifestInfo, callback)
+####validateAndNormalizeStartUrl(siteUrl, manifestInfo, callback)
 Validates the format of the manifest is a W3C manifest format.
 
 `siteUrl` is the URL of the website.
@@ -90,7 +90,7 @@ Validates the format of the manifest is a W3C manifest format.
 
 `callback` returns an error or the manifest object in `manifestInfo`.
 
-#### convertTo(manifestInfo, outputFormat, callback)
+####convertTo(manifestInfo, outputFormat, callback)
 Converts the manifest data to the specified output format.
 
 `manifestInfo` is the manifest's data in JSON format.
@@ -99,7 +99,7 @@ Converts the manifest data to the specified output format.
 
 `callback(err, manifestInfo)` returns an error or the manifest object in `manifestInfo`.
 
-#### validateManifest(manifestInfo, targetPlatforms, callback)
+####validateManifest(manifestInfo, targetPlatforms, callback)
 Makes sure the manifest is valid for the specified target platforms.
 
 `manifestInfo` is the manifest's data in JSON format.
@@ -116,11 +116,11 @@ Makes sure the manifest is valid for the specified target platforms.
 
 ---
 
-### Builder Module
+###Builder Module
 ````
 var projectBuilder = require('projectBuilder');
 ````
-#### createApps(w3cManifestInfo, rootDir, platforms, build, callback)
+####createApps(w3cManifestInfo, rootDir, platforms, build, callback)
 Generates the applications for the specified platforms.
 
 `w3cManifestInfo` is the manifest's data in JSON format.
@@ -135,18 +135,18 @@ Generates the applications for the specified platforms.
 
 ---
 
-### Project Tools module
+###Project Tools module
 ````
 var projectTools = require('projectTools');
 ````
-#### runApp(platform, callback)
+####runApp(platform, callback)
 Execute the app for the chosen platform.
 
 `platform` The app will execute for the selected platform.
 
 `callback` returns an error, if any.
 
-#### openVisualStudio(callback)
+####openVisualStudio(callback)
 Opens the Visual Studio project.
 
 `callback` returns an error, if any.
@@ -183,6 +183,13 @@ The W3C manifest defines a scope that restricts the URLs to which the applicatio
 ## Changelog
 
 Releases are documented in [GitHub](https://github.com/manifoldjs/ManifoldJS/releases).
+
+## Known Issues
+- Creating the directory shortcuts to the Cordova platform-specific projects may fail when running in the Windows environment. The tool reports **_"WARNING: Failed to create shortcut for Cordova platform: XXXX."__ where **_XXXX_** is **_ios_**, **_windows_**, or **_android_**.  
+  This is caused by an issue in Node.js which has been fixed in more recent releases. To resolve this issue, upgrade Node.js to the latest version.
+
+- Adding the **windows81** platform in the Linux environment fails. The tool reports **_"WARNING: Failed to add the Cordova platforms: XXXX."_** where **_XXXX_** includes **_windows_**.  
+  This is caused by an issue in the Windows platform for Cordova. Depending on the cordova-windows version, running the tool can show one of two errors: **"_Cannot find module 'Q'."_** or **"_No such file or directory."_**. As a workaround, reinstall manifoldjs to force an update to the latest release of Cordova in case this issue has already been fixed.
 
 ## License
 
