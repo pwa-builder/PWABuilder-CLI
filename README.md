@@ -23,8 +23,8 @@ manifoldjs <website-url> [-d <app-directory>] [-s <short-name>] [-p <platforms>]
 | `<website-url>`  | **(required)** URL of the hosted website |
 | `-d|--directory` | **(optional)** Path to the generated project files (default value: current directory) |
 | `-s|--shortname` | **(optional)** Application short name. When specified, it overrides the short_name value of the manifest |
-| `-l|--loglevel`  | **(optional)** Tracing log level options Available log levels: _debug,trace,info,warn,error_ (default value: _warn_) |
-| `-p|--platforms` | **(optional)** Platforms to generate. Supported platforms: _windows,windows10,android,ios,chrome_ (default value: all platforms) |
+| `-l|--loglevel`  | **(optional)** Tracing log level options. Available log levels: _debug,trace,info,warn,error_ (default value: _warn_) |
+| `-p|--platforms` | **(optional)** Platforms to generate. Supported platforms: _windows10,windows81,android,ios,chrome,web,firefox_ (default value: all platforms) |
 | `-b|--build`     | **(optional)** Forces the building process |
 | `-m|--manifest`  | **(optional)** Location of the W3C Web App manifest file (URL or local path). If not specified, the tool looks for a manifest in the site URL. Otherwise, a new manifest will be created pointing to the site URL. |
 | `-c|--crosswalk` | **(optional)** Enable Crosswalk for Android. Crosswalk is a web runtime that can be used to replace the stock WebView used by Android Cordova apps. Crosswalk is based on Google Chromium with Cordova API support and has better HTML5 feature support compared to the default WebView available in Android. |
@@ -60,7 +60,8 @@ Retrieves a manifest from a local path.
 `callback(err, manifestInfo)` returns an error or the manifest object in `manifestInfo`.
 
 
-####writeToFile(manifestInfo, filePath, callback)
+#### writeToFile(manifestInfo, filePath, callback)
+
 Writes manifest info to the specified path.
 `manifestInfo` Manifest data in JSON format.
 
@@ -68,21 +69,21 @@ Writes manifest info to the specified path.
 
 `callback(err, validationResults)` returns an error or an array of validation results.
 
-####fetchManifestUrlFromSite(siteUrl, callback)
+#### fetchManifestUrlFromSite(siteUrl, callback)
 If found, gets the manifest URL from the specified website URL.
 
 `siteUrl` is the URL of the website.
 
 `callback(err, content)` returns an error or a content object with start_url and short_name members.
 
-####downloadManifestFromUrl(manifestUrl, callback)
+#### downloadManifestFromUrl(manifestUrl, callback)
 Downloads the manifest from the specified URL.
 
 `manifestUrl` is the URL of the manifest.
 
 `callback(err, manifestInfo)` returns an error or the manifest object in `manifestInfo`.
 
-####validateAndNormalizeStartUrl(siteUrl, manifestInfo, callback)
+#### validateAndNormalizeStartUrl(siteUrl, manifestInfo, callback)
 Validates the format of the manifest is a W3C manifest format.
 
 `siteUrl` is the URL of the website.
@@ -91,7 +92,7 @@ Validates the format of the manifest is a W3C manifest format.
 
 `callback` returns an error or the manifest object in `manifestInfo`.
 
-####convertTo(manifestInfo, outputFormat, callback)
+#### convertTo(manifestInfo, outputFormat, callback)
 Converts the manifest data to the specified output format.
 
 `manifestInfo` is the manifest's data in JSON format.
@@ -100,7 +101,7 @@ Converts the manifest data to the specified output format.
 
 `callback(err, manifestInfo)` returns an error or the manifest object in `manifestInfo`.
 
-####validateManifest(manifestInfo, targetPlatforms, callback)
+#### validateManifest(manifestInfo, targetPlatforms, callback)
 Makes sure the manifest is valid for the specified target platforms.
 
 `manifestInfo` is the manifest's data in JSON format.
@@ -117,37 +118,39 @@ Makes sure the manifest is valid for the specified target platforms.
 
 ---
 
-###Builder Module
+### Builder Module
 ````
 var projectBuilder = require('projectBuilder');
 ````
-####createApps(w3cManifestInfo, rootDir, platforms, build, callback)
+#### createApps(w3cManifestInfo, rootDir, platforms, options, callback)
 Generates the applications for the specified platforms.
 
 `w3cManifestInfo` is the manifest's data in JSON format.
 
 `rootDir` is the root directory where the apps will be generated.
 
-`platforms` are the target platforms.
+`platforms` a string array specifying one or more target platforms: _windows10,windows81,android,ios,chrome,web,firefox_.
 
-`build` specifies whether to build the application or not.
+`options` an object with one or more properties that customize the generated application:
+- `crosswalk` (boolean) enable Crosswalk in the Cordova Android app
+- `build`     (boolean) set to build the generated application
 
 `callback(err)` returns an error, if any.
 
 ---
 
-###Project Tools module
+### Project Tools module
 ````
 var projectTools = require('projectTools');
 ````
-####runApp(platform, callback)
+#### runApp(platform, callback)
 Execute the app for the chosen platform.
 
 `platform` The app will execute for the selected platform.
 
 `callback` returns an error, if any.
 
-####openVisualStudio(callback)
+#### openVisualStudio(callback)
 Opens the Visual Studio project.
 
 `callback` returns an error, if any.
