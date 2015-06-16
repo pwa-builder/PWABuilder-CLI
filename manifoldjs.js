@@ -79,7 +79,7 @@ function getW3cManifest(siteUrl, manifestLocation, callback) {
 var parameters = require('optimist')
                 .usage('Usage: manifoldjs <website-url> [-d <app-directory>] [-s <short-name>]\n' +
                        '                                [-p <platforms>] [-l <log-level>]\n' +
-                       '                                [-b] [-m <manifest-file>]\n' +
+                       '                                [-b] [-c] [-m <manifest-file>]\n' +
                        '-or-\n' +
                        '       manifoldjs run <windows|android>')
                 .alias('d', 'directory')
@@ -87,11 +87,12 @@ var parameters = require('optimist')
                 .alias('p', 'platforms')
                 .alias('l', 'loglevel')
                 .alias('b', 'build')
-                .default('p', 'windows10,windows81,android,ios,chrome,web,firefox')
+                .alias('c', 'crosswalk')
+                .default('p', 'windows,android,ios,chrome,web,firefox')
                 .alias('m', 'manifest')
                 .default('l', 'warn')
                 .default('b', false)
-                .describe('p', '[windows10][,windows81][,android][,ios][,chrome][,web][,firefox]')
+                .describe('p', '[windows][,android][,ios][,chrome][,web][,firefox]')
                 .describe('l', 'debug|trace|info|warn|error')
                 .check(checkParameters)
                 .argv;
@@ -138,7 +139,7 @@ if (parameters._[0].toLowerCase() === 'run') {
     log.debug(JSON.stringify(manifestInfo.content, null, 4));
     
     // Create the apps for the specified platforms
-    projectBuilder.createApps(manifestInfo, rootDir, platforms, parameters.build, function (err) {
+    projectBuilder.createApps(manifestInfo, rootDir, platforms, parameters, function (err) {
       if (err) {
         var errmsg = err.message;
         if (global.logLevel !== 'debug') {

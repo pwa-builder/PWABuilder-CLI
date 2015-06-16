@@ -589,7 +589,7 @@ describe('Manifest Tools', function () {
         format: 'w3c'
       };
 
-      tools.validateManifest(manifestInfo, ['ios', 'windows81', 'firefox', 'chrome', 'android'], function() {
+      tools.validateManifest(manifestInfo, ['ios', 'windows', 'firefox', 'chrome', 'android'], function() {
         done();
       });
     });
@@ -611,7 +611,7 @@ describe('Manifest Tools', function () {
         'code': validationConstants.codes.requiredValue
       };
 
-      tools.validateManifest(manifestInfo, ['ios', 'windows81', 'firefox', 'chrome', 'android'], function (err, validationResults) {
+      tools.validateManifest(manifestInfo, ['ios', 'windows', 'firefox', 'chrome', 'android'], function (err, validationResults) {
         should.not.exist(err);
         validationResults.should.containEql(expectedValidation);
         done();
@@ -635,7 +635,7 @@ describe('Manifest Tools', function () {
         'code': validationConstants.codes.requiredValue
       };
 
-      tools.validateManifest(manifestInfo, ['ios', 'windows81', 'firefox', 'chrome', 'android'], function (err, validationResults) {
+      tools.validateManifest(manifestInfo, ['ios', 'windows', 'firefox', 'chrome', 'android'], function (err, validationResults) {
         should.not.exist(err);
         validationResults.should.containEql(expectedValidation);
         done();
@@ -659,7 +659,7 @@ describe('Manifest Tools', function () {
         'code': validationConstants.codes.requiredValue
       };
 
-      tools.validateManifest(manifestInfo, ['ios', 'windows81', 'firefox', 'chrome', 'android'], function (err, validationResults) {
+      tools.validateManifest(manifestInfo, ['ios', 'windows', 'firefox', 'chrome', 'android'], function (err, validationResults) {
         should.not.exist(err);
         validationResults.should.containEql(expectedValidation);
         done();
