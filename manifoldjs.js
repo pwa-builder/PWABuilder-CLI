@@ -4,9 +4,20 @@ var validations = require('./lib/common/validations'),
     manifestTools = require('./lib/manifestTools'),
     projectBuilder = require('./lib/projectBuilder'),
     projectTools = require('./lib/projectTools'),
+    version = require('./lib/common/version'),
     url = require('url'),
     log = require('loglevel'),
     path = require('path');
+
+version.checkForUpdate(function (err, updateAvailable) {
+  if (!err && updateAvailable) {
+    console.log();
+    console.log('*****************************************************************************************');
+    console.log('*** A new version of ManifoldJS is available (v' + updateAvailable + '). We recommend that you upgrade. ***');
+    console.log('*****************************************************************************************');
+    console.log();
+  }
+});
 
 function checkParameters(argv) {
   if (argv._.length < 1) {
