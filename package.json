@@ -11,7 +11,7 @@
     "email": "TBD",
     "url": "TBD"
   },
-  "license" : "MIT",
+  "license": "MIT",
   "licenses": [
     {
       "type": "MIT",
@@ -36,7 +36,8 @@
     "ncp": "^2.0.0",
     "optimist": "^0.6.1",
     "q": "^1.2.0",
-    "request": "^2.53.0"
+    "request": "^2.53.0",
+    "semver": "^4.3.6"
   },
   "devDependencies": {
     "blanket": "1.1.6",
