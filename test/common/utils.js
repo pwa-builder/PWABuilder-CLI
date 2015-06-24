@@ -117,12 +117,6 @@ describe('utils', function () {
       /*jshint -W030 */
       result.should.be.true;
     });
-    it('Should return true if parameter is a domain name', function () {
-      var inputValue = 'www.xyz.com';
-      var result = utils.isURL(inputValue);
-      /*jshint -W030 */
-      result.should.be.false;
-    });
     it('Should return true if parameter is an absolute URL', function () {
       var inputValue = '/a/b/index.html';
       var result = utils.isURL(inputValue);
@@ -134,12 +128,6 @@ describe('utils', function () {
       var result = utils.isURL(inputValue);
       /*jshint -W030 */
       result.should.be.true;
-    });
-    it('Should return false if parameter contains invalid characters', function () {
-      var inputValue = 'a/b/!index.html';
-      var result = utils.isURL(inputValue);
-      /*jshint -W030 */
-      result.should.be.false;
     });
   });
 });
