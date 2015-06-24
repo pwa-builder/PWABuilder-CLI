@@ -14,7 +14,7 @@ describe('validationRules', function () {
       validationRules.should.have.property('android');
       validationRules.should.have.property('chrome');
       validationRules.should.have.property('firefox');
-      validationRules.should.have.property('windows81');
+      validationRules.should.have.property('windows');
       validationRules.should.have.property('ios');
     });
 
