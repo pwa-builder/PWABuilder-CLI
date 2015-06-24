@@ -1,6 +1,6 @@
 {
   "name": "manifoldjs",
-  "version": "0.3.0",
+  "version": "0.3.1",
   "description": "Node.js tool for App Generation",
   "repository": {
     "type": "git",
@@ -11,7 +11,7 @@
     "email": "TBD",
     "url": "TBD"
   },
-  "license" : "MIT",
+  "license": "MIT",
   "licenses": [
     {
       "type": "MIT",
@@ -36,8 +36,10 @@
     "ncp": "^2.0.0",
     "optimist": "^0.6.1",
     "q": "^1.2.0",
-    "request": "^2.53.0"
-  },
+    "request": "^2.53.0",
+    "semver": "^4.3.6",
+    "tv4": "^1.1.12"
+},
   "devDependencies": {
     "blanket": "1.1.6",
     "grunt": "^0.4.5",

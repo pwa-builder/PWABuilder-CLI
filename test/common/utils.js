@@ -97,4 +97,37 @@ describe('utils', function () {
       result.should.be.false;
     });
   });
+
+  describe('isURL()', function () {
+    it('Should return false if parameter is a number', function () {
+      var inputValue = 123;
+      var result = utils.isURL(inputValue);
+      /*jshint -W030 */
+      result.should.be.false;
+    });
+    it('Should return false if parameter is a boolean', function () {
+      var inputValue = true;
+      var result = utils.isURL(inputValue);
+      /*jshint -W030 */
+      result.should.be.false;
+    });
+    it('Should return true if parameter is a full URL', function () {
+      var inputValue = 'http://www.xyz.com/index.html';
+      var result = utils.isURL(inputValue);
+      /*jshint -W030 */
+      result.should.be.true;
+    });
+    it('Should return true if parameter is an absolute URL', function () {
+      var inputValue = '/a/b/index.html';
+      var result = utils.isURL(inputValue);
+      /*jshint -W030 */
+      result.should.be.true;
+    });
+    it('Should return true if parameter is a relative URL', function () {
+      var inputValue = 'a/b/index.html';
+      var result = utils.isURL(inputValue);
+      /*jshint -W030 */
+      result.should.be.true;
+    });
+  });
 });
