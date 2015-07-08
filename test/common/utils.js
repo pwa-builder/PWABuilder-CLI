@@ -194,5 +194,13 @@ describe('utils', function () {
       /*jshint -W030 */
       result.should.be.exactly('abc');
     });
+    
+    it('Should retrieve default name if sanitization removes all characters', function () {
+      var inputValue = '111.222.333';
+      var result = utils.sanitizeName(inputValue);
+      /*jshint -W030 */
+      result.should.be.exactly('MyManifoldJSApp');
+    });
+    
   });
 });
