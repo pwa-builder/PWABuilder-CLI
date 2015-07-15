@@ -13,26 +13,39 @@ npm install -g manifoldjs
 ### Usage
 
 ````
-manifoldjs [website-url] [options]
+manifoldjs <website-url> [options]
+````
+-or-
+
+````
+manifoldjs <command>
 ````
 
 ### Parameters
 
 |  **&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Parameter&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;** | **Description** |
+| ----------------- | --------------- |
+| `website-url`     | URL of the hosted website. This parameter is not required if a manifest location is specified with the *-m* option |
+| `-d, --directory` | **(optional)** Path to the generated project files (default value: current directory) |
+| `-s, --shortname` | **(optional)** Application short name. When specified, it overrides the short_name value of the manifest |
+| `-l, --loglevel`  | **(optional)** Tracing log level options. Available log levels: _debug,info,warn,error_ (default value: _warn_) |
+| `-p, --platforms` | **(optional)** Platforms to generate. Supported platforms: _windows,windows10,android,ios,chrome,web,firefox_ (default value: all platforms) |
+| `-b, --build`     | **(optional)** Forces the building process |
+| `-m, --manifest`  | **(optional)** Location of the W3C Web App manifest file (URL or local path). If not specified, the tool looks for a manifest in the site URL. Otherwise, a new manifest will be created pointing to the site URL. |
+| `-c, --crosswalk` | **(optional)** Enable Crosswalk for Android. Crosswalk is a web runtime that can be used to replace the stock WebView used by Android Cordova apps. Crosswalk is based on Google Chromium with Cordova API support and has better HTML5 feature support compared to the default WebView available in Android. |
+
+
+### Commands
+
+|  **&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Command&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;** | **Description** |
 | ---------------- | --------------- |
-| `website-url`    | **(optional)** URL of the hosted website |
-| `-d|--directory` | **(optional)** Path to the generated project files (default value: current directory) |
-| `-s|--shortname` | **(optional)** Application short name. When specified, it overrides the short_name value of the manifest |
-| `-l|--loglevel`  | **(optional)** Tracing log level options. Available log levels: _debug,info,warn,error_ (default value: _warn_) |
-| `-p|--platforms` | **(optional)** Platforms to generate. Supported platforms: _windows,windows10,android,ios,chrome,web,firefox_ (default value: all platforms) |
-| `-b|--build`     | **(optional)** Forces the building process |
-| `-m|--manifest`  | **(optional)** Location of the W3C Web App manifest file (URL or local path). If not specified, the tool looks for a manifest in the site URL. Otherwise, a new manifest will be created pointing to the site URL. |
-| `-c|--crosswalk` | **(optional)** Enable Crosswalk for Android. Crosswalk is a web runtime that can be used to replace the stock WebView used by Android Cordova apps. Crosswalk is based on Google Chromium with Cordova API support and has better HTML5 feature support compared to the default WebView available in Android. |
+| `run <platform>` | Launches the app of the specified platform. Currently, only _android_ and _windows_ platforms are supported by this command |
+| `visualstudio`   | (for windows only) Opens the project file of the generated Windows 8.1 / Windows 10 app in Visual Studio |
 
 ### Example
 
 ````
-manifoldjs http://meteorite.azurewebsites.net -d C:\Projects -l info -p windows10,android -b
+manifoldjs http://shiftr.azurewebsites.net -d C:\Projects -l info -p windows10,android -b
 ````
 
 ## Client Library
