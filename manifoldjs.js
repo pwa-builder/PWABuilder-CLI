@@ -110,7 +110,7 @@ var program = require('commander')
              .option('-l, --loglevel <log-level>', 'debug|info|warn|error', 'warn')
              .option('-p, --platforms <platforms>', '[windows][,windows10][,android][,ios]\n                                    ' +
                                                     '[,chrome][,web][,firefox]', 'windows,windows10,android,ios,chrome,web,firefox')
-             .option('-b, --build', 'Forces the building process', false)
+             .option('-b, --build', 'forces the building process', false)
              .option('-m, --manifest <manifest-location>', 'location of the W3C Web App manifest\n                                    ' +
                                                     'file (URL or local path)')
              .option('-c, --crosswalk', 'enable Crosswalk for Android', false)
