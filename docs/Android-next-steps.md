@@ -6,7 +6,7 @@
 
 2. To test your application on a device, download the ManifoldJS test harness from the Store, and follow the directions. _Coming soon!_
 
-3. To test locally, in the folder for your app, type "ManifoldJS run Android".
+3. To test locally, in the folder for your app, type "manifoldjs run android".
 
 > **Note:** Looking for some debugging tools that work on all your platforms? Try [Vorlon.js](http://www.vorlonjs.com/). It makes mobile testing a breeze, and works inside the app ManifoldJS apps.
 

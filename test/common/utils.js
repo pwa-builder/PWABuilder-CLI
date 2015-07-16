@@ -130,4 +130,77 @@ describe('utils', function () {
       result.should.be.true;
     });
   });
+  
+  describe('sanitizeName()', function () {
+    it('Should not remove any character (lower case)', function () {
+      var inputValue = 'abc123.def456.ghi789';
+      var result = utils.sanitizeName(inputValue);
+      /*jshint -W030 */
+      result.should.be.exactly('abc123.def456.ghi789');
+    });
+
+    it('Should not remove any character (upper case)', function () {
+      var inputValue = 'ABC123.DEF456.GHI789';
+      var result = utils.sanitizeName(inputValue);
+      /*jshint -W030 */
+      result.should.be.exactly('ABC123.DEF456.GHI789');
+    });
+
+    it('Should remove invalid characters', function () {
+      var inputValue = '!"#-/\ @%abc()!"#-/\ @%';
+      var result = utils.sanitizeName(inputValue);
+      /*jshint -W030 */
+      result.should.be.exactly('abc');
+    });
+
+    it('Should remove first character if it is a number', function () {
+      var inputValue = '1abc';
+      var result = utils.sanitizeName(inputValue);
+      /*jshint -W030 */
+      result.should.be.exactly('abc');
+    });
+    
+    it('Should remove first character if it is a dot', function () {
+      var inputValue = '.abc';
+      var result = utils.sanitizeName(inputValue);
+      /*jshint -W030 */
+      result.should.be.exactly('abc');
+    });
+    
+    it('Should remove all numbers after a dot', function () {
+      var inputValue = 'abc.123def';
+      var result = utils.sanitizeName(inputValue);
+      /*jshint -W030 */
+      result.should.be.exactly('abc.def');
+    });
+    
+    it('Should remove numbers and dots at the end (scenario 1)', function () {
+      var inputValue = 'abc.123';
+      var result = utils.sanitizeName(inputValue);
+      /*jshint -W030 */
+      result.should.be.exactly('abc');
+    });
+    
+    it('Should remove numbers and dots at the end (scenario 2)', function () {
+      var inputValue = 'abc.123.456';
+      var result = utils.sanitizeName(inputValue);
+      /*jshint -W030 */
+      result.should.be.exactly('abc');
+    });
+    
+    it('Should remove last character if it is a dot', function () {
+      var inputValue = 'abc.';
+      var result = utils.sanitizeName(inputValue);
+      /*jshint -W030 */
+      result.should.be.exactly('abc');
+    });
+    
+    it('Should retrieve default name if sanitization removes all characters', function () {
+      var inputValue = '111.222.333';
+      var result = utils.sanitizeName(inputValue);
+      /*jshint -W030 */
+      result.should.be.exactly('MyManifoldJSApp');
+    });
+    
+  });
 });

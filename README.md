@@ -13,26 +13,39 @@ npm install -g manifoldjs
 ### Usage
 
 ````
-manifoldjs <website-url> [-d <app-directory>] [-s <short-name>] [-p <platforms>] [-l <log-level>] [-b] [-m <manifest-file>]
+manifoldjs <website-url> [options]
+````
+-or-
+
+````
+manifoldjs <command>
 ````
 
 ### Parameters
 
 |  **&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Parameter&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;** | **Description** |
+| ----------------- | --------------- |
+| `website-url`     | URL of the hosted website. This parameter is not required if a manifest location is specified with the *-m* option |
+| `-d, --directory` | **(optional)** Path to the generated project files (default value: current directory) |
+| `-s, --shortname` | **(optional)** Application short name. When specified, it overrides the short_name value of the manifest |
+| `-l, --loglevel`  | **(optional)** Tracing log level options. Available log levels: _debug,info,warn,error_ (default value: _warn_) |
+| `-p, --platforms` | **(optional)** Platforms to generate. Supported platforms: _windows,windows10,android,ios,chrome,web,firefox_ (default value: all platforms) |
+| `-b, --build`     | **(optional)** Forces the building process |
+| `-m, --manifest`  | **(optional)** Location of the W3C Web App manifest file (URL or local path). If not specified, the tool looks for a manifest in the site URL. Otherwise, a new manifest will be created pointing to the site URL. |
+| `-c, --crosswalk` | **(optional)** Enable Crosswalk for Android. Crosswalk is a web runtime that can be used to replace the stock WebView used by Android Cordova apps. Crosswalk is based on Google Chromium with Cordova API support and has better HTML5 feature support compared to the default WebView available in Android. |
+
+
+### Commands
+
+|  **&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Command&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;** | **Description** |
 | ---------------- | --------------- |
-| `<website-url>`  | **(required)** URL of the hosted website |
-| `-d|--directory` | **(optional)** Path to the generated project files (default value: current directory) |
-| `-s|--shortname` | **(optional)** Application short name. When specified, it overrides the short_name value of the manifest |
-| `-l|--loglevel`  | **(optional)** Tracing log level options. Available log levels: _debug,trace,info,warn,error_ (default value: _warn_) |
-| `-p|--platforms` | **(optional)** Platforms to generate. Supported platforms: _windows,windows10,android,ios,chrome,web,firefox_ (default value: all platforms) |
-| `-b|--build`     | **(optional)** Forces the building process |
-| `-m|--manifest`  | **(optional)** Location of the W3C Web App manifest file (URL or local path). If not specified, the tool looks for a manifest in the site URL. Otherwise, a new manifest will be created pointing to the site URL. |
-| `-c|--crosswalk` | **(optional)** Enable Crosswalk for Android. Crosswalk is a web runtime that can be used to replace the stock WebView used by Android Cordova apps. Crosswalk is based on Google Chromium with Cordova API support and has better HTML5 feature support compared to the default WebView available in Android. |
+| `run <platform>` | Launches the app of the specified platform. Currently, only _android_ and _windows_ platforms are supported by this command |
+| `visualstudio`   | (for windows only) Opens the project file of the generated Windows 8.1 / Windows 10 app in Visual Studio |
 
 ### Example
 
 ````
-manifoldjs http://meteorite.azurewebsites.net -d C:\Projects -l info -p windows10,android -b
+manifoldjs http://shiftr.azurewebsites.net -d C:\Projects -l info -p windows10,android -b
 ````
 
 ## Client Library
@@ -189,16 +202,25 @@ The W3C manifest defines a scope that restricts the URLs to which the applicatio
 Releases are documented in [GitHub](https://github.com/manifoldjs/ManifoldJS/releases).
 
 ## Known Issues
-- Creating the directory shortcuts to the Cordova platform-specific projects may fail when running in the Windows environment. The tool reports **_"WARNING: Failed to create shortcut for Cordova platform: XXXX."__ where **_XXXX_** is **_ios_**, **_windows_**, or **_android_**.  
+- Creating the directory shortcuts to the Cordova platform-specific projects may fail when running in the Windows environment. The tool reports **_"WARNING: Failed to create shortcut for Cordova platform: XXXX."__** where **_XXXX_** is **_ios_**, **_windows_**, or **_android_**.  
   This is caused by an issue in Node.js which has been fixed in more recent releases. To resolve this issue, upgrade Node.js to the latest version.
 
 - Adding the **windows** platform in the Linux and Mac OS environments fails. The tool reports **_"WARNING: Failed to add the Cordova platforms: XXXX."_** where **_XXXX_** includes **_windows_**.  
-  This is caused by an issue in the Windows platform for Cordova. Depending on the cordova-windows version, running the tool can show one of two errors: **"_Cannot find module 'Q'."_** or **"_No such file or directory."_**. As a workaround, reinstall manifoldjs to force an update to the latest release of Cordova in case this issue has already been fixed.
+  This is caused by an issue in the Windows platform for Cordova. Depending on the cordova-windows version, running the tool can show one of two errors: **"_Cannot find module 'Q'."_** or **"_No such file or directory."_**. Until this problem is fixed by Cordova, the workaround is to exclude the Windows platform when building projects in Linux or MacOS by using the **__-p | --platforms__** command line parameter. For example,
+  ```
+  manifoldjs http://your.site/ .... -p ios,android,firefox,chrome,web
+  ```
+
+- Error when building an iOS application for projects generated in a Windows machine and then copied to an OS X machine. Xcode reports "**_Shell Script Invocation Error - Command /bin/sh failed with exit code 126_**". This happens when the execution permission (+x) is lost on some scripts when copying between the different file systems.  
+
+  To resolve this, open a Terminal window in OS X and execute the following command to restore the executable bit on the script.
+  ```  
+  chmod +x [path to the ManifoldJS project]/cordova/platforms/ios/cordova/lib/copy-www-build-step.sh
+  ```
 
 - Issues in Visual Studio 2015 RC with the Windows solution generated by Cordova:
   - Opening the **CordovaApp.sln** solution file might hang Visual Studio while loading the Windows 8 project. As a workaround, remove the Windows 8 project file from the solution.
   - When building the solution, Visual Studio reports the following error in the Windows 10 project: **_"'ValidateAppxManifest' failed. Unspecified error"_**. As a workaround, clean and rebuild the solution.
-
 
 ## License
 

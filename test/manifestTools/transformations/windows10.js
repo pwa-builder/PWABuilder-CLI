@@ -243,6 +243,72 @@ describe('transformation: Windows 10 Manifest', function () {
 
         done();
       });
+    }); 
+
+    it('Should add scope as rule if scope is full URL', function (done) {
+      var siteUrl = 'http://url.com:3000/';
+      var shortName = 'shortName';
+
+      var originalManifestInfo = {
+        content: {
+          'start_url': siteUrl,
+          'short_name': shortName,
+          'scope': 'http://subdomain.url.com:3000/'
+        }
+      };
+
+      transformation.convertFromBase(originalManifestInfo, function (err, result) {
+        should.not.exist(err);
+        should.exist(result);
+        /*jshint -W030 */
+        result.should.have.property('content').which.is.an.Object;
+        result.should.have.property('format', 'windows10');
+
+        var manifest = result.content;
+
+        manifest.should.have.property('rawData');
+
+        var expectedContentUriRules = '<uap:ApplicationContentUriRules>' +
+                                        '<uap:Rule Type="include" Match="http://subdomain.url.com:3000/" />' +
+                                      '</uap:ApplicationContentUriRules>';
+                            
+        manifest.rawData.replace(/[\t\r\n]/g, '').indexOf(expectedContentUriRules).should.be.above(-1);
+
+        done();
+      });
+    });
+    
+    it('Should add scope as rule if scope is full URL but has subdomain as wildcard', function (done) {
+      var siteUrl = 'http://url.com:3000/';
+      var shortName = 'shortName';
+
+      var originalManifestInfo = {
+        content: {
+          'start_url': siteUrl,
+          'short_name': shortName,
+          'scope': 'http://*.url.com:3000/'
+        }
+      };
+
+      transformation.convertFromBase(originalManifestInfo, function (err, result) {
+        should.not.exist(err);
+        should.exist(result);
+        /*jshint -W030 */
+        result.should.have.property('content').which.is.an.Object;
+        result.should.have.property('format', 'windows10');
+
+        var manifest = result.content;
+
+        manifest.should.have.property('rawData');
+
+        var expectedContentUriRules = '<uap:ApplicationContentUriRules>' +
+                                        '<uap:Rule Type="include" Match="http://*.url.com:3000/" />' +
+                                      '</uap:ApplicationContentUriRules>';
+                            
+        manifest.rawData.replace(/[\t\r\n]/g, '').indexOf(expectedContentUriRules).should.be.above(-1);
+
+        done();
+      });
     });
   });
 });
