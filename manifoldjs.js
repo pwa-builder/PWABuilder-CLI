@@ -12,9 +12,10 @@ var validations = require('./lib/common/validations'),
 version.checkForUpdate(function (err, updateAvailable) {
   if (!err && updateAvailable) {
     console.log();
-    console.log('*****************************************************************************************');
-    console.log('*** A new version of ManifoldJS is available (v' + updateAvailable + '). We recommend that you upgrade. ***');
-    console.log('*****************************************************************************************');
+    console.log('*******************************************************************************');
+    console.log('A new version of ManifoldJS is available (v' + updateAvailable + ').')
+    console.log('We recommend that you upgrade.');
+    console.log('*******************************************************************************');
     console.log();
   }
 });
