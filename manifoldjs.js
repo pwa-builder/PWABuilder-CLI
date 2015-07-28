@@ -157,7 +157,7 @@ if (program.args[0] && program.args[0].toLowerCase() === 'run') {
   // it should be removed once cordova adds support for Windows on Linux and MacOS
   if (!platformUtils.isWindows && 
        program.rawArgs.indexOf('-p') === -1 && 
-       program.rawArgs.indexOf('-platforms')  === -1) {
+       program.rawArgs.indexOf('--platforms')  === -1) {
     platforms.splice(platforms.indexOf('windows'), 1);
   }
   
