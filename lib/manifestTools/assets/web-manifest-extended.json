@@ -1,0 +1,33 @@
+{
+  "title": "JSON schema for Web Application manifest files (schema extensions)",
+  "$schema": "http://json-schema.org/draft-04/schema#",
+
+  "type": "object",
+
+  "properties": {
+    "mjs_access_whitelist": {
+      "description": "The mjs_access_whitelist member is an array of rules that indicates the type of access the URLs matching the rule should have.",
+      "type": "array",
+      "items": {
+        "$ref": "#/definitions/mjs_access_whitelist_rule"
+      }
+    }
+  },
+
+  "definitions": {
+    "mjs_access_whitelist_rule": {
+      "type": "object",
+      "properties": {
+        "url": {
+          "description": "A string that represents the URL pattern for which the rule should be applied to.",
+          "type": "string",
+          "format": "uri"
+        },
+        "apiAccess" : {
+          "description": "A string that defines the type of access to the runtime API where the application is running.",
+          "enum": [ "none", "all", "AllowForWebOnly" ]
+        }
+      }
+    }
+  }
+}

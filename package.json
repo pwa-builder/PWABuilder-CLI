@@ -1,6 +1,6 @@
 {
   "name": "manifoldjs",
-  "version": "0.3.1",
+  "version": "0.3.3",
   "description": "Node.js tool for App Generation",
   "repository": {
     "type": "git",
@@ -35,12 +35,12 @@
   "dependencies": {
     "archiver": "^0.14.4",
     "cheerio": "^0.18.0",
+    "commander": "^2.8.1",
     "cordova": "5.1.1",
     "gulp-appx": "git+http://github.com/southworkscom/CloudAppX",
     "loglevel": "^1.2.0",
     "mkdirp": "^0.5.0",
     "ncp": "^2.0.0",
-    "optimist": "^0.6.1",
     "q": "^1.2.0",
     "request": "^2.53.0",
     "semver": "^4.3.6",

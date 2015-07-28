@@ -19,37 +19,44 @@ version.checkForUpdate(function (err, updateAvailable) {
   }
 });
 
-function checkParameters(argv) {
-  if (argv._.length < 1) {
-    throw 'ERROR: Missing required parameters.';
-  } else if(argv._.length === 1) {
-    if (argv._[0].toLowerCase() === 'run') {
-      throw 'ERROR: Missing platform parameter.';
+function checkParameters(program) {
+  if (program.args.length === 0 && !program.manifest) {
+    console.error('ERROR: Missing required parameters. Either the web site URL or the location of a W3C manifest should be specified.');
+    process.exit(1);
+  } else if(program.args.length === 1) {
+    if (program.args[0].toLowerCase() === 'run') {
+      console.error('ERROR: Missing platform parameter.');
+      process.exit(1);
     }
-  } else if (argv._.length === 2) {
-    if (argv._[0].toLowerCase() !== 'run') {
-      throw 'ERROR: Invalid parameters.';
+  } else if (program.length === 2) {
+    if (program.args[0].toLowerCase() !== 'run') {
+      console.error('ERROR: Invalid parameters.');
+      process.exit(1);
     } else {
-      if (!validations.platformToRunValid(argv._[1])) {
-        throw 'ERROR: Invalid platform specified.';
+      if (!validations.platformToRunValid(program.args[1])) {
+        console.error('ERROR: Invalid platform specified.');
+        process.exit(1);
       }
     }
-  } else {
-    throw 'ERROR: Unexpected parameters.';
+  } else if (program.length > 2) {
+    console.error('ERROR: Unexpected parameters.');
+    process.exit(1);
   }
 
   // check platforms
-  if (argv.platforms) {
-    var platforms = argv.platforms.split(/[\s,]+/);
+  if (program.platforms) {
+    var platforms = program.platforms.split(/[\s,]+/);
     if (!validations.platformsValid(platforms)) {
-      throw 'ERROR: Invalid platform(s) specified.';
+      console.error('ERROR: Invalid platform(s) specified.');
+      process.exit(1);
     }
   }
 
   // check log level
-  if (argv.loglevel) {
-    if (!validations.logLevelValid(argv.loglevel)) {
-      throw 'ERROR: Invalid loglevel specified. Valid values are: debug, trace, info, warn, error';
+  if (program.loglevel) {
+    if (!validations.logLevelValid(program.loglevel)) {
+      console.error('ERROR: Invalid loglevel specified. Valid values are: debug, trace, info, warn, error');
+      process.exit(1);
     }
   }
 }
@@ -62,11 +69,12 @@ function getW3cManifest(siteUrl, manifestLocation, callback) {
 
     return manifestTools.validateAndNormalizeStartUrl(siteUrl, manifestInfo, callback);
   }
-
-  var parsedSiteUrl = url.parse(siteUrl);
-
-  if (!parsedSiteUrl.hostname) {
-    return callback(new Error('The site URL is not a valid URL.'));
+  
+  if (siteUrl) {
+    var parsedSiteUrl = url.parse(siteUrl);
+    if (!parsedSiteUrl.hostname) {
+      return callback(new Error('The site URL is not a valid URL.'));
+    }
   }
 
   if (manifestLocation) {
@@ -80,48 +88,54 @@ function getW3cManifest(siteUrl, manifestLocation, callback) {
       log.info('Reading manifest file ' + manifestLocation + '...');
       manifestTools.getManifestFromFile(manifestLocation, resolveStartURL);
     }
-  } else {
+  } else if (siteUrl) {    
     // scan a site to retrieve its manifest
     log.info('Scanning ' + siteUrl + ' for manifest...');
     manifestTools.getManifestFromSite(siteUrl, resolveStartURL);
+  } else {
+    return callback(new Error('A site URL or manifest should be specified.'));
   }
 }
 
-var parameters = require('optimist')
-                .usage('Usage: manifoldjs <website-url> [-d <app-directory>] [-s <short-name>]\n' +
-                       '                                [-p <platforms>] [-l <log-level>]\n' +
-                       '                                [-b] [-c] [-m <manifest-file>]\n' +
-                       '-or-\n' +
-                       '       manifoldjs run <windows|android>')
-                .alias('d', 'directory')
-                .alias('s', 'shortname')
-                .alias('p', 'platforms')
-                .alias('l', 'loglevel')
-                .alias('b', 'build')
-                .alias('c', 'crosswalk')
-                .default('p', 'windows,android,ios,chrome,web,firefox')
-                .alias('m', 'manifest')
-                .default('l', 'warn')
-                .default('b', false)
-                .describe('p', '[windows][,android][,ios][,chrome][,web][,firefox]')
-                .describe('l', 'debug|trace|info|warn|error')
-                .check(checkParameters)
-                .argv;
+var program = require('commander')
+             .usage('<website-url> [options]\n' +
+                    '  -or-\n' +
+                    '         manifoldjs -m <manifest-location> [options]\n' +
+                    '  -or-\n' +
+                    '         manifoldjs run <windows|android>\n' +
+                    '  -or-\n' +
+                    '         manifoldjs visualstudio')
+             .option('-d, --directory <app-dir>', 'path to the generated project files')
+             .option('-s, --shortname <short-name>', 'application short name')
+             .option('-l, --loglevel <log-level>', 'debug|info|warn|error', 'warn')
+             .option('-p, --platforms <platforms>', '[windows][,windows10][,android][,ios]\n                                    ' +
+                                                    '[,chrome][,web][,firefox]', 'windows,windows10,android,ios,chrome,web,firefox')
+             .option('-b, --build', 'forces the building process', false)
+             .option('-m, --manifest <manifest-location>', 'location of the W3C Web App manifest\n                                    ' +
+                                                    'file (URL or local path)')
+             .option('-c, --crosswalk', 'enable Crosswalk for Android', false)
+             .parse(process.argv);
 
-global.logLevel = parameters.loglevel;
+if (!process.argv.slice(2).length) {
+  program.help();
+}
+
+checkParameters(program);
+
+global.logLevel = program.loglevel;
 log.setLevel(global.logLevel);
 
-if (parameters._[0].toLowerCase() === 'run') {
+if (program.args[0] && program.args[0].toLowerCase() === 'run') {
   // Run the app for the specified platform
 
-  var platform = parameters._[1];
+  var platform = program.args[1];
   projectTools.runApp(platform, function (err) {
     if (err) {
       log.error('ERROR: ' + err.message);
     }
   });
 
-} else if (parameters._[0].toLowerCase() === 'visualstudio') {
+} else if (program.args[0] && program.args[0].toLowerCase() === 'visualstudio') {
 
   projectTools.openVisualStudio(function (err) {
     if (err) {
@@ -132,25 +146,25 @@ if (parameters._[0].toLowerCase() === 'run') {
   });
 
 } else {
-  var siteUrl = parameters._[0];
-  var rootDir = parameters.directory ? path.resolve(parameters.directory) : process.cwd();
-  var platforms = parameters.platforms.split(/[\s,]+/);
-  getW3cManifest(siteUrl, parameters.manifest, function (err, manifestInfo) {
+  var siteUrl = program.args[0];
+  var rootDir = program.directory ? path.resolve(program.directory) : process.cwd();
+  var platforms = program.platforms.split(/[\s,]+/);
+  getW3cManifest(siteUrl, program.manifest, function (err, manifestInfo) {
     if (err) {
       log.error('ERROR: ' + err.message);
       return;
     }
 
     // if specified as a parameter, override the app's short name
-    if (parameters.s) {
-      manifestInfo.content.short_name = parameters.s;
+    if (program.shortname) {
+      manifestInfo.content.short_name = program.shortname;
     }
     
     log.debug('Manifest contents:');
     log.debug(JSON.stringify(manifestInfo.content, null, 4));
     
     // Create the apps for the specified platforms
-    projectBuilder.createApps(manifestInfo, rootDir, platforms, parameters, function (err) {
+    projectBuilder.createApps(manifestInfo, rootDir, platforms, program, function (err) {
       if (err) {
         var errmsg = err.message;
         if (global.logLevel !== 'debug') {

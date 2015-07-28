@@ -89,7 +89,7 @@ describe('transformation: Windows 10 Manifest', function () {
         manifest.rawData.indexOf('StartPage="' + siteUrl + '"').should.be.above(-1);
         manifest.rawData.indexOf('Description="' + name + '"').should.be.above(-1);
         manifest.rawData.indexOf('<uap:Rotation Preference="' + orientation + '" />').should.be.above(-1);
-        manifest.rawData.replace(/[\t\r\n]/g, '').indexOf('<uap:ApplicationContentUriRules><uap:Rule Type="include" Match="http://url.com/" /></uap:ApplicationContentUriRules>').should.be.above(-1);
+        manifest.rawData.replace(/[\t\r\n]/g, '').indexOf('<uap:ApplicationContentUriRules><uap:Rule Type="include" WindowsRuntimeAccess="none" Match="http://url.com/" /></uap:ApplicationContentUriRules>').should.be.above(-1);
 
         manifest.should.have.property('icons').which.is.an.Object;
         manifest.icons.should.containEql({ '30x30': { 'url': smallLogoSrc, 'fileName': 'smalllogo.scale-100.png' } });
@@ -128,8 +128,8 @@ describe('transformation: Windows 10 Manifest', function () {
         manifest.should.have.property('rawData');
 
         var expectedContentUriRules = '<uap:ApplicationContentUriRules>' +
-                                          '<uap:Rule Type="include" Match="http://url.com/scope-path/" />' +
-                                          '<uap:Rule Type="include" Match="http://example.com/" />' +
+                                          '<uap:Rule Type="include" WindowsRuntimeAccess="none" Match="http://url.com/scope-path/" />' +
+                                          '<uap:Rule Type="include" WindowsRuntimeAccess="none" Match="http://example.com/" />' +
                                       '</uap:ApplicationContentUriRules>';
 
         manifest.rawData.replace(/[\t\r\n]/g, '').indexOf(expectedContentUriRules).should.be.above(-1);
@@ -148,7 +148,7 @@ describe('transformation: Windows 10 Manifest', function () {
           'short_name': shortName,
           'scope': '/scope-path/',
           'mjs_access_whitelist': [
-            { 'url': 'http://url.com/scope-path/hello/' }
+            { 'url': 'http://url.com/scope-path/' }
           ]
         }
       };
@@ -165,7 +165,7 @@ describe('transformation: Windows 10 Manifest', function () {
         manifest.should.have.property('rawData');
 
         var expectedContentUriRules = '<uap:ApplicationContentUriRules>' +
-                                        '<uap:Rule Type="include" Match="http://url.com/scope-path/" />' +
+                                        '<uap:Rule Type="include" WindowsRuntimeAccess="none" Match="http://url.com/scope-path/" />' +
                                       '</uap:ApplicationContentUriRules>';
 
         manifest.rawData.replace(/[\t\r\n]/g, '').indexOf(expectedContentUriRules).should.be.above(-1);
@@ -200,7 +200,7 @@ describe('transformation: Windows 10 Manifest', function () {
 
         manifest.should.have.property('rawData');
 
-        var expectedContentUriRules = '<uap:ApplicationContentUriRules><uap:Rule Type="include" Match="http://url.com/" /></uap:ApplicationContentUriRules>';
+        var expectedContentUriRules = '<uap:ApplicationContentUriRules><uap:Rule Type="include" WindowsRuntimeAccess="none" Match="http://url.com/" /></uap:ApplicationContentUriRules>';
 
         manifest.rawData.replace(/[\t\r\n]/g, '').indexOf(expectedContentUriRules).should.be.above(-1);
 
@@ -235,8 +235,8 @@ describe('transformation: Windows 10 Manifest', function () {
         manifest.should.have.property('rawData');
 
         var expectedContentUriRules = '<uap:ApplicationContentUriRules>' +
-                                        '<uap:Rule Type="include" Match="http://url.com/scope-path/" />' +
-                                        '<uap:Rule Type="include" Match="http://example.com/" />' +
+                                        '<uap:Rule Type="include" WindowsRuntimeAccess="none" Match="http://url.com/scope-path/" />' +
+                                        '<uap:Rule Type="include" WindowsRuntimeAccess="none" Match="http://example.com/" />' +
                                       '</uap:ApplicationContentUriRules>';
                             
         manifest.rawData.replace(/[\t\r\n]/g, '').indexOf(expectedContentUriRules).should.be.above(-1);
@@ -269,7 +269,7 @@ describe('transformation: Windows 10 Manifest', function () {
         manifest.should.have.property('rawData');
 
         var expectedContentUriRules = '<uap:ApplicationContentUriRules>' +
-                                        '<uap:Rule Type="include" Match="http://subdomain.url.com:3000/" />' +
+                                        '<uap:Rule Type="include" WindowsRuntimeAccess="none" Match="http://subdomain.url.com:3000/" />' +
                                       '</uap:ApplicationContentUriRules>';
                             
         manifest.rawData.replace(/[\t\r\n]/g, '').indexOf(expectedContentUriRules).should.be.above(-1);
@@ -302,7 +302,78 @@ describe('transformation: Windows 10 Manifest', function () {
         manifest.should.have.property('rawData');
 
         var expectedContentUriRules = '<uap:ApplicationContentUriRules>' +
-                                        '<uap:Rule Type="include" Match="http://*.url.com:3000/" />' +
+                                        '<uap:Rule Type="include" WindowsRuntimeAccess="none" Match="http://*.url.com:3000/" />' +
+                                      '</uap:ApplicationContentUriRules>';
+                            
+        manifest.rawData.replace(/[\t\r\n]/g, '').indexOf(expectedContentUriRules).should.be.above(-1);
+
+        done();
+      }); 
+    });
+    
+    it('Should enable API access in base rule', function (done) {
+      var siteUrl = 'http://url.com/something?query';
+      var shortName = 'shortName';
+
+      var originalManifestInfo = {
+        content: {
+          'start_url': siteUrl,
+          'short_name': shortName,
+          'mjs_access_whitelist': [
+            { 'url': 'http://url.com/', 'apiAccess': 'all' }
+          ]
+        }
+      };
+
+      transformation.convertFromBase(originalManifestInfo, function (err, result) {
+        should.not.exist(err);
+        should.exist(result);
+        /*jshint -W030 */
+        result.should.have.property('content').which.is.an.Object;
+        result.should.have.property('format', 'windows10');
+
+        var manifest = result.content;
+
+        manifest.should.have.property('rawData');
+
+        var expectedContentUriRules = '<uap:ApplicationContentUriRules>' +
+                                        '<uap:Rule Type="include" WindowsRuntimeAccess="all" Match="http://url.com/" />' +
+                                      '</uap:ApplicationContentUriRules>';
+                            
+        manifest.rawData.replace(/[\t\r\n]/g, '').indexOf(expectedContentUriRules).should.be.above(-1);
+
+        done();
+      });
+    });
+    
+    it('Should enable API in secondary rule but not in base rule', function (done) {
+      var siteUrl = 'http://url.com/something?query';
+      var shortName = 'shortName';
+
+      var originalManifestInfo = {
+        content: {
+          'start_url': siteUrl,
+          'short_name': shortName,
+          'mjs_access_whitelist': [
+            { 'url': 'http://url.com/somepath/', 'apiAccess': 'all' }
+          ]
+        }
+      };
+
+      transformation.convertFromBase(originalManifestInfo, function (err, result) {
+        should.not.exist(err);
+        should.exist(result);
+        /*jshint -W030 */
+        result.should.have.property('content').which.is.an.Object;
+        result.should.have.property('format', 'windows10');
+
+        var manifest = result.content;
+
+        manifest.should.have.property('rawData');
+
+        var expectedContentUriRules = '<uap:ApplicationContentUriRules>' +
+                                        '<uap:Rule Type="include" WindowsRuntimeAccess="none" Match="http://url.com/" />' +
+                                        '<uap:Rule Type="include" WindowsRuntimeAccess="all" Match="http://url.com/somepath/" />' +
                                       '</uap:ApplicationContentUriRules>';
                             
         manifest.rawData.replace(/[\t\r\n]/g, '').indexOf(expectedContentUriRules).should.be.above(-1);
