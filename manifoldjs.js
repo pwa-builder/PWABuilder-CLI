@@ -70,7 +70,7 @@ function getW3cManifest(siteUrl, manifestLocation, callback) {
 
     return manifestTools.validateAndNormalizeStartUrl(siteUrl, manifestInfo, callback);
   }
-  
+
   if (siteUrl) {
     var parsedSiteUrl = url.parse(siteUrl);
     if (!parsedSiteUrl.hostname) {
@@ -89,7 +89,7 @@ function getW3cManifest(siteUrl, manifestLocation, callback) {
       log.info('Reading manifest file ' + manifestLocation + '...');
       manifestTools.getManifestFromFile(manifestLocation, resolveStartURL);
     }
-  } else if (siteUrl) {    
+  } else if (siteUrl) {
     // scan a site to retrieve its manifest
     log.info('Scanning ' + siteUrl + ' for manifest...');
     manifestTools.getManifestFromSite(siteUrl, resolveStartURL);
@@ -115,6 +115,7 @@ var program = require('commander')
              .option('-m, --manifest <manifest-location>', 'location of the W3C Web App manifest\n                                    ' +
                                                     'file (URL or local path)')
              .option('-c, --crosswalk', 'enable Crosswalk for Android', false)
+             .option('-w, --webAppToolkit', 'adds the Web App Toolkit cordova plugin', false)
              .parse(process.argv);
 
 if (!process.argv.slice(2).length) {
@@ -160,10 +161,10 @@ if (program.args[0] && program.args[0].toLowerCase() === 'run') {
     if (program.shortname) {
       manifestInfo.content.short_name = program.shortname;
     }
-    
+
     log.debug('Manifest contents:');
     log.debug(JSON.stringify(manifestInfo.content, null, 4));
-    
+
     // Create the apps for the specified platforms
     projectBuilder.createApps(manifestInfo, rootDir, platforms, program, function (err) {
       if (err) {
@@ -175,7 +176,7 @@ if (program.args[0] && program.args[0].toLowerCase() === 'run') {
         log.error(errmsg);
         return;
       }
-      
+
       log.info('The application(s) are ready!');
     });
   });
