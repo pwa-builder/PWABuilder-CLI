@@ -33,6 +33,8 @@ manifoldjs <command>
 | `-b, --build`     | **(optional)** Forces the building process |
 | `-m, --manifest`  | **(optional)** Location of the W3C Web App manifest file (URL or local path). If not specified, the tool looks for a manifest in the site URL. Otherwise, a new manifest will be created pointing to the site URL. |
 | `-c, --crosswalk` | **(optional)** Enable Crosswalk for Android. Crosswalk is a web runtime that can be used to replace the stock WebView used by Android Cordova apps. Crosswalk is based on Google Chromium with Cordova API support and has better HTML5 feature support compared to the default WebView available in Android. |
+| `-w, --webAppToolkit` | **(optional)** Adds the [Web App Toolkit](https://github.com/manifoldjs/Web-App-ToolKit) cordova plugin. The Web App Toolkit is a plugin for creating Windows, Android and iOS apps based on existing web content. It depends on the Hosted Web App Plugin. Used in the right way, it can facilitate the creation of compelling extensions to your web content for users across platforms. |
+
 
 
 ### Commands
@@ -145,8 +147,10 @@ Generates the applications for the specified platforms.
 `platforms` a string array specifying one or more target platforms: _windows,android,ios,chrome,web,firefox_.
 
 `options` an object with one or more properties that customize the generated application:
+
 - `crosswalk` (boolean) enable Crosswalk in the Cordova Android app
 - `build`     (boolean) set to build the generated application
+- `webAppToolkit` (boolean) adds the Web App Toolkit <https://github.com/manifoldjs/Web-App-ToolKit> cordova plugin
 
 `callback(err)` returns an error, if any.
 
