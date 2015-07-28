@@ -4,6 +4,7 @@ var validations = require('./lib/common/validations'),
     manifestTools = require('./lib/manifestTools'),
     projectBuilder = require('./lib/projectBuilder'),
     projectTools = require('./lib/projectTools'),
+    platformUtils = require('./lib/platformUtils/platformUtils'),
     version = require('./lib/common/version'),
     url = require('url'),
     log = require('loglevel'),
@@ -150,6 +151,16 @@ if (program.args[0] && program.args[0].toLowerCase() === 'run') {
   var siteUrl = program.args[0];
   var rootDir = program.directory ? path.resolve(program.directory) : process.cwd();
   var platforms = program.platforms.split(/[\s,]+/);
+  
+  // remove windows as default platform if run on Linux or MacOS
+  // Fix for issue # 115: https://github.com/manifoldjs/ManifoldJS/issues/115
+  // it should be removed once cordova adds support for Windows on Linux and MacOS
+  if (!platformUtils.isWindows && 
+       program.rawArgs.indexOf('-p') === -1 && 
+       program.rawArgs.indexOf('-platforms')  === -1) {
+    platforms.splice(platforms.indexOf('windows'), 1);
+  }
+  
   getW3cManifest(siteUrl, program.manifest, function (err, manifestInfo) {
     if (err) {
       log.error('ERROR: ' + err.message);
