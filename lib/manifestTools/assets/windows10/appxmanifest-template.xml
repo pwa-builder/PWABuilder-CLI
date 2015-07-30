@@ -2,6 +2,7 @@
 <Package xmlns="http://schemas.microsoft.com/appx/manifest/foundation/windows10"
 xmlns:mp="http://schemas.microsoft.com/appx/2014/phone/manifest"
 xmlns:uap="http://schemas.microsoft.com/appx/manifest/uap/windows10"
+xmlns:build="http://schemas.microsoft.com/developer/appx/2015/build"
 IgnorableNamespaces="uap mp build"> 
 	<Identity Name="{IdentityName}" Publisher="CN=user" Version="1.0.0.0" ProcessorArchitecture="neutral" /> 
 	<mp:PhoneIdentity PhoneProductId="{PhoneProductId}" PhonePublisherId="00000000-0000-0000-0000-000000000000"/> 
@@ -9,8 +10,7 @@ IgnorableNamespaces="uap mp build">
 	<build:Metadata>
 		<build:Item Name ="ManifoldJSVersion" Value ="{ManifoldJSVersion}" />
 		<build:Item Name ="GeneratedFrom" Value ="{GeneratedFrom}" />
-		<build:Item Name ="GenerationDate" Value ="{GenerationDate}" />
-		{MetadataItems}
+		<build:Item Name ="GenerationDate" Value ="{GenerationDate}" />{MetadataItems}
 	</build:Metadata>
 
 	<Properties> 
@@ -20,7 +20,7 @@ IgnorableNamespaces="uap mp build">
 	</Properties> 
 
 	<Dependencies> 
-		<TargetDeviceFamily Name="Windows.Universal" MinVersion="10.0.10030.0" MaxVersionTested="10.0.10069.0"/> 
+		<TargetDeviceFamily Name="Windows.Universal" MinVersion="10.0.10240.0" MaxVersionTested="10.0.10240.0" /> 
 	</Dependencies> 
 
 	<Resources>
