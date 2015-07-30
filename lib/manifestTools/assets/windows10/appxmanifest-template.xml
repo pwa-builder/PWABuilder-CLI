@@ -7,7 +7,10 @@ IgnorableNamespaces="uap mp build">
   <mp:PhoneIdentity PhoneProductId="{PhoneProductId}" PhonePublisherId="00000000-0000-0000-0000-000000000000"/> 
 
   <build:Metadata>
-    <build:Item Name ="ManifoldJS" Version ="{ManifoldJSVersion}" />
+    <build:Item Name ="ManifoldJSVersion" Value ="{ManifoldJSVersion}" />
+    <build:Item Name ="GeneratedFrom" Value ="{GeneratedFrom}" />
+    <build:Item Name ="GenerationDate" Value ="{GenerationDate}" />
+    {MetadataItems}
   </build:Metadata>
 
   <Properties> 
