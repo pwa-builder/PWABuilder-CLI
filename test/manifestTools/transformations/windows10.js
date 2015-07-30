@@ -101,6 +101,42 @@ describe('transformation: Windows 10 Manifest', function () {
       });
     });
 
+    it('Should keep timestamp information if present', function (done) {
+      var expectedDate = new Date().toISOString();
+      var originalManifestInfo = {
+        content: {
+          'start_url': 'http://url.com/something?query',
+          'short_name': 'shortName'
+        },
+        timestamp: expectedDate
+      };
+
+      transformation.convertFromBase(originalManifestInfo, function (err, result) {
+        should.not.exist(err);
+        should.exist(result);
+        /*jshint -W030 */
+        result.should.have.property('timestamp', expectedDate);
+        done();
+      });
+    });
+
+    it('Should add timestamp', function (done) {
+      var originalManifestInfo = {
+        content: {
+          'start_url': 'http://url.com/something?query',
+          'short_name': 'shortName'
+        },
+      };
+
+      transformation.convertFromBase(originalManifestInfo, function (err, result) {
+        should.not.exist(err);
+        should.exist(result);
+        /*jshint -W030 */
+        result.should.have.property('timestamp');
+        done();
+      });
+    });
+
     it('Should return the transformed manifest with content uri rules', function (done) {
       var siteUrl = 'http://url.com/something?query';
       var shortName = 'shortName';
