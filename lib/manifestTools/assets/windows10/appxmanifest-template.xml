@@ -1,48 +1,51 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<!--Generation Tool: ManifoldJS (version {ManifoldJSVersion})-->
 <Package xmlns="http://schemas.microsoft.com/appx/manifest/foundation/windows10"
 xmlns:mp="http://schemas.microsoft.com/appx/2014/phone/manifest"
 xmlns:uap="http://schemas.microsoft.com/appx/manifest/uap/windows10"
-IgnorableNamespaces="uap mp"> 
-	<Identity Name="{IdentityName}" Publisher="CN=user" Version="1.0.0.0" ProcessorArchitecture="neutral" /> 
-	<mp:PhoneIdentity PhoneProductId="{PhoneProductId}" PhonePublisherId="00000000-0000-0000-0000-000000000000"/> 
+IgnorableNamespaces="uap mp build"> 
+  <Identity Name="{IdentityName}" Publisher="CN=user" Version="1.0.0.0" ProcessorArchitecture="neutral" /> 
+  <mp:PhoneIdentity PhoneProductId="{PhoneProductId}" PhonePublisherId="00000000-0000-0000-0000-000000000000"/> 
 
-	<Properties> 
-		<DisplayName>{DisplayName}</DisplayName> 
-		<PublisherDisplayName>user</PublisherDisplayName> 
-		<Logo>images\storelogo.scale-100.png</Logo> 
-	</Properties> 
+  <build:Metadata>
+    <build:Item Name ="ManifoldJS" Version ="{ManifoldJSVersion}" />
+  </build:Metadata>
 
-	<Dependencies> 
-		<TargetDeviceFamily Name="Windows.Universal" MinVersion="10.0.10030.0" MaxVersionTested="10.0.10069.0"/> 
-	</Dependencies> 
+  <Properties> 
+    <DisplayName>{DisplayName}</DisplayName> 
+    <PublisherDisplayName>user</PublisherDisplayName> 
+  <Logo>images\storelogo.scale-100.png</Logo> 
+  </Properties> 
 
-	<Resources>
-	<Resource Language="en-us" /> 
-	 </Resources> 
+  <Dependencies> 
+    <TargetDeviceFamily Name="Windows.Universal" MinVersion="10.0.10030.0" MaxVersionTested="10.0.10069.0"/> 
+  </Dependencies> 
 
-	<Applications> 
-		<Application Id="{ApplicationId}" StartPage="{StartPage}"> 
-			<uap:VisualElements 
-				DisplayName="{DisplayName}" 
-				Square150x150Logo="images\logo.scale-100.png" 
-				Square44x44Logo="images\smalllogo.scale-100.png" 
-				Description="{Description}"  
-				BackgroundColor="blue"> 
-				<uap:SplashScreen Image="images\splashscreen.scale-100.png" /> 
-				<uap:InitialRotationPreference> 
-					<uap:Rotation Preference="{RotationPreference}" /> 
-				</uap:InitialRotationPreference> 
-			</uap:VisualElements> 
-			<uap:ApplicationContentUriRules>
-				{ApplicationContentUriRules}
-			</uap:ApplicationContentUriRules>
-		</Application> 
-	</Applications> 
+  <Resources>
+  <Resource Language="en-us" /> 
+   </Resources> 
 
-	<Capabilities>
-		<Capability Name="internetClient" />
-		<Capability Name="privateNetworkClientServer" />
-	</Capabilities>
+  <Applications> 
+    <Application Id="{ApplicationId}" StartPage="{StartPage}"> 
+      <uap:VisualElements 
+        DisplayName="{DisplayName}" 
+        Square150x150Logo="images\logo.scale-100.png" 
+        Square44x44Logo="images\smalllogo.scale-100.png" 
+        Description="{Description}"  
+        BackgroundColor="blue"> 
+        <uap:SplashScreen Image="images\splashscreen.scale-100.png" /> 
+        <uap:InitialRotationPreference> 
+          <uap:Rotation Preference="{RotationPreference}" /> 
+        </uap:InitialRotationPreference> 
+      </uap:VisualElements> 
+      <uap:ApplicationContentUriRules>
+        {ApplicationContentUriRules}
+      </uap:ApplicationContentUriRules>
+    </Application> 
+  </Applications> 
+
+  <Capabilities>
+    <Capability Name="internetClient" />
+    <Capability Name="privateNetworkClientServer" />
+  </Capabilities>
 
 </Package>
