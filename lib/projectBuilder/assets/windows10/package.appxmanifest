@@ -16,8 +16,7 @@
   <build:Metadata>
     <build:Item Name ="ManifoldJSVersion" Value ="{ManifoldJSVersion}" />
     <build:Item Name ="GeneratedFrom" Value ="{GeneratedFrom}" />
-    <build:Item Name ="GenerationDate" Value ="{GenerationDate}" />
-    {MetadataItems}
+    <build:Item Name ="GenerationDate" Value ="{GenerationDate}" />{MetadataItems}
   </build:Metadata>
 
   <Properties>
