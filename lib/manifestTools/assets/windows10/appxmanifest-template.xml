@@ -4,7 +4,7 @@ xmlns:mp="http://schemas.microsoft.com/appx/2014/phone/manifest"
 xmlns:uap="http://schemas.microsoft.com/appx/manifest/uap/windows10"
 xmlns:build="http://schemas.microsoft.com/developer/appx/2015/build"
 IgnorableNamespaces="uap mp build"> 
-	<Identity Name="{IdentityName}" Publisher="CN=user" Version="1.0.0.0" ProcessorArchitecture="neutral" /> 
+	<Identity Name="{Package-Identity-Name}" Publisher="{Package-Identity-Publisher}" Version="1.0.0.0" ProcessorArchitecture="neutral" /> 
 	<mp:PhoneIdentity PhoneProductId="{PhoneProductId}" PhonePublisherId="00000000-0000-0000-0000-000000000000"/> 
 
 	<build:Metadata>
@@ -15,7 +15,7 @@ IgnorableNamespaces="uap mp build">
 
 	<Properties> 
 		<DisplayName>{DisplayName}</DisplayName> 
-		<PublisherDisplayName>user</PublisherDisplayName> 
+		<PublisherDisplayName>{Package-Properties-PublisherDisplayName}</PublisherDisplayName> 
 	<Logo>images\storelogo.scale-100.png</Logo> 
 	</Properties> 
 
