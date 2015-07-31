@@ -165,7 +165,7 @@ if (program.args[0] && program.args[0].toLowerCase() === 'run') {
     log.debug(JSON.stringify(manifestInfo.content, null, 4));
 
     // add generatedFrom value to manifestInfo for telemetry
-    manifestInfo.generatedFrom = "CLI";
+    manifestInfo.generatedFrom = 'CLI';
 
     // Create the apps for the specified platforms
     projectBuilder.createApps(manifestInfo, rootDir, platforms, program, function (err) {
