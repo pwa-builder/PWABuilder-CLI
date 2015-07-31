@@ -164,9 +164,6 @@ if (program.args[0] && program.args[0].toLowerCase() === 'run') {
     log.debug('Manifest contents:');
     log.debug(JSON.stringify(manifestInfo.content, null, 4));
 
-    // Add timestamp to manifest information for telemetry purposes only
-    manifestInfo.timestamp = new Date().toISOString().replace(/T/, ' ').replace(/\.[0-9]+/, ' ');
-
     // Create the apps for the specified platforms
     projectBuilder.createApps(manifestInfo, rootDir, platforms, program, function (err) {
       if (err) {
