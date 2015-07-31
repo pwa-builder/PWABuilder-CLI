@@ -37,7 +37,7 @@
     "cheerio": "^0.18.0",
     "commander": "^2.8.1",
     "cordova": "5.1.1",
-    "gulp-appx": "git+http://github.com/southworkscom/CloudAppX#manifoldjs-support-v2",
+    "gulp-appx": "git+http://github.com/southworkscom/CloudAppX#manifoldjs-support-v3",
     "loglevel": "^1.2.0",
     "mkdirp": "^0.5.0",
     "ncp": "^2.0.0",

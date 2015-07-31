@@ -7,7 +7,9 @@ var validations = require('./lib/common/validations'),
     version = require('./lib/common/version'),
     url = require('url'),
     log = require('loglevel'),
-    path = require('path');
+    path = require('path'),
+    fs = require('fs'),
+    windows10Utils = require('./lib/platformUtils/windows10Utils');
 
 version.checkForUpdate(function (err, updateAvailable) {
   if (!err && updateAvailable) {
@@ -20,43 +22,58 @@ version.checkForUpdate(function (err, updateAvailable) {
 });
 
 function checkParameters(program) {
-  if (program.args.length === 0 && !program.manifest) {
-    console.error('ERROR: Missing required parameters. Either the web site URL or the location of a W3C manifest should be specified.');
-    process.exit(1);
-  } else if(program.args.length === 1) {
-    if (program.args[0].toLowerCase() === 'run') {
-      console.error('ERROR: Missing platform parameter.');
-      process.exit(1);
+  if (program.args.length > 0) {
+    var unknownArgs = 0;
+    var command = program.args[0].toLowerCase();
+    switch (command) {
+      case 'run':
+        if (program.args.length < 2) {
+          return 'ERROR: You must specify a platform (windows | android).';
+        } 
+        
+        if (!validations.platformToRunValid(program.args[1])) {
+          return 'ERROR: Invalid platform specified - [' + program.args[1] + '].';
+        }
+
+        unknownArgs = 2;
+        break;
+      case 'package':
+        if (!program.directory) {
+          return 'ERROR: You must specify a content directory (-d | --directory)';
+        }
+        
+        if (!program.output) {
+          return 'ERROR: You must specify an output package path (-o | --output)';
+        }
+
+        program.package = true;
+      case 'visualstudio':
+      default:
+        unknownArgs = 1;
+        break;
     }
-  } else if (program.length === 2) {
-    if (program.args[0].toLowerCase() !== 'run') {
-      console.error('ERROR: Invalid parameters.');
-      process.exit(1);
-    } else {
-      if (!validations.platformToRunValid(program.args[1])) {
-        console.error('ERROR: Invalid platform specified.');
-        process.exit(1);
-      }
+  } else {
+    if (!program.manifest) {
+      return 'ERROR: You must specify either the web site URL or the location of a W3C manifest (-m | --manifest).';
     }
-  } else if (program.length > 2) {
-    console.error('ERROR: Unexpected parameters.');
-    process.exit(1);
+  }
+
+  if (program.args.length > unknownArgs) {
+    return 'ERROR: Unexpected parameters - [' + program.args.slice(unknownArgs).join() + '].';
   }
 
   // check platforms
   if (program.platforms) {
     var platforms = program.platforms.split(/[\s,]+/);
     if (!validations.platformsValid(platforms)) {
-      console.error('ERROR: Invalid platform(s) specified.');
-      process.exit(1);
+      return 'ERROR: Invalid platform(s) specified.';
     }
   }
 
   // check log level
   if (program.loglevel) {
     if (!validations.logLevelValid(program.loglevel)) {
-      console.error('ERROR: Invalid loglevel specified. Valid values are: debug, trace, info, warn, error');
-      process.exit(1);
+      return 'ERROR: Invalid loglevel specified. Valid values are: debug, trace, info, warn, error';
     }
   }
 }
@@ -102,6 +119,8 @@ var program = require('commander')
                     '  -or-\n' +
                     '         manifoldjs -m <manifest-location> [options]\n' +
                     '  -or-\n' +
+                    '         manifoldjs package -d <content-directory> -o <output-package-path>\n' +
+                    '  -or-\n' +
                     '         manifoldjs run <windows|android>\n' +
                     '  -or-\n' +
                     '         manifoldjs visualstudio')
@@ -114,13 +133,18 @@ var program = require('commander')
              .option('-m, --manifest <manifest-location>', 'location of the W3C Web App manifest\n                                    ' +
                                                     'file (URL or local path)')
              .option('-c, --crosswalk', 'enable Crosswalk for Android', false)
+             .option('-o, --output <output-package-path>', 'output package file path')
              .parse(process.argv);
 
 if (!process.argv.slice(2).length) {
   program.help();
 }
 
-checkParameters(program);
+var validationResult = checkParameters(program);
+if (validationResult) {
+  console.log(validationResult);
+  process.exit(1);
+}
 
 global.logLevel = program.loglevel;
 log.setLevel(global.logLevel);
@@ -145,6 +169,17 @@ if (program.args[0] && program.args[0].toLowerCase() === 'run') {
     }
   });
 
+} else if (program.package) {
+  // creates App Store packages for publishing - currently supports Windows 10 only
+  log.info('Creating a Windows Store AppX package for the Windows 10 hosted app project...');
+  windows10Utils.makeAppx(program.directory, program.output, function (err) {
+    if (err) {
+      log.error('ERROR: ' + err.message);
+      return;
+    }
+
+    log.info('The app store package was created successfully!');
+  });
 } else {
   var siteUrl = program.args[0];
   var rootDir = program.directory ? path.resolve(program.directory) : process.cwd();
