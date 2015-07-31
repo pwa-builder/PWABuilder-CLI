@@ -4,6 +4,7 @@ var validations = require('./lib/common/validations'),
     manifestTools = require('./lib/manifestTools'),
     projectBuilder = require('./lib/projectBuilder'),
     projectTools = require('./lib/projectTools'),
+    platformUtils = require('./lib/platformUtils/platformUtils'),
     version = require('./lib/common/version'),
     url = require('url'),
     log = require('loglevel'),
@@ -14,9 +15,10 @@ var validations = require('./lib/common/validations'),
 version.checkForUpdate(function (err, updateAvailable) {
   if (!err && updateAvailable) {
     console.log();
-    console.log('*****************************************************************************************');
-    console.log('*** A new version of ManifoldJS is available (v' + updateAvailable + '). We recommend that you upgrade. ***');
-    console.log('*****************************************************************************************');
+    console.log('*******************************************************************************');
+    console.log('A new version of ManifoldJS is available (v' + updateAvailable + ').');
+    console.log('We recommend that you upgrade.');
+    console.log('*******************************************************************************');
     console.log();
   }
 });
@@ -134,6 +136,7 @@ var program = require('commander')
                                                     'file (URL or local path)')
              .option('-c, --crosswalk', 'enable Crosswalk for Android', false)
              .option('-o, --output <output-package-path>', 'output package file path')
+             .option('-w, --webAppToolkit', 'adds the Web App Toolkit cordova plugin', false)
              .parse(process.argv);
 
 if (!process.argv.slice(2).length) {
@@ -184,6 +187,16 @@ if (program.args[0] && program.args[0].toLowerCase() === 'run') {
   var siteUrl = program.args[0];
   var rootDir = program.directory ? path.resolve(program.directory) : process.cwd();
   var platforms = program.platforms.split(/[\s,]+/);
+  
+  // remove windows as default platform if run on Linux or MacOS
+  // Fix for issue # 115: https://github.com/manifoldjs/ManifoldJS/issues/115
+  // it should be removed once cordova adds support for Windows on Linux and MacOS
+  if (!platformUtils.isWindows && 
+       program.rawArgs.indexOf('-p') === -1 && 
+       program.rawArgs.indexOf('--platforms')  === -1) {
+    platforms.splice(platforms.indexOf('windows'), 1);
+  }
+  
   getW3cManifest(siteUrl, program.manifest, function (err, manifestInfo) {
     if (err) {
       log.error('ERROR: ' + err.message);
@@ -198,6 +211,9 @@ if (program.args[0] && program.args[0].toLowerCase() === 'run') {
     log.debug('Manifest contents:');
     log.debug(JSON.stringify(manifestInfo.content, null, 4));
     
+    // add generatedFrom value to manifestInfo for telemetry
+    manifestInfo.generatedFrom = 'CLI';
+
     // Create the apps for the specified platforms
     projectBuilder.createApps(manifestInfo, rootDir, platforms, program, function (err) {
       if (err) {

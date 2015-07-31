@@ -1,10 +1,10 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<!--Generation Tool: ManifoldJS (version {ManifoldJSVersion})-->
 <Package
   xmlns="http://schemas.microsoft.com/appx/manifest/foundation/windows10"
   xmlns:mp="http://schemas.microsoft.com/appx/2014/phone/manifest"
   xmlns:uap="http://schemas.microsoft.com/appx/manifest/uap/windows10"
-  IgnorableNamespaces="uap mp">
+  xmlns:build="http://schemas.microsoft.com/developer/appx/2015/build"
+  IgnorableNamespaces="uap mp build">
 
   <Identity
     Name="{IdentityName}"
@@ -12,6 +12,12 @@
     Publisher="CN=user" />
 
   <mp:PhoneIdentity PhoneProductId="{PhoneProductId}" PhonePublisherId="00000000-0000-0000-0000-000000000000"/>
+  
+  <build:Metadata>
+    <build:Item Name ="ManifoldJSVersion" Value ="{ManifoldJSVersion}" />
+    <build:Item Name ="GeneratedFrom" Value ="{GeneratedFrom}" />
+    <build:Item Name ="GenerationDate" Value ="{GenerationDate}" />{MetadataItems}
+  </build:Metadata>
 
   <Properties>
     <DisplayName>{DisplayName}</DisplayName>
@@ -20,7 +26,7 @@
   </Properties>
 
   <Dependencies>
-    <TargetDeviceFamily Name="Windows.Universal" MinVersion="10.0.10030.0" MaxVersionTested="10.0.10069.0"/>
+    <TargetDeviceFamily Name="Windows.Universal" MinVersion="10.0.0.0" MaxVersionTested="10.0.0.0" />
   </Dependencies>
 
   <Resources>

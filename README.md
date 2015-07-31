@@ -33,6 +33,8 @@ manifoldjs <command>
 | `-b, --build`     | **(optional)** Forces the building process |
 | `-m, --manifest`  | **(optional)** Location of the W3C Web App manifest file (URL or local path). If not specified, the tool looks for a manifest in the site URL. Otherwise, a new manifest will be created pointing to the site URL. |
 | `-c, --crosswalk` | **(optional)** Enable Crosswalk for Android. Crosswalk is a web runtime that can be used to replace the stock WebView used by Android Cordova apps. Crosswalk is based on Google Chromium with Cordova API support and has better HTML5 feature support compared to the default WebView available in Android. |
+| `-w, --webAppToolkit` | **(optional)** Adds the [Web App Toolkit](https://github.com/manifoldjs/Web-App-ToolKit) cordova plugin. The Web App Toolkit is a plugin for creating Windows, Android and iOS apps based on existing web content. It depends on the Hosted Web App Plugin. Used in the right way, it can facilitate the creation of compelling extensions to your web content for users across platforms. |
+
 
 
 ### Commands
@@ -145,8 +147,10 @@ Generates the applications for the specified platforms.
 `platforms` a string array specifying one or more target platforms: _windows,android,ios,chrome,web,firefox_.
 
 `options` an object with one or more properties that customize the generated application:
+
 - `crosswalk` (boolean) enable Crosswalk in the Cordova Android app
 - `build`     (boolean) set to build the generated application
+- `webAppToolkit` (boolean) adds the Web App Toolkit <https://github.com/manifoldjs/Web-App-ToolKit> cordova plugin
 
 `callback(err)` returns an error, if any.
 
@@ -206,10 +210,7 @@ Releases are documented in [GitHub](https://github.com/manifoldjs/ManifoldJS/rel
   This is caused by an issue in Node.js which has been fixed in more recent releases. To resolve this issue, upgrade Node.js to the latest version.
 
 - Adding the **windows** platform in the Linux and Mac OS environments fails. The tool reports **_"WARNING: Failed to add the Cordova platforms: XXXX."_** where **_XXXX_** includes **_windows_**.  
-  This is caused by an issue in the Windows platform for Cordova. Depending on the cordova-windows version, running the tool can show one of two errors: **"_Cannot find module 'Q'."_** or **"_No such file or directory."_**. Until this problem is fixed by Cordova, the workaround is to exclude the Windows platform when building projects in Linux or MacOS by using the **__-p | --platforms__** command line parameter. For example,
-  ```
-  manifoldjs http://your.site/ .... -p ios,android,firefox,chrome,web
-  ```
+  This is caused by an issue in the Windows platform for Cordova. Depending on the cordova-windows version, running the tool can show one of two errors: **"_Cannot find module 'Q'."_** or **"_No such file or directory."_**. Until this problem is fixed by Cordova, we've removed the windows platform from the default list when creating the app in Linux or Mac OS.
 
 - Error when building an iOS application for projects generated in a Windows machine and then copied to an OS X machine. Xcode reports "**_Shell Script Invocation Error - Command /bin/sh failed with exit code 126_**". This happens when the execution permission (+x) is lost on some scripts when copying between the different file systems.  
 
