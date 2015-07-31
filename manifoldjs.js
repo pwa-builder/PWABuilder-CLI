@@ -4,13 +4,12 @@ var validations = require('./lib/common/validations'),
     manifestTools = require('./lib/manifestTools'),
     projectBuilder = require('./lib/projectBuilder'),
     projectTools = require('./lib/projectTools'),
-    platformUtils = require('./lib/platformUtils/platformUtils'),
+    platformUtils = require('./lib/platformUtils'),
     version = require('./lib/common/version'),
     url = require('url'),
     log = require('loglevel'),
     path = require('path'),
-    fs = require('fs'),
-    windows10Utils = require('./lib/platformUtils/windows10Utils');
+    fs = require('fs');
 
 version.checkForUpdate(function (err, updateAvailable) {
   if (!err && updateAvailable) {
@@ -175,7 +174,7 @@ if (program.args[0] && program.args[0].toLowerCase() === 'run') {
 } else if (program.package) {
   // creates App Store packages for publishing - currently supports Windows 10 only
   log.info('Creating a Windows Store AppX package for the Windows 10 hosted app project...');
-  windows10Utils.makeAppx(program.directory, program.output, function (err) {
+  platformUtils.makeAppx(program.directory, program.output, function (err) {
     if (err) {
       log.error('ERROR: ' + err.message);
       return;
