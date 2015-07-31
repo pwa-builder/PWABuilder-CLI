@@ -206,10 +206,7 @@ Releases are documented in [GitHub](https://github.com/manifoldjs/ManifoldJS/rel
   This is caused by an issue in Node.js which has been fixed in more recent releases. To resolve this issue, upgrade Node.js to the latest version.
 
 - Adding the **windows** platform in the Linux and Mac OS environments fails. The tool reports **_"WARNING: Failed to add the Cordova platforms: XXXX."_** where **_XXXX_** includes **_windows_**.  
-  This is caused by an issue in the Windows platform for Cordova. Depending on the cordova-windows version, running the tool can show one of two errors: **"_Cannot find module 'Q'."_** or **"_No such file or directory."_**. Until this problem is fixed by Cordova, the workaround is to exclude the Windows platform when building projects in Linux or MacOS by using the **__-p | --platforms__** command line parameter. For example,
-  ```
-  manifoldjs http://your.site/ .... -p ios,android,firefox,chrome,web
-  ```
+  This is caused by an issue in the Windows platform for Cordova. Depending on the cordova-windows version, running the tool can show one of two errors: **"_Cannot find module 'Q'."_** or **"_No such file or directory."_**. Until this problem is fixed by Cordova, we've removed the windows platform from the default list when creating the app in Linux or Mac OS.
 
 - Error when building an iOS application for projects generated in a Windows machine and then copied to an OS X machine. Xcode reports "**_Shell Script Invocation Error - Command /bin/sh failed with exit code 126_**". This happens when the execution permission (+x) is lost on some scripts when copying between the different file systems.  
 
