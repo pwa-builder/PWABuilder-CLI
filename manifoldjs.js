@@ -4,6 +4,7 @@ var validations = require('./lib/common/validations'),
     manifestTools = require('./lib/manifestTools'),
     projectBuilder = require('./lib/projectBuilder'),
     projectTools = require('./lib/projectTools'),
+    platformUtils = require('./lib/platformUtils/platformUtils'),
     version = require('./lib/common/version'),
     url = require('url'),
     log = require('loglevel'),
@@ -70,7 +71,7 @@ function getW3cManifest(siteUrl, manifestLocation, callback) {
 
     return manifestTools.validateAndNormalizeStartUrl(siteUrl, manifestInfo, callback);
   }
-  
+
   if (siteUrl) {
     var parsedSiteUrl = url.parse(siteUrl);
     if (!parsedSiteUrl.hostname) {
@@ -89,7 +90,7 @@ function getW3cManifest(siteUrl, manifestLocation, callback) {
       log.info('Reading manifest file ' + manifestLocation + '...');
       manifestTools.getManifestFromFile(manifestLocation, resolveStartURL);
     }
-  } else if (siteUrl) {    
+  } else if (siteUrl) {
     // scan a site to retrieve its manifest
     log.info('Scanning ' + siteUrl + ' for manifest...');
     manifestTools.getManifestFromSite(siteUrl, resolveStartURL);
@@ -115,6 +116,7 @@ var program = require('commander')
              .option('-m, --manifest <manifest-location>', 'location of the W3C Web App manifest\n                                    ' +
                                                     'file (URL or local path)')
              .option('-c, --crosswalk', 'enable Crosswalk for Android', false)
+             .option('-w, --webAppToolkit', 'adds the Web App Toolkit cordova plugin', false)
              .parse(process.argv);
 
 if (!process.argv.slice(2).length) {
@@ -150,6 +152,16 @@ if (program.args[0] && program.args[0].toLowerCase() === 'run') {
   var siteUrl = program.args[0];
   var rootDir = program.directory ? path.resolve(program.directory) : process.cwd();
   var platforms = program.platforms.split(/[\s,]+/);
+  
+  // remove windows as default platform if run on Linux or MacOS
+  // Fix for issue # 115: https://github.com/manifoldjs/ManifoldJS/issues/115
+  // it should be removed once cordova adds support for Windows on Linux and MacOS
+  if (!platformUtils.isWindows && 
+       program.rawArgs.indexOf('-p') === -1 && 
+       program.rawArgs.indexOf('--platforms')  === -1) {
+    platforms.splice(platforms.indexOf('windows'), 1);
+  }
+  
   getW3cManifest(siteUrl, program.manifest, function (err, manifestInfo) {
     if (err) {
       log.error('ERROR: ' + err.message);
@@ -160,7 +172,7 @@ if (program.args[0] && program.args[0].toLowerCase() === 'run') {
     if (program.shortname) {
       manifestInfo.content.short_name = program.shortname;
     }
-    
+
     log.debug('Manifest contents:');
     log.debug(JSON.stringify(manifestInfo.content, null, 4));
 
@@ -178,7 +190,7 @@ if (program.args[0] && program.args[0].toLowerCase() === 'run') {
         log.error(errmsg);
         return;
       }
-      
+
       log.info('The application(s) are ready!');
     });
   });
