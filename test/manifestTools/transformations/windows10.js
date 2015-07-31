@@ -101,6 +101,24 @@ describe('transformation: Windows 10 Manifest', function () {
       });
     });
 
+    it('Should keep generatedFrom information if present', function (done) {
+      var originalManifestInfo = {
+        content: {
+          'start_url': 'http://url.com/something?query',
+          'short_name': 'shortName'
+        },
+        generatedFrom: 'CLI'
+      };
+
+      transformation.convertFromBase(originalManifestInfo, function (err, result) {
+        should.not.exist(err);
+        should.exist(result);
+        /*jshint -W030 */
+        result.should.have.property('generatedFrom', 'CLI');
+        done();
+      });
+    });
+
     it('Should keep timestamp information if present', function (done) {
       var expectedDate = new Date().toISOString();
       var originalManifestInfo = {
