@@ -1,20 +1,26 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<!--Generation Tool: ManifoldJS (version {ManifoldJSVersion})-->
 <Package xmlns="http://schemas.microsoft.com/appx/manifest/foundation/windows10"
 xmlns:mp="http://schemas.microsoft.com/appx/2014/phone/manifest"
 xmlns:uap="http://schemas.microsoft.com/appx/manifest/uap/windows10"
-IgnorableNamespaces="uap mp"> 
-	<Identity Name="{IdentityName}" Publisher="CN=user" Version="1.0.0.0" ProcessorArchitecture="neutral" /> 
+xmlns:build="http://schemas.microsoft.com/developer/appx/2015/build"
+IgnorableNamespaces="uap mp build"> 
+	<Identity Name="{Package-Identity-Name}" Publisher="{Package-Identity-Publisher}" Version="1.0.0.0" ProcessorArchitecture="neutral" /> 
 	<mp:PhoneIdentity PhoneProductId="{PhoneProductId}" PhonePublisherId="00000000-0000-0000-0000-000000000000"/> 
+
+	<build:Metadata>
+		<build:Item Name ="ManifoldJSVersion" Value ="{ManifoldJSVersion}" />
+		<build:Item Name ="GeneratedFrom" Value ="{GeneratedFrom}" />
+		<build:Item Name ="GenerationDate" Value ="{GenerationDate}" />{MetadataItems}
+	</build:Metadata>
 
 	<Properties> 
 		<DisplayName>{DisplayName}</DisplayName> 
-		<PublisherDisplayName>user</PublisherDisplayName> 
-		<Logo>images\storelogo.scale-100.png</Logo> 
+		<PublisherDisplayName>{Package-Properties-PublisherDisplayName}</PublisherDisplayName> 
+	<Logo>images\storelogo.scale-100.png</Logo> 
 	</Properties> 
 
 	<Dependencies> 
-		<TargetDeviceFamily Name="Windows.Universal" MinVersion="10.0.10030.0" MaxVersionTested="10.0.10069.0"/> 
+		<TargetDeviceFamily Name="Windows.Universal" MinVersion="10.0.10240.0" MaxVersionTested="10.0.10240.0" /> 
 	</Dependencies> 
 
 	<Resources>
@@ -27,7 +33,7 @@ IgnorableNamespaces="uap mp">
 				DisplayName="{DisplayName}" 
 				Square150x150Logo="images\logo.scale-100.png" 
 				Square44x44Logo="images\smalllogo.scale-100.png" 
-				Description="{Description}"  
+				Description="{Description}"	
 				BackgroundColor="blue"> 
 				<uap:SplashScreen Image="images\splashscreen.scale-100.png" /> 
 				<uap:InitialRotationPreference> 
