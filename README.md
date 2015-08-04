@@ -8,6 +8,9 @@ This tool is used to create hosted web applications based on a [W3C Web App mani
 npm install -g manifoldjs
 ````
 
+## Documentation
+To get started, visit our [wiki](https://github.com/manifoldjs/manifoldJS/wiki).
+
 ## Command Line Interface
 
 ### Usage
@@ -42,12 +45,17 @@ manifoldjs <command>
 |  **&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Command&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;** | **Description** |
 | ---------------- | --------------- |
 | `run <platform>` | Launches the app of the specified platform. Currently, only _android_ and _windows_ platforms are supported by this command |
-| `visualstudio`   | (for windows only) Opens the project file of the generated Windows 8.1 / Windows 10 app in Visual Studio |
+| `visualstudio`   | (for Windows only) Opens the project file of the generated Windows 8.1 / Windows 10 app in Visual Studio |
+| `package <content-directory> <output-package-path>`   | Creates an APPX package for uploading the Windows 10 app to the Store, where _&lt;content-directory&gt;_ is the folder that contains the app contents, including the **appmanifest.xml** file and the app's icons, and _&lt;output-package-path&gt;_ is the path to the APPX file to be generated|
 
 ### Example
-
+**Creating a new hosted web application**
 ````
 manifoldjs http://shiftr.azurewebsites.net -d C:\Projects -l info -p windows10,android -b
+````
+**Packaging a Windows 10 app for submission to the Store**
+````
+manifoldjs package /myapp/windows10/manifest /yourapp/yourapp.appx -l debug
 ````
 
 ## Client Library
