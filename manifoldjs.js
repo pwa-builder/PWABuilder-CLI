@@ -52,9 +52,9 @@ function checkParameters(program) {
         program.package = true;
         break;
       case 'visualstudio':
+        program.visualstudio = true;
       default:
         unknownArgs = 1;
-        program.visualstudio = true;
         break;
     }
   } else {
