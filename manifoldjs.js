@@ -37,20 +37,24 @@ function checkParameters(program) {
         }
 
         unknownArgs = 2;
+        program.run = true;
         break;
       case 'package':
-        if (!program.directory) {
-          return 'ERROR: You must specify a content directory (-d | --directory)';
+        if (program.args.length < 2) {
+          return 'ERROR: You must specify a content directory.';
         }
         
-        if (!program.output) {
-          return 'ERROR: You must specify an output package path (-o | --output)';
+        if (program.args.length < 3) {
+          return 'ERROR: You must specify an output package path.';
         }
 
+        unknownArgs = 3;
         program.package = true;
+        break;
       case 'visualstudio':
       default:
         unknownArgs = 1;
+        program.visualstudio = true;
         break;
     }
   } else {
@@ -120,7 +124,7 @@ var program = require('commander')
                     '  -or-\n' +
                     '         manifoldjs -m <manifest-location> [options]\n' +
                     '  -or-\n' +
-                    '         manifoldjs package -d <content-directory> -o <output-package-path>\n' +
+                    '         manifoldjs package <content-directory> <output-package-path>\n' +
                     '  -or-\n' +
                     '         manifoldjs run <windows|android>\n' +
                     '  -or-\n' +
@@ -134,7 +138,6 @@ var program = require('commander')
              .option('-m, --manifest <manifest-location>', 'location of the W3C Web App manifest\n                                    ' +
                                                     'file (URL or local path)')
              .option('-c, --crosswalk', 'enable Crosswalk for Android', false)
-             .option('-o, --output <output-package-path>', 'output package file path')
              .option('-w, --webAppToolkit', 'adds the Web App Toolkit cordova plugin', false)
              .parse(process.argv);
 
@@ -151,7 +154,7 @@ if (validationResult) {
 global.logLevel = program.loglevel;
 log.setLevel(global.logLevel);
 
-if (program.args[0] && program.args[0].toLowerCase() === 'run') {
+if (program.run) {
   // Run the app for the specified platform
 
   var platform = program.args[1];
@@ -161,7 +164,7 @@ if (program.args[0] && program.args[0].toLowerCase() === 'run') {
     }
   });
 
-} else if (program.args[0] && program.args[0].toLowerCase() === 'visualstudio') {
+} else if (program.visualstudio) {
 
   projectTools.openVisualStudio(function (err) {
     if (err) {
@@ -174,7 +177,9 @@ if (program.args[0] && program.args[0].toLowerCase() === 'run') {
 } else if (program.package) {
   // creates App Store packages for publishing - currently supports Windows 10 only
   log.info('Creating a Windows Store AppX package for the Windows 10 hosted app project...');
-  platformUtils.makeAppx(program.directory, program.output, function (err) {
+  var directory = program.args[1];
+  var outputPath = program.args[2];
+  platformUtils.makeAppx(directory, outputPath, function (err) {
     if (err) {
       log.error('ERROR: ' + err.message);
       return;
