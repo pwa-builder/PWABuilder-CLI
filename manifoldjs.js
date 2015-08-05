@@ -8,8 +8,7 @@ var validations = require('./lib/common/validations'),
     version = require('./lib/common/version'),
     url = require('url'),
     log = require('loglevel'),
-    path = require('path'),
-    fs = require('fs');
+    path = require('path');
 
 version.checkForUpdate(function (err, updateAvailable) {
   if (!err && updateAvailable) {
@@ -23,8 +22,8 @@ version.checkForUpdate(function (err, updateAvailable) {
 });
 
 function checkParameters(program) {
+  var unknownArgs = 0;
   if (program.args.length > 0) {
-    var unknownArgs = 0;
     var command = program.args[0].toLowerCase();
     switch (command) {
       case 'run':
@@ -52,7 +51,9 @@ function checkParameters(program) {
         program.package = true;
         break;
       case 'visualstudio':
+        unknownArgs = 1;
         program.visualstudio = true;
+        break;
       default:
         unknownArgs = 1;
         break;
