@@ -58,7 +58,7 @@ describe('transformation: Windows 10 Manifest', function () {
             },
             {
               'src': smallLogoSrc,
-              'sizes': '30x30',
+              'sizes': '44x44',
               'type': 'image/png'
             },
             {
@@ -92,7 +92,7 @@ describe('transformation: Windows 10 Manifest', function () {
         manifest.rawData.replace(/[\t\r\n]/g, '').indexOf('<uap:ApplicationContentUriRules><uap:Rule Type="include" WindowsRuntimeAccess="none" Match="http://url.com/" /></uap:ApplicationContentUriRules>').should.be.above(-1);
 
         manifest.should.have.property('icons').which.is.an.Object;
-        manifest.icons.should.containEql({ '30x30': { 'url': smallLogoSrc, 'fileName': 'smalllogo.scale-100.png' } });
+        manifest.icons.should.containEql({ '44x44': { 'url': smallLogoSrc, 'fileName': 'smalllogo.scale-100.png' } });
         manifest.icons.should.containEql({ '50x50': { 'url': storeLogoSrc, 'fileName': 'storelogo.scale-100.png' } });
         manifest.icons.should.containEql({ '150x150': { 'url': logoSrc, 'fileName': 'logo.scale-100.png' } });
         manifest.icons.should.containEql({ '620x300': { 'url': splashScreenSrc, 'fileName': 'splashscreen.scale-100.png' } });
