@@ -174,6 +174,13 @@ describe('utils', function () {
       result.should.be.exactly('abc.def');
     });
     
+    it('Should remove numbers and dots at the beginning', function () {
+      var inputValue = '123.abc';
+      var result = utils.sanitizeName(inputValue);
+      /*jshint -W030 */
+      result.should.be.exactly('abc');
+    });
+
     it('Should remove numbers and dots at the end (scenario 1)', function () {
       var inputValue = 'abc.123';
       var result = utils.sanitizeName(inputValue);
@@ -188,6 +195,13 @@ describe('utils', function () {
       result.should.be.exactly('abc');
     });
     
+    it('Should remove "inner" segment if it contains only numbers', function () {
+      var inputValue = 'abc.123.def';
+      var result = utils.sanitizeName(inputValue);
+      /*jshint -W030 */
+      result.should.be.exactly('abc.def');
+    });
+
     it('Should remove last character if it is a dot', function () {
       var inputValue = 'abc.';
       var result = utils.sanitizeName(inputValue);
@@ -200,7 +214,6 @@ describe('utils', function () {
       var result = utils.sanitizeName(inputValue);
       /*jshint -W030 */
       result.should.be.exactly('MyManifoldJSApp');
-    });
-    
+    });    
   });
 });
