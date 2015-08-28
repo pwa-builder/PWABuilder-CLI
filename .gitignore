@@ -5,3 +5,4 @@ coverage.html
 *.njsproj
 *.suo
 *.sln
+.settings
