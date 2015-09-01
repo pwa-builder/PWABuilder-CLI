@@ -208,6 +208,11 @@ if (program.run) {
       return;
     }
 
+      // Fix #145: don't require a short name
+    manifestInfo.content.short_name =   manifestInfo.content.short_name || 
+                                        manifestInfo.content.name ||
+                                        manifestInfo.default.short_name;
+
     // if specified as a parameter, override the app's short name
     if (program.shortname) {
       manifestInfo.content.short_name = program.shortname;
