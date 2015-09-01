@@ -68,7 +68,7 @@
       "type": "image/png"
     }
   ],
-  "start_url": "http://www.thishereweb.com/",
+  "start_url": "http://www.test.thishereweb.com/a/",
   "display": "standalone",
   "orientation": "landscape"
 }
