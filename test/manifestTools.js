@@ -25,7 +25,8 @@ var inputFiles = {
   notExistingFile: path.join(assetsDirectory, 'notExistingFile.json'),
   invalidManifest: path.join(assetsDirectory, 'invalid.json'),
   invalidManifestFormat: path.join(assetsDirectory, 'invalidManifestFormat.json'),
-  validManifest: path.join(assetsDirectory, 'manifest.json')
+  validManifest: path.join(assetsDirectory, 'manifest.json'),
+  issue88Manifest: path.join(assetsDirectory, 'manifest_#88.json')
 };
 
 var outputFiles = {
@@ -577,6 +578,19 @@ describe('Manifest Tools', function () {
 
       tools.validateManifest(manifestInfo, undefined, function(){
         done();
+      });
+    });
+    
+    it('Issue #88', function (done) {
+      
+      tools.getManifestFromFile(inputFiles.issue88Manifest, function (err, manifestObject){
+        var w3cmanifest = {
+          content: manifestObject,
+          format: "w3c"};
+        tools.validateAndNormalizeStartUrl ("http://thishereweb.com", w3cmanifest.content, function(err, results){
+          should.not.exist(err);
+        done();
+        });
       });
     });
 
