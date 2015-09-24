@@ -35,9 +35,10 @@
   "dependencies": {
     "archiver": "^0.14.4",
     "cheerio": "^0.18.0",
+    "cloudappx-server": "^0.0.4",
     "commander": "^2.8.1",
     "cordova": "5.1.1",
-    "cloudappx-server": "^0.0.4",
+    "hwa": "^0.0.4",
     "loglevel": "^1.2.0",
     "mkdirp": "^0.5.0",
     "ncp": "^2.0.0",
