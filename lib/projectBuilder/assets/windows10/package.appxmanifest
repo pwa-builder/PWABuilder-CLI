@@ -41,7 +41,7 @@
       <uap:VisualElements
         DisplayName="{DisplayName}"
         Description="{Description}"
-        BackgroundColor="#464646"
+        BackgroundColor="{theme_color}"
         Square150x150Logo="images\logo.png"
         Square44x44Logo="images\smalllogo.png">
 
