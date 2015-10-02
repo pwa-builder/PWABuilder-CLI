@@ -37,7 +37,12 @@
       "description": "Represents the URL that the developer would prefer the user agent load when the user launches the web application.",
       "type": "string",
       "format": "uri"
+    },
+    "theme_color": {
+      "description": "background color for splash screen and icons",
+      "type": "string"
     }
+    
   },
 
   "definitions": {
