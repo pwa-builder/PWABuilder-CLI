@@ -37,7 +37,12 @@
       "description": "Represents the URL that the developer would prefer the user agent load when the user launches the web application.",
       "type": "string",
       "format": "uri"
+    },
+    "theme_color": {
+      "description": "background color for splash screen and icons",
+      "type": "string"
     }
+    
   },
 
   "definitions": {
@@ -47,7 +52,7 @@
         "density": {
           "description": "The density member of an icon is the device pixel density for which this icon was designed.",
           "type": [ "number", "string" ],
-          "default": [ 1.0, "one" ]
+          "default":  [ 1.0, "1.0" ]
         },
         "sizes": {
           "description": "The sizes member is a string consisting of an unordered set of unique space-separated tokens which are ASCII case-insensitive that represents the dimensions of an icon for visual media.",

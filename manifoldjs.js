@@ -217,7 +217,7 @@ if (program.run) {
     if (program.shortname) {
       manifestInfo.content.short_name = program.shortname;
     }
-    
+ 
     log.debug('Manifest contents:');
     log.debug(JSON.stringify(manifestInfo.content, null, 4));
     

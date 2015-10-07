@@ -586,8 +586,8 @@ describe('Manifest Tools', function () {
       tools.getManifestFromFile(inputFiles.issue88Manifest, function (err, manifestObject){
         var w3cmanifest = {
           content: manifestObject,
-          format: "w3c"};
-        tools.validateAndNormalizeStartUrl ("http://thishereweb.com", w3cmanifest.content, function(err, results){
+          format: 'w3c'};
+        tools.validateAndNormalizeStartUrl ('http://thishereweb.com', w3cmanifest.content, function(err){
           should.not.exist(err);
         done();
         });
