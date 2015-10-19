@@ -1,0 +1,2 @@
+# Make sure that manifoldjs.js file will always have LF line endings on checkout.
+manifoldjs.js eol=lf
