@@ -44,7 +44,7 @@
         BackgroundColor="{theme_color}"
         Square150x150Logo="images\logo.png"
         Square44x44Logo="images\smalllogo.png">
-
+        <uap:DefaultTile Wide310x150Logo="images\widelogo.png"/>
         <uap:SplashScreen Image="images\splashscreen.png" />
 
         <uap:InitialRotationPreference>
