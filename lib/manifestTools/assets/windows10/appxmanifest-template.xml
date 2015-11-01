@@ -34,7 +34,8 @@ IgnorableNamespaces="uap mp build">
 				Square150x150Logo="images\logo.scale-100.png" 
 				Square44x44Logo="images\smalllogo.scale-100.png" 
 				Description="{Description}"	
-				BackgroundColor="{theme_color}"> 
+				BackgroundColor="{theme_color}">
+				<uap:DefaultTile Wide310x150Logo="images\widelogo.scale-200.png"/> 
 				<uap:SplashScreen Image="images\splashscreen.scale-100.png" /> 
 				<uap:InitialRotationPreference> 
 					<uap:Rotation Preference="{RotationPreference}" /> 
