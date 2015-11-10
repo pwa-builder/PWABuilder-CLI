@@ -25,6 +25,33 @@ describe('Manifest Type Detector', function () {
       should.exist(result);
       result.should.be.equal('w3c');
     });
+    
+    it('Chrome os manifest object should match ChromeOS format format', function() {
+      var manifestObj = {
+          'name': 'Sample',
+          'description': 'Chrome Web App Sample',
+          'version': '0.0.1',
+          'app': {
+              'launch': {
+                  'web_url': 'http://example.com'
+              }
+          },
+          'icons': {
+              '16': 'icon-16.png',
+              '48': 'icon-48.png',
+              '128': 'icon-128.png'
+          },
+          'permissions': [
+              'notifications',
+              'background'
+          ]
+      };
+
+      var result = manifestTypeDetector.detect(manifestObj);
+
+      should.exist(result);
+      result.should.be.equal('chromeos');
+    });
 
     it('Invalid manifest object should return undefined as format', function() {
       var manifestObj = {
