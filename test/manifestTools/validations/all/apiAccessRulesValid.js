@@ -61,16 +61,7 @@ describe('Validation - All', function () {
         done();
       });
     });
-
-    it('Should not return error if \'none\' access type is specified for cordova platforms', function(done) {
-      validation({ mjs_api_access: [ { match : 'http://domain.com', platform : 'windows;ios;android', access: 'none' } ] }, function(err, error) {
-        should.not.exist(err);
-        should.exist(error);
-        error.should.have.length(0);
-        done();
-      });
-    });
-    
+   
     it('Should not return error if \'all\' access type is specified for windows10 platform', function(done) {
       validation({ mjs_api_access: [ { match : 'http://domain.com', platform : 'windows10', access: 'all' } ] }, function(err, error) {
         should.not.exist(err);
@@ -89,8 +80,8 @@ describe('Validation - All', function () {
       });
     });
     
-    it('Should not return error if \'none\' access type is specified for windows10 platform', function(done) {
-      validation({ mjs_api_access: [ { match : 'http://domain.com', platform : 'windows10', access: 'none' } ] }, function(err, error) {
+    it('Should not return error if \'none\' access type is specified for all platforms', function(done) {
+      validation({ mjs_api_access: [ { match : 'http://domain.com', platform : 'android;ios;windows;windows10', access: 'none' } ] }, function(err, error) {
         should.not.exist(err);
         should.exist(error);
         error.should.have.length(0);
