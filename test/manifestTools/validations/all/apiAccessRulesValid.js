@@ -7,7 +7,7 @@ var should = require('should');
 describe('Validation - All', function () {
   describe('apiAccessRulesValid', function () {
     it('Should return error if platforms are not supported', function(done) {
-      validation({ mjs_api_access: [ { platform : "invalidplatform" } ] }, function(err, error) {
+      validation({ mjs_api_access: [ { platform : 'invalidplatform' } ] }, function(err, error) {
         should.not.exist(err);
         should.exist(error);
         error.should.have.length(1);
