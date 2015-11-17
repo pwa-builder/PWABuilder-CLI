@@ -11,7 +11,14 @@
       "items": {
         "$ref": "#/definitions/mjs_access_whitelist_rule"
       }
-    }
+    },
+    "mjs_api_access": {
+      "description": "The mjs_api_whitelist member is an array of rules that indicates the type of access to the runtime API the URLs matching the rule should have.",
+      "type": "array",
+      "items": {
+        "$ref": "#/definitions/mjs_api_access_rule"
+      }
+    }    
   },
 
   "definitions": {
@@ -26,6 +33,25 @@
         "apiAccess" : {
           "description": "A string that defines the type of access to the runtime API where the application is running.",
           "enum": [ "none", "all", "AllowForWebOnly" ]
+        }
+      }
+    },
+    "mjs_api_access_rule": {
+      "type": "object",
+      "properties": {
+        "match": {
+          "description": "A string that represents the URL pattern for which the rule should be applied to.",
+          "type": "string",
+          "format": "uri"
+        },
+        "platform" : {
+          "description": "Specifies the platforms for which the rule should be applied to.",
+          "type": [ "string", "array" ],
+          "items": { "type": "string" }
+        },
+        "access" : {
+          "description": "Defines the type of access to the runtime API where the application is running. Could be extended in the future to accept other types for platforms with different access requirements.",
+          "type": [ "string" ]
         }
       }
     }
