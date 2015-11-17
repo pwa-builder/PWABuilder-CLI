@@ -25,7 +25,22 @@
       "items": {
         "$ref": "#/definitions/mjs_import_scripts_rule"
       }
-    }    
+    },
+    "mjs_cordova": {
+      "description": "Specify how to load the Cordova and plugin JavaScript files.",
+      "type": "object",
+      "properties": {
+        "plugin_mode" : {
+          "description" : "Defines where the Cordova and plugin JavaScript files are injected from.",
+          "enum" : [ "client", "server" ]
+        },
+        "base_url" : {
+          "description": "When pluginMode is configured as “server”, this property specifies the exact location in the server of the Cordova and plugin JavaScript files.",
+          "type" : "string",
+          "format" : "uri"
+        }
+      }
+    }   
   },
 
   "definitions": {
