@@ -640,6 +640,42 @@ describe('transformation: Windows 10 Manifest', function () {
       });
     });
     
+    it('Should add ACUR from mjs_api_access with default access type \'all\' if no access type is specified', function (done) {
+      var siteUrl = 'http://url.com/something?query';
+      var shortName = 'shortName';
+
+      var originalManifestInfo = {
+        content: {
+          'start_url': siteUrl,
+          'short_name': shortName,
+          'mjs_api_access': [
+            { 'match': 'http://url.com/somepath/', 'platform': 'windows10'}
+          ]
+        }
+      };
+
+      transformation.convertFromBase(originalManifestInfo, function (err, result) {
+        should.not.exist(err);
+        should.exist(result);
+        /*jshint -W030 */
+        result.should.have.property('content').which.is.an.Object;
+        result.should.have.property('format', 'windows10');
+
+        var manifest = result.content;
+
+        manifest.should.have.property('rawData');
+
+        var expectedContentUriRules = '<uap:ApplicationContentUriRules>' +
+                                        '<uap:Rule Type="include" WindowsRuntimeAccess="none" Match="http://url.com/" />' +
+                                        '<uap:Rule Type="include" WindowsRuntimeAccess="all" Match="http://url.com/somepath/" />' +
+                                      '</uap:ApplicationContentUriRules>';
+                            
+        manifest.rawData.replace(/[\t\r\n]/g, '').indexOf(expectedContentUriRules).should.be.above(-1);
+
+        done();
+      });
+    });
+    
     it('Should not add ACUR from mjs_api_access if windows10 is not in platform', function (done) {
       var siteUrl = 'http://url.com/something?query';
       var shortName = 'shortName';
