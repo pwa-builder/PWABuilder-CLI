@@ -12,6 +12,13 @@
         "$ref": "#/definitions/mjs_access_whitelist_rule"
       }
     },
+    "mjs_extended_scope": {
+      "description": "The mjs_extended_scope member is an array of rules that define the navigation scope of this web application's application context.",
+      "type": "array",
+      "items": {
+        "type": "string", "format": "uri" 
+      }
+    },
     "mjs_api_access": {
       "description": "The mjs_api_whitelist member is an array of rules that indicates the type of access to the runtime API the URLs matching the rule should have.",
       "type": "array",
