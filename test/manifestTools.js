@@ -688,7 +688,7 @@ describe('Manifest Tools', function () {
       });
     });
 
-    it('Should recommend to specify access rules', function (done) {
+    it('Should recommend to specify scope rules', function (done) {
       var manifestInfo = {
         content: {
           'short_name': 'MyApp',
@@ -698,10 +698,10 @@ describe('Manifest Tools', function () {
       };
 
       var expectedValidation = {
-        'description': 'It is recommended to specify a set of access rules that represent the navigation scope of the application',
+        'description': 'It is recommended to specify a set of rules that represent the navigation scope of the application',
         'platform': validationConstants.platforms.all,
         'level': validationConstants.levels.suggestion,
-        'member': validationConstants.manifestMembers.mjs_access_whitelist,
+        'member': validationConstants.manifestMembers.mjs_extended_scope,
         'code': validationConstants.codes.requiredValue
       };
 
