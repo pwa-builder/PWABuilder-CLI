@@ -198,11 +198,11 @@ grunt
 ## Supported Input Manifests
 
 - [W3C Web App](http://www.w3.org/TR/appmanifest/)
+- [Chrome Hosted Apps](https://developers.google.com/chrome/apps/docs/developers_guide)
 
 We plan to support the following manifest files in the future:
 
 - [Web App Template](http://wat-docs.azurewebsites.net/JsonWindows)
-- [Chrome Hosted Apps](https://developers.google.com/chrome/apps/docs/developers_guide)
 - [Firefox Open Web Apps](https://developer.mozilla.org/Apps/Build/Manifest)
 
 ## Navigation Scope

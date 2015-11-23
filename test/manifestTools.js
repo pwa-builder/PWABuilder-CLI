@@ -7,6 +7,8 @@ var fs = require('fs');
 var should = require('should');
 var http = require('http');
 var url = require('url');
+var manifestTypeDetector = require('../lib/manifestTools/manifestTypeDetector');
+var chromeToW3c = require('../lib/platformUtils/chromeToW3c.js');
 
 var responseFunction;
 
@@ -557,6 +559,36 @@ describe('Manifest Tools', function () {
       });
     });
   });
+  
+  describe('chromeToW3c()', function () {
+    it('Should convert from Chrome OS manifest format to W3C manifest format', function() {
+        var manifestObj = {
+            'name': 'Sample',
+            'description': 'Chrome Web App Sample',
+            'version': '0.0.1',
+            'app': {
+                'launch': {
+                    'web_url': 'http://example.com'
+                }
+            },
+            'icons': {
+                '16': 'icon-16.png',
+                '48': 'icon-48.png',
+                '128': 'icon-128.png'
+            },
+            'permissions': [
+                'notifications',
+                'background'
+            ]
+        };
+  
+        manifestObj = chromeToW3c.chromeToW3CManifest(manifestObj);
+        var result = manifestTypeDetector.detect(manifestObj);
+  
+        should.exist(result);
+        result.should.be.equal('w3c');
+    });
+  });
 
 
   describe('validateManifest()', function () {
@@ -656,7 +688,7 @@ describe('Manifest Tools', function () {
       });
     });
 
-    it('Should recommend to specify access rules', function (done) {
+    it('Should recommend to specify scope rules', function (done) {
       var manifestInfo = {
         content: {
           'short_name': 'MyApp',
@@ -666,10 +698,10 @@ describe('Manifest Tools', function () {
       };
 
       var expectedValidation = {
-        'description': 'It is recommended to specify a set of access rules that represent the navigation scope of the application',
+        'description': 'It is recommended to specify a set of rules that represent the navigation scope of the application',
         'platform': validationConstants.platforms.all,
         'level': validationConstants.levels.suggestion,
-        'member': validationConstants.manifestMembers.mjs_access_whitelist,
+        'member': validationConstants.manifestMembers.mjs_extended_scope,
         'code': validationConstants.codes.requiredValue
       };
 

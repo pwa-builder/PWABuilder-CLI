@@ -383,7 +383,7 @@ describe('transformation: Windows 10 Manifest', function () {
       }); 
     });
     
-    it('Should enable API access in base rule', function (done) {
+    it('Should use mjs_access_whitelist to enable API access in base ACUR', function (done) {
       var siteUrl = 'http://url.com/something?query';
       var shortName = 'shortName';
 
@@ -418,7 +418,7 @@ describe('transformation: Windows 10 Manifest', function () {
       });
     });
     
-    it('Should enable API in secondary rule but not in base rule', function (done) {
+    it('Should use mjs_access_whitelist to enable API access in secondary ACUR but not in base ACUR', function (done) {
       var siteUrl = 'http://url.com/something?query';
       var shortName = 'shortName';
 
@@ -446,6 +446,298 @@ describe('transformation: Windows 10 Manifest', function () {
         var expectedContentUriRules = '<uap:ApplicationContentUriRules>' +
                                         '<uap:Rule Type="include" WindowsRuntimeAccess="none" Match="http://url.com/" />' +
                                         '<uap:Rule Type="include" WindowsRuntimeAccess="all" Match="http://url.com/somepath/" />' +
+                                      '</uap:ApplicationContentUriRules>';
+                            
+        manifest.rawData.replace(/[\t\r\n]/g, '').indexOf(expectedContentUriRules).should.be.above(-1);
+
+        done();
+      });
+    });
+    
+    it('Should use mjs_api_access to enable API access in base ACUR', function (done) {
+      var siteUrl = 'http://url.com/something?query';
+      var shortName = 'shortName';
+
+      var originalManifestInfo = {
+        content: {
+          'start_url': siteUrl,
+          'short_name': shortName,
+          'mjs_api_access': [
+            { 'match': 'http://url.com/', 'access': 'all' }
+          ]
+        }
+      };
+
+      transformation.convertFromBase(originalManifestInfo, function (err, result) {
+        should.not.exist(err);
+        should.exist(result);
+        /*jshint -W030 */
+        result.should.have.property('content').which.is.an.Object;
+        result.should.have.property('format', 'windows10');
+
+        var manifest = result.content;
+
+        manifest.should.have.property('rawData');
+
+        var expectedContentUriRules = '<uap:ApplicationContentUriRules>' +
+                                        '<uap:Rule Type="include" WindowsRuntimeAccess="all" Match="http://url.com/" />' +
+                                      '</uap:ApplicationContentUriRules>';
+                            
+        manifest.rawData.replace(/[\t\r\n]/g, '').indexOf(expectedContentUriRules).should.be.above(-1);
+
+        done();
+      });
+    });
+    
+    it('Should use mjs_api_access to enable API access in secondary ACUR but not in base ACUR', function (done) {
+      var siteUrl = 'http://url.com/something?query';
+      var shortName = 'shortName';
+
+      var originalManifestInfo = {
+        content: {
+          'start_url': siteUrl,
+          'short_name': shortName,
+          'mjs_api_access': [
+            { 'match': 'http://url.com/somepath/', 'access': 'all' }
+          ]
+        }
+      };
+
+      transformation.convertFromBase(originalManifestInfo, function (err, result) {
+        should.not.exist(err);
+        should.exist(result);
+        /*jshint -W030 */
+        result.should.have.property('content').which.is.an.Object;
+        result.should.have.property('format', 'windows10');
+
+        var manifest = result.content;
+
+        manifest.should.have.property('rawData');
+
+        var expectedContentUriRules = '<uap:ApplicationContentUriRules>' +
+                                        '<uap:Rule Type="include" WindowsRuntimeAccess="none" Match="http://url.com/" />' +
+                                        '<uap:Rule Type="include" WindowsRuntimeAccess="all" Match="http://url.com/somepath/" />' +
+                                      '</uap:ApplicationContentUriRules>';
+                            
+        manifest.rawData.replace(/[\t\r\n]/g, '').indexOf(expectedContentUriRules).should.be.above(-1);
+
+        done();
+      });
+    });
+    
+    it('Should add different ACURs from mjs_api_access and mjs_access_whitelist if match setting is different', function (done) {
+      var siteUrl = 'http://url.com/something?query';
+      var shortName = 'shortName';
+
+      var originalManifestInfo = {
+        content: {
+          'start_url': siteUrl,
+          'short_name': shortName,
+          'mjs_access_whitelist': [
+            { 'url': 'http://url.com/otherpath/' }
+          ],
+          'mjs_api_access': [
+            { 'match': 'http://url.com/somepath/', 'access': 'all' }
+          ]
+        }
+      };
+
+      transformation.convertFromBase(originalManifestInfo, function (err, result) {
+        should.not.exist(err);
+        should.exist(result);
+        /*jshint -W030 */
+        result.should.have.property('content').which.is.an.Object;
+        result.should.have.property('format', 'windows10');
+
+        var manifest = result.content;
+
+        manifest.should.have.property('rawData');
+
+        var expectedContentUriRules = '<uap:ApplicationContentUriRules>' +
+                                        '<uap:Rule Type="include" WindowsRuntimeAccess="none" Match="http://url.com/" />' +
+                                        '<uap:Rule Type="include" WindowsRuntimeAccess="none" Match="http://url.com/otherpath/" />' +
+                                        '<uap:Rule Type="include" WindowsRuntimeAccess="all" Match="http://url.com/somepath/" />' +
+                                      '</uap:ApplicationContentUriRules>';
+                            
+        manifest.rawData.replace(/[\t\r\n]/g, '').indexOf(expectedContentUriRules).should.be.above(-1);
+
+        done();
+      });
+    });
+    
+    it('Should add single ACUR from mjs_api_access and mjs_access_whitelist if both have same match setting', function (done) {
+      var siteUrl = 'http://url.com/something?query';
+      var shortName = 'shortName';
+
+      var originalManifestInfo = {
+        content: {
+          'start_url': siteUrl,
+          'short_name': shortName,
+          'mjs_access_whitelist': [
+            { 'url': 'http://url.com/somepath/' }
+          ],
+          'mjs_api_access': [
+            { 'match': 'http://url.com/somepath/', 'access': 'all' }
+          ]
+        }
+      };
+
+      transformation.convertFromBase(originalManifestInfo, function (err, result) {
+        should.not.exist(err);
+        should.exist(result);
+        /*jshint -W030 */
+        result.should.have.property('content').which.is.an.Object;
+        result.should.have.property('format', 'windows10');
+
+        var manifest = result.content;
+
+        manifest.should.have.property('rawData');
+
+        var expectedContentUriRules = '<uap:ApplicationContentUriRules>' +
+                                        '<uap:Rule Type="include" WindowsRuntimeAccess="none" Match="http://url.com/" />' +
+                                        '<uap:Rule Type="include" WindowsRuntimeAccess="all" Match="http://url.com/somepath/" />' +
+                                      '</uap:ApplicationContentUriRules>';
+                            
+        manifest.rawData.replace(/[\t\r\n]/g, '').indexOf(expectedContentUriRules).should.be.above(-1);
+
+        done();
+      });
+    });
+    
+    it('Should add ACUR from mjs_api_access if windows10 is in platform', function (done) {
+      var siteUrl = 'http://url.com/something?query';
+      var shortName = 'shortName';
+
+      var originalManifestInfo = {
+        content: {
+          'start_url': siteUrl,
+          'short_name': shortName,
+          'mjs_api_access': [
+            { 'match': 'http://url.com/somepath/', 'platform': 'windows10', 'access': 'all' }
+          ]
+        }
+      };
+
+      transformation.convertFromBase(originalManifestInfo, function (err, result) {
+        should.not.exist(err);
+        should.exist(result);
+        /*jshint -W030 */
+        result.should.have.property('content').which.is.an.Object;
+        result.should.have.property('format', 'windows10');
+
+        var manifest = result.content;
+
+        manifest.should.have.property('rawData');
+
+        var expectedContentUriRules = '<uap:ApplicationContentUriRules>' +
+                                        '<uap:Rule Type="include" WindowsRuntimeAccess="none" Match="http://url.com/" />' +
+                                        '<uap:Rule Type="include" WindowsRuntimeAccess="all" Match="http://url.com/somepath/" />' +
+                                      '</uap:ApplicationContentUriRules>';
+                            
+        manifest.rawData.replace(/[\t\r\n]/g, '').indexOf(expectedContentUriRules).should.be.above(-1);
+
+        done();
+      });
+    });
+    
+    it('Should add ACUR from mjs_api_access with default access type \'all\' if no access type is specified', function (done) {
+      var siteUrl = 'http://url.com/something?query';
+      var shortName = 'shortName';
+
+      var originalManifestInfo = {
+        content: {
+          'start_url': siteUrl,
+          'short_name': shortName,
+          'mjs_api_access': [
+            { 'match': 'http://url.com/somepath/', 'platform': 'windows10'}
+          ]
+        }
+      };
+
+      transformation.convertFromBase(originalManifestInfo, function (err, result) {
+        should.not.exist(err);
+        should.exist(result);
+        /*jshint -W030 */
+        result.should.have.property('content').which.is.an.Object;
+        result.should.have.property('format', 'windows10');
+
+        var manifest = result.content;
+
+        manifest.should.have.property('rawData');
+
+        var expectedContentUriRules = '<uap:ApplicationContentUriRules>' +
+                                        '<uap:Rule Type="include" WindowsRuntimeAccess="none" Match="http://url.com/" />' +
+                                        '<uap:Rule Type="include" WindowsRuntimeAccess="all" Match="http://url.com/somepath/" />' +
+                                      '</uap:ApplicationContentUriRules>';
+                            
+        manifest.rawData.replace(/[\t\r\n]/g, '').indexOf(expectedContentUriRules).should.be.above(-1);
+
+        done();
+      });
+    });
+    
+    it('Should not add ACUR from mjs_api_access if windows10 is not in platform', function (done) {
+      var siteUrl = 'http://url.com/something?query';
+      var shortName = 'shortName';
+
+      var originalManifestInfo = {
+        content: {
+          'start_url': siteUrl,
+          'short_name': shortName,
+          'mjs_api_access': [
+            { 'match': 'http://url.com/somepath/', 'platform': 'other', 'access': 'all' }
+          ]
+        }
+      };
+
+      transformation.convertFromBase(originalManifestInfo, function (err, result) {
+        should.not.exist(err);
+        should.exist(result);
+        /*jshint -W030 */
+        result.should.have.property('content').which.is.an.Object;
+        result.should.have.property('format', 'windows10');
+
+        var manifest = result.content;
+
+        manifest.should.have.property('rawData');
+
+        var expectedContentUriRules = '<uap:ApplicationContentUriRules>' +
+                                        '<uap:Rule Type="include" WindowsRuntimeAccess="none" Match="http://url.com/" />' +
+                                      '</uap:ApplicationContentUriRules>';
+                            
+        manifest.rawData.replace(/[\t\r\n]/g, '').indexOf(expectedContentUriRules).should.be.above(-1);
+
+        done();
+      });
+    });
+    
+    it('Should not add ACUR from mjs_api_access if access type is \'none\' and match setting is not whitelisted', function (done) {
+      var siteUrl = 'http://url.com/something?query';
+      var shortName = 'shortName';
+
+      var originalManifestInfo = {
+        content: {
+          'start_url': siteUrl,
+          'short_name': shortName,
+          'mjs_api_access': [
+            { 'match': 'http://url.com/somepath/', 'platform': 'windows10', 'access': 'none' }
+          ]
+        }
+      };
+
+      transformation.convertFromBase(originalManifestInfo, function (err, result) {
+        should.not.exist(err);
+        should.exist(result);
+        /*jshint -W030 */
+        result.should.have.property('content').which.is.an.Object;
+        result.should.have.property('format', 'windows10');
+
+        var manifest = result.content;
+
+        manifest.should.have.property('rawData');
+
+        var expectedContentUriRules = '<uap:ApplicationContentUriRules>' +
+                                        '<uap:Rule Type="include" WindowsRuntimeAccess="none" Match="http://url.com/" />' +
                                       '</uap:ApplicationContentUriRules>';
                             
         manifest.rawData.replace(/[\t\r\n]/g, '').indexOf(expectedContentUriRules).should.be.above(-1);
