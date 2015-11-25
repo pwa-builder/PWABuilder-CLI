@@ -20,7 +20,7 @@ describe('Validation - All', function () {
     });
 
     it('Should return error if API access type is not supported for cordova platforms', function(done) {
-      validation({ mjs_api_access: [ { platform : 'windows;ios;android', access : 'invalidtype' } ] }, function(err, error) {
+      validation({ mjs_api_access: [ { platform : 'windows,ios,android', access : 'invalidtype' } ] }, function(err, error) {
         should.not.exist(err);
         should.exist(error);
         error.should.have.length(3);
@@ -54,7 +54,7 @@ describe('Validation - All', function () {
     });
 
     it('Should not return error if \'cordova\' access type is specified for cordova platforms', function(done) {
-      validation({ mjs_api_access: [ { match : 'http://domain.com', platform : 'windows;ios;android', access: 'cordova' } ] }, function(err, error) {
+      validation({ mjs_api_access: [ { match : 'http://domain.com', platform : 'windows,ios,android', access: 'cordova' } ] }, function(err, error) {
         should.not.exist(err);
         should.exist(error);
         error.should.have.length(0);
@@ -81,7 +81,7 @@ describe('Validation - All', function () {
     });
     
     it('Should not return error if \'none\' access type is specified for all platforms', function(done) {
-      validation({ mjs_api_access: [ { match : 'http://domain.com', platform : 'android;ios;windows;windows10', access: 'none' } ] }, function(err, error) {
+      validation({ mjs_api_access: [ { match : 'http://domain.com', platform : 'android,ios,windows,windows10', access: 'none' } ] }, function(err, error) {
         should.not.exist(err);
         should.exist(error);
         error.should.have.length(0);
