@@ -1,11 +1,12 @@
 #!/usr/bin/env node
 
-var validations = require('./lib/common/validations'),
-    manifestTools = require('./lib/manifestTools'),
-    projectBuilder = require('./lib/projectBuilder'),
+var manifoldLib = require('manifoldjs-lib'),
+    validations = manifoldLib.utils.validations, 
+    manifestTools = manifoldLib.manifestTools,
+    projectBuilder = manifoldLib.projectBuilder,
     projectTools = require('./lib/projectTools'),
     platformUtils = require('./lib/platformUtils'),
-    version = require('./lib/common/version'),
+    version = manifoldLib.utils.version,
     url = require('url'),
     log = require('loglevel'),
     path = require('path');
