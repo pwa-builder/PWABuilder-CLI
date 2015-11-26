@@ -251,6 +251,7 @@ describe('transformation: ChromeOS Manifest', function () {
 
     it('Should return true if manifestObj is a valid manifest', function() {
       var manifestObj = {
+        'manifest_version': 2,
         'app': {
           'urls': [ 'url' ],
           'launch': {
@@ -288,6 +289,7 @@ describe('transformation: ChromeOS Manifest', function () {
 
     it('Should return true if manifestObj is a valid complex manifest', function() {
       var manifestObj = {
+        'manifest_version': 2,
         'name': 'Google Mail',
         'description': 'Read your gmail',
         'version': '1',
