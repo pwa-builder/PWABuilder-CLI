@@ -26,8 +26,9 @@ describe('Manifest Type Detector', function () {
       result.should.be.equal('w3c');
     });
     
-    it('Chrome os manifest object should match ChromeOS format format', function() {
+    it('ChromeOS manifest object should match ChromeOS format', function() {
       var manifestObj = {
+          'manifest_version': 2,
           'name': 'Sample',
           'description': 'Chrome Web App Sample',
           'version': '0.0.1',

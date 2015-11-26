@@ -255,7 +255,7 @@ var createChromeApp = function (w3cManifestInfo, generatedAppDir /*, options*/) 
             return downloadTask.resolve();
           }
 
-          downloader.downloadImage(iconUrl, iconFilePath, function (err, data) {
+          downloader.downloadImage(iconUrl, iconFilePath, function (err) {
             if (err) {
               log.warn('WARNING: Failed to download icon file: ' + icons[size]);
               log.debug(err.message);
