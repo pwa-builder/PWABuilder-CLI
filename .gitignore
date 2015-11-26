@@ -6,3 +6,4 @@ coverage.html
 *.suo
 *.sln
 .settings
+launch.json

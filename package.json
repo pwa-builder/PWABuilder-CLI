@@ -1,6 +1,6 @@
 {
   "name": "manifoldjs",
-  "version": "0.4.2",
+  "version": "0.4.3",
   "description": "Node.js tool for App Generation",
   "repository": {
     "type": "git",
@@ -37,7 +37,7 @@
     "cheerio": "^0.18.0",
     "cloudappx-server": "^0.0.4",
     "commander": "^2.8.1",
-    "cordova": "5.1.1",
+    "cordova": "5.4.1",
     "hwa": "^0.0.4",
     "loglevel": "^1.2.0",
     "mkdirp": "^0.5.0",
