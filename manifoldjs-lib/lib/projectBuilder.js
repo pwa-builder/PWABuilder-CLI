@@ -542,7 +542,8 @@ var createCordovaApp = function (w3cManifestInfo, generatedAppDir, platforms, op
   var task = Q.defer();
 
   // path to cordova shell command
-  var cordovaPath = path.resolve(__dirname, '..', 'node_modules', 'cordova', 'bin', 'cordova');
+  var appDir = path.dirname(require.main.filename);
+  var cordovaPath = path.resolve(appDir, 'node_modules', 'cordova', 'bin', 'cordova');
 
   // go to the directory where the app will be created
   process.chdir(generatedAppDir);
