@@ -2,7 +2,7 @@
 
 var http = require('http'),
     semver = require('semver'),
-    pkg = require('../../package.json');
+    pkg = require('../../../package.json');
 
 var getCurrentPackageVersion = function () {
   return pkg.version;

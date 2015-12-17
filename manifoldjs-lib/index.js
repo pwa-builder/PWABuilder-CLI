@@ -1,9 +1,11 @@
 'use strict';
 
 module.exports = {
-  utils: require('./lib/utils'),
-  // constants: require('./lib/constants'),
-  manifestTools: require('./lib/manifestTools'),
-  projectBuilder: require('./lib/projectBuilder'),
-  // Platform: require('./lib/platform')
+  utils: require('./src/utils'),
+  validations: require('./src/validations'),
+  manifestTools: require('./src/manifestTools'),
+  projectBuilder: require('./src/projectBuilder'),
+  projectTools: require('./src/projectTools'),
+  platformUtils: require('./src/platformUtils'),
+  version: require('./src/version')
 };

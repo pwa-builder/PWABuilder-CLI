@@ -7,15 +7,15 @@ var manifestTools = require('./manifestTools'),
     execute = require('child_process').exec,
     fs = require('fs'),
     log = require('loglevel'),
-    downloader = require('./projectBuilder/downloader'),
+    downloader = require('./downloader'),
     Q = require('q'),
     _mkdirp = require('mkdirp'),
     ncp = require('ncp'),
-    fileUtils = require('./common/fileUtils'),
-    utils = require('./common/utils'),
-    windows10Utils = require('./platformUtils/windows10Utils'),
-    validationConstants = require('./manifestTools/validationConstants'),
-    version = require('./common/version');
+    fileUtils = require('./fileUtils'),
+    utils = require('./utils'),
+    windows10Utils = require('manifoldjs-windows10').windows10Utils,
+    validationConstants = require('./validationConstants'),
+    version = require('./version');
 
 var originalPath = process.cwd();
 
