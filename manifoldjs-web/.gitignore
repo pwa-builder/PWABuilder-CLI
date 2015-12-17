@@ -1,0 +1,8 @@
+node_modules
+npm-debug.log
+coverage.html
+.ntvs_analysis.dat
+*.njsproj
+*.suo
+*.sln
+.DS_Store
