@@ -1,0 +1,14 @@
+{
+  "chrome": {
+    "packageName" : "manifoldjs-chrome", "source" : "../manifoldjs-chrome"
+  },
+  "firefox": {
+    "packageName" : "manifoldjs-firefox", "source" : "../manifoldjs-firefox"
+  },
+  "windows10": {
+    "packageName" : "manifoldjs-windows10", "source" : "../manifoldjs-windows10"
+  },
+  "cordova": {
+    "packageName" : "manifoldjs-cordova", "source" : "../manifoldjs-cordova"
+  }
+}
