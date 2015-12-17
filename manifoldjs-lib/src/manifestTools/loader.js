@@ -211,59 +211,10 @@ function getManifestFromFile(filePath, callback) {
 function writeToFile(manifestInfo, filePath, callback) {
   if (manifestInfo && manifestInfo.content) {
     var jsonString = JSON.stringify(manifestInfo.content, undefined, 4);
-    fs.writeFile(filePath, jsonString, callback);
-  } else {
-    return callback(new Error('Manifest content is empty or invalid.'));
-  }
-}
-
-function validateManifest(manifestInfo, targetPlatforms, callback) {
-    if (!manifestInfo || !manifestInfo.content) {
-        return callback(new Error('Manifest content is empty or invalid.'));
-    }
-    
-    if (manifestInfo.format !== c.BASE_MANIFEST_FORMAT) {
-        return callback(new Error('The manifest passed as argument is not a W3C manifest.'));
-    }
-
-    // Add 'general' if it is not present
-    var validationTargetPlatforms;
-    if (!targetPlatforms) {
-      validationTargetPlatforms = [validationConstants.platforms.all];
-    } else if (targetPlatforms.length === 0 || targetPlatforms.indexOf(validationConstants.platforms.all) < 0) {
-      validationTargetPlatforms = targetPlatforms.slice(); // Creates a copy
-      validationTargetPlatforms.push(validationConstants.platforms.all);
-    }
-
-    var validationResults = [];
-    var pendingValidations = [];
-
-    validationTargetPlatforms.forEach(function (platform) {
-      var validationTask = new Q.defer();
-      pendingValidations.push(validationTask.promise);
-      var validationFunc = validationRules[platform];
-
-      if (validationFunc) {
-        validationFunc(manifestInfo.content, function(err, platformResults) {
-          if (err) {
-            return validationTask.reject(err);
-          }
-
-          validationResults.push.apply(validationResults, platformResults);
-          validationTask.resolve();
-        });
-      } else {
-        return validationTask.reject(new Error('Target platform does not have validations.'));
-      }
-    });
+    return Q.nfcall(fs.writeFile, filePath, jsonString).nodeify(callback);
+  } 
   
-    Q.allSettled(pendingValidations)
-      .fail(function(err) {
-        callback(err);
-      })
-      .done(function() {
-        callback(undefined, validationResults);
-      });
+  return Q.reject(new Error('Manifest content is empty or invalid.')).nodeify(callback);
 }
 
 function validateAndNormalizeStartUrl(siteUrl, manifestInfo, callback) {
@@ -312,13 +263,8 @@ module.exports = {
   getManifestFromSite: getManifestFromSite,
   getManifestFromFile: getManifestFromFile,
   writeToFile: writeToFile,
-
   fetchManifestUrlFromSite: fetchManifestUrlFromSite,
   downloadManifestFromUrl: downloadManifestFromUrl,
-
   validateAndNormalizeStartUrl: validateAndNormalizeStartUrl,
-
-  convertTo: convertTo,
-
-  validateManifest: validateManifest
+  convertTo: convertTo
 };
