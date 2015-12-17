@@ -13,7 +13,8 @@ var manifestTools = require('./manifestTools'),
     ncp = require('ncp'),
     fileUtils = require('./fileUtils'),
     utils = require('./utils'),
-    windows10Utils = require('manifoldjs-windows10').windows10Utils,
+// TODO: temporarily remove to avoid cyclic reference
+    // windows10Utils = require('manifoldjs-windows10').windows10Utils,
     validationConstants = require('./validationConstants'),
     version = require('./version');
 
@@ -410,7 +411,9 @@ var updateProjectFiles = function (sourceDir, w3cManifestInfo, callback) {
   var packageManifestPath = path.join(sourceDir, 'package.appxmanifest');
   fileUtils.replaceFileContent(packageManifestPath,
     function (data) {
-      return windows10Utils.replaceManifestValues(w3cManifestInfo, data);
+      // TODO: temporarily disable to avoid cyclic reference
+      throw new Error('THIS NEEDS TO BE REVIEWED!!!');
+      // return windows10Utils.replaceManifestValues(w3cManifestInfo, data);
     },
     callback);
 };

@@ -1,8 +1,8 @@
 'use strict';
 
 var url = require('url'),
-    utils = require('../../common/utils'), 
-    c = require('../constants');
+    utils = require('../../utils'), 
+    c = require('../../constants');
 
 function convertToBase(manifestInfo, callback) {
   if (!manifestInfo || !manifestInfo.content) {

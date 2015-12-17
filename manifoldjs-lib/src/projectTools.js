@@ -1,5 +1,4 @@
-﻿var manifoldLib = require('manifoldjs-lib'),
-    validations = manifoldLib.utils.validations,
+﻿var validations = require('./validations'),
     platformUtils = require('./platformUtils'),
     fs = require('fs'),
     path = require('path'),

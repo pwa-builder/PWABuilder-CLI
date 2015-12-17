@@ -1,7 +1,7 @@
 'use strict';
 
 var transformations = require('./transformations');
-var c = require('./constants');
+var c = require('../constants');
 
 function detect(manifestObj) {
   var results = [];

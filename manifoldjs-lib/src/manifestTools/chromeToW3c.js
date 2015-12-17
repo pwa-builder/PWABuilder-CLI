@@ -1,6 +1,6 @@
 'use strict';
 
-var utils = require('../common/utils');
+var utils = require('../utils');
 
 function chromeToW3CManifest(chromeManifest) {
     var w3cManifest = {

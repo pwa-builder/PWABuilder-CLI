@@ -1,9 +1,10 @@
 ﻿'use strict';
 
-var c = require('../constants'),
+var c = require('../../constants'),
     fs = require('fs'),
-    path = require('path'),
-    windows10Utils = require('../../platformUtils/windows10Utils');
+    path = require('path');
+    // TODO: temporarily removed to avoid cyclic reference
+    // windows10Utils = require('manifoldjs-windows10').windows10Utils;
 
 var validIconFormats = [
   'png',
@@ -56,7 +57,9 @@ function convertFromBase(manifestInfo, callback) {
     var timestamp = manifestInfo.timestamp || new Date().toISOString().replace(/T/, ' ').replace(/\.[0-9]+/, ' ');
 
     var rawManifest = data.toString();
-    rawManifest = windows10Utils.replaceManifestValues(manifestInfo, rawManifest);
+    // TODO: temporarily disabled to avoid cyclic reference
+    throw new Error('THIS NEEDS TO BE REVIEWED!!!');
+    // rawManifest = windows10Utils.replaceManifestValues(manifestInfo, rawManifest);
 
     var icons = {};
     if (originalManifest.icons && originalManifest.icons.length) {

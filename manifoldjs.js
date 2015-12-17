@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 
 var manifoldLib = require('manifoldjs-lib'),
-    validations = manifoldLib.utils.validations, 
+    validations = manifoldLib.validations, 
     manifestTools = manifoldLib.manifestTools,
     projectBuilder = manifoldLib.projectBuilder,
     projectTools = manifoldLib.projectTools,

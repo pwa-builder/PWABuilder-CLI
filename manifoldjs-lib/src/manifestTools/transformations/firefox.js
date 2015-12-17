@@ -14,7 +14,7 @@
 //  - description
 //  - icons (1 icon of 128x128 required, 1 icon of 512x512 recommended)
 
-var c = require('../constants'),
+var c = require('../../constants'),
     url = require('url');
 
 function convertToBase(manifestInfo, callback) {

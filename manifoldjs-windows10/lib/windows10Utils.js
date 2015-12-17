@@ -1,10 +1,12 @@
 'use strict';
 
 var url = require('url');
-    
-var utils = require('../common/utils'),
-    version = require('../common/version');
-    
+
+var manifoldjsLib = require('manifoldjs-lib');
+     
+var utils = manifoldjsLib.utils,
+    version = manifoldjsLib.version;
+
 var metadataItemTemplate = '\r\n\t\t<build:Item Name ="{0}" Version ="{1}" />';
 
 var baseAcurMatch;
