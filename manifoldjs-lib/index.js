@@ -6,6 +6,7 @@ module.exports = {
   manifestTools: require('./src/manifestTools'),
   projectBuilder: require('./src/projectBuilder'),
   projectTools: require('./src/projectTools'),
+  platformTools: require('./src/platformTools'),
   platformUtils: require('./src/platformUtils'),
   version: require('./src/version')
 };
