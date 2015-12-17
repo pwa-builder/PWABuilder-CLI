@@ -5,7 +5,7 @@ var url = require('url');
 var manifoldjsLib = require('manifoldjs-lib');
      
 var utils = manifoldjsLib.utils,
-    version = manifoldjsLib.version;
+    packageTools = manifoldjsLib.packageTools;
 
 var metadataItemTemplate = '\r\n\t\t<build:Item Name ="{0}" Version ="{1}" />';
 
@@ -66,7 +66,7 @@ function replaceManifestValues(w3cManifestInfo, content) {
                                     .replace(/{DisplayName}/g, w3cManifest.short_name)
                                     .replace(/{Description}/g, w3cManifest.name || w3cManifest.short_name)
                                     .replace(/{RotationPreference}/g, w3cManifest.orientation || 'portrait')
-                                    .replace(/{ManifoldJSVersion}/g, version.getCurrentPackageVersion())
+                                    .replace(/{ManifoldJSVersion}/g, packageTools.getCurrentPackageVersion())
                                     .replace(/{GeneratedFrom}/g, w3cManifestInfo.generatedFrom || 'API')
                                     .replace(/{GenerationDate}/g, timestamp)
                                     .replace(/{theme_color}/g, w3cManifest.theme_color || 'blue');

@@ -6,12 +6,12 @@ var manifoldLib = require('manifoldjs-lib'),
     projectBuilder = manifoldLib.projectBuilder,
     projectTools = manifoldLib.projectTools,
     platformUtils = manifoldLib.platformUtils,
-    version = manifoldLib.version,
+    packageTools = manifoldLib.packageTools,
+    log = manifoldLib.log,
     url = require('url'),
-    log = require('loglevel'),
     path = require('path');
 
-version.checkForUpdate(function (err, updateAvailable) {
+packageTools.checkForUpdate(function (err, updateAvailable) {
   if (!err && updateAvailable) {
     console.log();
     console.log('*******************************************************************************');
