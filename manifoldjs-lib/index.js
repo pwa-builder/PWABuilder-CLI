@@ -1,6 +1,7 @@
 'use strict';
 
 module.exports = {
+  PlatformBase: require('./src/platformBase'),
   utils: require('./src/utils'),
   validations: require('./src/validations'),
   manifestTools: require('./src/manifestTools'),
@@ -8,5 +9,6 @@ module.exports = {
   projectTools: require('./src/projectTools'),
   platformTools: require('./src/platformTools'),
   platformUtils: require('./src/platformUtils'),
-  version: require('./src/version')
+  packageTools: require('./src/packageTools'),
+  log: require('./src/log')
 };

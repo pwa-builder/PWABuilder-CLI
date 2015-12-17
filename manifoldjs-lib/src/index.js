@@ -2,6 +2,6 @@
 
 module.exports = {
  validations: require('./validations'),
- version: require('./version.js')
+ packageTools: require('./packageTools.js')
 };
 
