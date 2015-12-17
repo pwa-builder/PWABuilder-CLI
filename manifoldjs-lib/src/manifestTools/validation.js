@@ -66,7 +66,7 @@ function validateManifest(w3cManifestInfo, targetPlatforms, callback) {
     return Q.reject(new Error('Manifest content is empty or invalid.')).nodeify(callback);
   }
 
-  if (w3cManifestInfo.format.toUpperCase() !== constants.BASE_MANIFEST_FORMAT) {
+  if (w3cManifestInfo.format !== constants.BASE_MANIFEST_FORMAT) {
     return Q.reject(new Error('The manifest passed as argument is not a W3C manifest.')).nodeify(callback);
   }
 
