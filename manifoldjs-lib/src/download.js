@@ -1,13 +1,14 @@
 'use strict';
 
-var http = require('http');
-var https = require('https');
-var url = require('url');
+var http = require('http'),
+    https = require('https'),
+    url = require('url'),
+    path = require('path'),
+    fs = require('fs'),
+    Q = require('q');
 
-var path = require('path');
-var fs = require('fs');
+function download(inputUri, outputFilePath, callback) {
 
-var downloadImage = function (inputUri, outputFilePath, callback) {
   var uri = url.parse(inputUri);
 
   if (inputUri.indexOf('http://') !== 0 && inputUri.indexOf('https://') !== 0) {
@@ -19,13 +20,13 @@ var downloadImage = function (inputUri, outputFilePath, callback) {
     }
   }
 
-  if(!(uri.protocol === 'http:' || uri.protocol === 'https:')) {
-    return callback(new Error('Invalid protocol, only http & https are supported'));
+  if (!(uri.protocol === 'http:' || uri.protocol === 'https:')) {
+    return Q.reject(new Error('Invalid protocol, only http & https are supported')).nodeify(callback);
   }
-  
+
   var downloadDir = path.dirname(outputFilePath);
   if (!fs.existsSync(downloadDir)) {
-    return callback(new Error('Invalid download directory: ' + downloadDir));
+    return Q.reject(new Error('Invalid download directory: ' + downloadDir)).nodeify(callback);
   }
 
   var lastModified;
@@ -39,7 +40,7 @@ var downloadImage = function (inputUri, outputFilePath, callback) {
     host: uri.hostname,
     port: uri.port || (uri.protocol === 'https:' ? 443 : 80),
     path: uri.path,
-    agent : false
+    agent: false
   };
 
   if (lastModified) {
@@ -49,25 +50,27 @@ var downloadImage = function (inputUri, outputFilePath, callback) {
   }
 
   var protocol = uri.protocol === 'https:' ? https : http;
-  protocol.get(options, function(res) {
+
+  var deferred = Q.defer();
+  protocol.get(options, function (res) {
     // If Moved Permanently or Found, redirect to new URL
     if ([301, 302].indexOf(res.statusCode) > -1) {
-      return downloadImage(res.headers.location, outputFilePath, callback);
+      return download(res.headers.location, outputFilePath);
     }
 
     // If not OK or Not Modified, throw error
     if ([200, 304].indexOf(res.statusCode) === -1) {
-      return callback(new Error('Invalid status code: ' + res.statusCode + ' - ' + res.statusMessage));
+      return deferred.reject(new Error('Invalid status code: ' + res.statusCode + ' - ' + res.statusMessage));
     }
 
     // If Not Modified, ignore
     if (res.statusCode === 304) {
-      return callback(undefined, { 'path': outputFilePath, 'statusCode': res.statusCode, 'statusMessage': res.statusMessage });
+      return deferred.resolve(undefined, { 'path': outputFilePath, 'statusCode': res.statusCode, 'statusMessage': res.statusMessage });
     }
 
     // If not an image, throw error
     if (!res.headers['content-type'].match(/image/)) {
-      return callback(new Error('Unexpected Content-Type: ' + res.headers['content-type']));
+      return deferred.reject(new Error('Unexpected Content-Type: ' + res.headers['content-type']));
     }
 
     // Else save
@@ -78,14 +81,18 @@ var downloadImage = function (inputUri, outputFilePath, callback) {
       
         // update the last modified time of the file to match the response header
         fs.utimes(outputFilePath, lastAccessed, lastModified, function (err) {
-          return callback(err, { 'path': outputFilePath, 'statusCode': res.statusCode, 'statusMessage': res.statusMessage });
+          if (err) {
+            return deferred.reject(err);
+          }
+
+          return deferred.resolve({ 'path': outputFilePath, 'statusCode': res.statusCode, 'statusMessage': res.statusMessage });
         });
       });
   }).on('error', function (err) {
-    return callback(err);
+    return deferred.reject(err);
   });
+
+  return deferred.promise.nodeify(callback)
 };
 
-module.exports = {
-  downloadImage: downloadImage,
-};
+module.exports = download;
