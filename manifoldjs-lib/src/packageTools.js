@@ -1,18 +1,27 @@
 'use strict';
 
 var http = require('http'),
+    path = require('path'),
     semver = require('semver'),
-    pkg = require('../../../package.json');
+    Q = require('q');
 
-var getCurrentPackageVersion = function () {
-  return pkg.version;
-};
-
-var getCurrentPackageName = function () {
-  return pkg.name;
-};
+function getPackageInformation(packageName) {
+  var packagePath = path.dirname(require.main.filename);
+  if (packageName) {
+    packagePath = path.join(packagePath, 'node_modules', packageName);      
+  }
+  
+  packagePath = path.join(packagePath, 'package.json');
+  var module = require(packagePath);
+  if (!module) {
+    throw new Error('Error retrieving information for module: \'' + packageName + '\'.');
+  }
+  
+  return module;
+}
 
 var getNpmPackageLatestVersion = function (packageName, callback) {
+  var deferred = Q.defer();
   http.get('http://registry.npmjs.org/' + packageName + '/latest', function (res) {
     var data = '';
     
@@ -23,31 +32,30 @@ var getNpmPackageLatestVersion = function (packageName, callback) {
     res.on('end', function () {
       try {
         var packageJson = JSON.parse(data);
-        callback(undefined, packageJson.version);
+        deferred.resolve(packageJson.version);
       } catch (err) {
-        callback(err);
+        deferred.reject(new Error('Error parsing version information for npm package: \'' + packageName + '\'. ' + err.message + '.'));
       }
     });
   }).on('error', function (err) {
-    callback(err);
+    deferred.reject(new Error('Error retrieving version information for npm package: \'' + packageName + '\'. ' + err.message + '.'));
   });
+  
+  return deferred.promise.nodeify(callback);
 };
 
 var checkForUpdate = function (callback) {
-  var name = getCurrentPackageName();
-  getNpmPackageLatestVersion(name, function (err, latestVersion) {
-    if (err) {
-      return callback && callback(err);
-    }
-
-    var currentVersion = getCurrentPackageVersion();
-    return callback && callback(undefined, semver.lt(currentVersion, latestVersion) ? latestVersion : undefined);
-  });
+  var currentModule = getPackageInformation();
+  return getNpmPackageLatestVersion(currentModule.name)
+          .then(function (latestVersion) {
+            var updateVersion = semver.lt(currentModule.version, latestVersion) ? latestVersion : undefined;
+            return Q.resolve(updateVersion);
+          })
+          .nodeify(callback);
 };
 
 module.exports = {
-  getCurrentPackageName : getCurrentPackageName,
-  getCurrentPackageVersion: getCurrentPackageVersion,
+  getPackageInformation: getPackageInformation,
   getNpmPackageLatestVersion: getNpmPackageLatestVersion,
-  checkForUpdate : checkForUpdate
+  checkForUpdate: checkForUpdate
 };
