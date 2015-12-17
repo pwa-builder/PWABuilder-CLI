@@ -7,16 +7,17 @@ var manifestTools = require('./manifestTools'),
     execute = require('child_process').exec,
     fs = require('fs'),
     log = require('loglevel'),
-    downloader = require('./downloader'),
+    downloader = require('./download'),
     Q = require('q'),
     _mkdirp = require('mkdirp'),
     ncp = require('ncp'),
-    fileUtils = require('./fileUtils'),
+    fileTools = require('./fileTools'),
     utils = require('./utils'),
 // TODO: temporarily remove to avoid cyclic reference
     // windows10Utils = require('manifoldjs-windows10').windows10Utils,
     validationConstants = require('./validationConstants'),
-    version = require('./version');
+    packageTools = require('./packageTools'),
+    platformTools = require('./platformTools');
 
 var originalPath = process.cwd();
 
@@ -76,7 +77,7 @@ var copyDocFile = function (docFilename, targetPath, callback) {
 
   log.info('Copying documentation file "' + docFilename + '" to target: ' + target + '...');
 
-  fileUtils.copyFile(source, target, callback);
+  fileTools.copyFile(source, target, callback);
 };
 
 var copyOfflineFile = function (docFilename, targetPath, callback) {
@@ -85,14 +86,14 @@ var copyOfflineFile = function (docFilename, targetPath, callback) {
 
   log.info('Copying offline file "' + docFilename + '" to target: ' + target + '...');
 
-  fileUtils.copyFile(source, target, callback);
+  fileTools.copyFile(source, target, callback);
 };
 
 
 var createGenerationInfoFile = function (targetPath, callback) {
   var generationInfoFilePath = path.join(targetPath, 'generationInfo.json');
   var generationInfo = {
-    'manifoldJSVersion': version.getCurrentPackageVersion()
+    'manifoldJSVersion': packageTools.getCurrentPackageVersion()
   };
 
   log.info('Creating generation info file: ' + generationInfoFilePath + '...');
@@ -113,7 +114,7 @@ var copyDefaultHostedWebAppIcon = function(webAppManifest, platform, iconFilenam
     var source = path.join(__dirname, 'projectBuilder', 'assets', platform, 'images', iconFilename);
     var target = path.join(targetPath, iconFilename);
 
-    fileUtils.copyFile(source, target, function (err) {
+    fileTools.copyFile(source, target, function (err) {
       if (err) {
         callback(err);
       } else {
@@ -409,7 +410,7 @@ var createFirefoxOSApp = function (w3cManifestInfo, generatedAppDir /*, options*
 
 var updateProjectFiles = function (sourceDir, w3cManifestInfo, callback) {
   var packageManifestPath = path.join(sourceDir, 'package.appxmanifest');
-  fileUtils.replaceFileContent(packageManifestPath,
+  fileTools.replaceFileContent(packageManifestPath,
     function (data) {
       // TODO: temporarily disable to avoid cyclic reference
       throw new Error('THIS NEEDS TO BE REVIEWED!!!');
@@ -711,7 +712,63 @@ var createCordovaApp = function (w3cManifestInfo, generatedAppDir, platforms, op
   return task.promise;
 };
 
+// START - replacement
+var loadedPlatforms;
+
+var logResult = {};
+logResult[validationConstants.levels.suggestion] = log.info;
+logResult[validationConstants.levels.warning] = log.warn;
+logResult[validationConstants.levels.error] = log.error;
+
 var createApps = function (w3cManifestInfo, rootDir, platforms, options, callback) {
+
+  // enable all registered platforms
+  Q.fcall(platformTools.enablePlatforms)
+	// load all platforms specified in the command line
+	.then(function () {
+		return platformTools.loadPlatforms(platforms)		
+	})
+	// validate the manifest
+	.then(function (platforms) {
+		loadedPlatforms = platforms;		
+		return manifestTools.validateManifest(w3cManifestInfo, loadedPlatforms);
+	})
+	// output validation results
+	.then(function (validationResults) {
+		validationResults.forEach(function (result) {			
+			// logResult[result.level]('Manifest validation - ' + result.description, result.platform === constants.validation.platforms.all ? undefined : result.platform);
+      logResult[result.level]('Manifest validation - ' + result.description, result.platform);
+		});
+	})
+	.then(function () {
+		// create apps for each platform
+		var tasks = loadedPlatforms.map(function (platform) {
+			if (!platform) {
+				return Q.resolve();
+			};
+						
+			log.debug('Creating app for platform \'' + platform.name + '\'...');
+			return Q.nfcall(platform.create, w3cManifestInfo, rootDir, options)
+					.then(function () {
+						log.info(platform.name + ' app is created!');
+					})
+					.catch(function (err) {
+						log.error(platform.name + ' app could not be created - '+ err.getMessage());
+					});
+		});
+
+		return Q.allSettled(tasks);
+	})
+	.catch(function (err) {
+		log.error('Completed with errors - ' + err.getMessage());	
+	})
+	.done(function () {
+		log.info('All done!');
+	});
+}
+// END - replacement
+
+var createAppsX = function (w3cManifestInfo, rootDir, platforms, options, callback) {
   var errmsg = 'One or more errors occurred when generating the application.';
   manifestTools.validateManifest(w3cManifestInfo, platforms, function (err, validationResults) {
     if (err) {
