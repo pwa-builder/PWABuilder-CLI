@@ -15,7 +15,7 @@ var manifestTools = require('./manifestTools'),
     utils = require('./utils'),
 // TODO: temporarily remove to avoid cyclic reference
     // windows10Utils = require('manifoldjs-windows10').windows10Utils,
-    validationConstants = require('./validationConstants'),
+    validationConstants = require('./constants').validation,
     packageTools = require('./packageTools'),
     platformTools = require('./platformTools');
 

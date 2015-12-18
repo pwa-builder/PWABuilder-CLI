@@ -1,7 +1,8 @@
 'use strict';
 
-var validationConstants = require('../../validationConstants');
-var validations = require('../../../common/validations');
+var validationConstants = require('../../constants').validation,
+    validations = require('../validation');
+
 var validAccessTypes = {
   'ios': [ 'cordova' ],
   'windows': [ 'cordova' ],

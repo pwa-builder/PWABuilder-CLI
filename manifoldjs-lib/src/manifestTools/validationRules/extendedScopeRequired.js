@@ -1,6 +1,6 @@
 ﻿'use strict';
 
-var validationConstants = require('../../validationConstants');
+var validationConstants = require('../../constants').validation;
 
 module.exports = function (manifestContent, callback) {
   var mjs_access_whitelist = manifestContent.mjs_access_whitelist;

@@ -1,6 +1,6 @@
 ﻿'use strict';
 
-var validationConstants = require('../../validationConstants');
+var validationConstants = require('../../constants').validation;
 
 module.exports = function (manifestContent, callback) {
   if (manifestContent.mjs_access_whitelist) {

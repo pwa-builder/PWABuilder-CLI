@@ -1,7 +1,7 @@
 ﻿'use strict';
 
-var validationConstants = require('../../validationConstants');
-var utils = require('../../../common/utils');
+var validationConstants = require('../../constants').validation,
+    utils = require('../../utils');
 
 module.exports = function (manifestContent, callback) {
   var shortName = manifestContent.short_name;

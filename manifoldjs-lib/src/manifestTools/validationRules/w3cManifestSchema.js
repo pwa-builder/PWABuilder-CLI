@@ -1,11 +1,12 @@
 ﻿'use strict';
 
-var validationConstants = require('../../validationConstants');
-var utils = require('../../../common/utils');
 var fs = require('fs'),
     path = require('path'),
     tv4 = require('tv4');
 
+var validationConstants = require('../../constants').validation,
+    utils = require('../../utils');
+    
 tv4.addFormat('uri', function (data) {
   if (!utils.isURL(data)) {
     return '\'' + data + '\' is not a valid URL.';
@@ -19,10 +20,10 @@ for (var key in tv4.errorCodes) {
 }
 
 module.exports = function (manifestContent, callback) {
-  var schemaFile = path.resolve(__dirname, '..', '..', 'assets', 'web-manifest.json');
+  var schemaFile = path.resolve(__dirname, '..', 'assets', 'web-manifest.json');
   var schema = JSON.parse(fs.readFileSync(schemaFile).toString());
   
-  var extendedSchemaFile = path.resolve(__dirname, '..', '..', 'assets', 'web-manifest-extended.json');
+  var extendedSchemaFile = path.resolve(__dirname, '..', 'assets', 'web-manifest-extended.json');
   var extendedSchema = JSON.parse(fs.readFileSync(extendedSchemaFile).toString());
   
   // merge the extended schema with the standard schema 
