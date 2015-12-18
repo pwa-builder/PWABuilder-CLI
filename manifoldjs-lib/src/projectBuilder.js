@@ -230,183 +230,183 @@ var createWebApp = function (w3cManifestInfo, generatedAppDir /*, options*/) {
   return task.promise;
 };
 
-var createChromeApp = function (w3cManifestInfo, generatedAppDir /*, options*/) {
-  log.info('Generating the Chrome application...');
+// var createChromeApp = function (w3cManifestInfo, generatedAppDir /*, options*/) {
+//   log.info('Generating the Chrome application...');
+// 
+//   var task = Q.defer();
+// 
+//   manifestTools.convertTo(w3cManifestInfo, 'chromeOS', function (err, chromeManifestInfo) {
+// 
+//     if (err) {
+//       return task.reject(wrapError('Failed to convert the Chrome manifest. The Chrome project could not be created successfully.', err));
+//     }
+// 
+//     // if the platform dir doesn't exist, create it
+//     var platformDir = path.join(generatedAppDir, 'chrome');
+//     mkdirp(platformDir, function (err) {
+//       function createIconDownloadTask(icons, size) {
+//         var downloadTask = new Q.defer();
+//         var iconUrl = url.resolve(w3cManifestInfo.content.start_url, icons[size]);
+//         var iconPath = url.parse(icons[size]).pathname;
+//         var iconFilePath = path.join(platformDir, icons[size]);
+//         var iconFolder = path.join(platformDir, iconPath.replace(/[^\/]*$/, ''));
+//         mkdirp(iconFolder, function (err) {
+//           if (err) {
+//             log.warn('WARNING: Failed to create folder for icon files: ' + iconFolder);
+//             log.debug(err.message);
+//             return downloadTask.resolve();
+//           }
+// 
+//           downloader.downloadImage(iconUrl, iconFilePath, function (err) {
+//             if (err) {
+//               log.warn('WARNING: Failed to download icon file: ' + icons[size]);
+//               log.debug(err.message);
+//             } else {
+//               icons[size] = iconPath;
+//             }
+//             
+//             downloadTask.resolve();
+//           });
+//         });
+// 
+//         return downloadTask.promise;
+//       }
+// 
+//       if (err && err.code !== 'EEXIST') {
+//         return task.reject(wrapError('ERROR: Failed to create the platform directory. The Chrome project could not be created successfully.', err));
+//       }
+// 
+//       // download icons to the app's folder
+//       var pendingDownloads = [];
+//       log.info('Downloading Chrome icons...');
+//       var icons = chromeManifestInfo.content.icons;
+//       for (var size in icons) {
+//         pendingDownloads.push(createIconDownloadTask(icons, size));
+//       }
+// 
+//       // copy the manifest assets to the app folder
+//       Q.allSettled(pendingDownloads)
+//       .done(function () {
+//         copyDefaultChromeIcon(chromeManifestInfo.content, platformDir, function (err) {
+//           if (err) {
+//             log.warn('WARNING: Failed to copy the default icon for Chrome.');
+//             log.debug(err.message);
+//           }
+// 
+//           log.info('Copying the Chrome manifest to the app folder...');
+//           var manifestFilePath = path.join(platformDir, 'manifest.json');
+//           manifestTools.writeToFile(chromeManifestInfo, manifestFilePath, function (err) {
+//             if (err) {
+//               return task.reject(wrapError('ERROR: Failed to copy the manifest to the Chrome platform folder. The Chrome project could not be created successfully.', err));
+//             }
+// 
+//             copyDocFile('Chrome-next-steps.md', platformDir, function (err) {
+//               if (err) {
+//                 log.warn('WARNING: Failed to copy documentation file to the Chrome platform folder.');
+//                 log.debug(err.message);
+//               }
+// 
+//               createGenerationInfoFile(platformDir, function (err) {
+//                 if (err) {
+//                   log.warn('WARNING: Failed to create generation info file for Chrome platform.');
+//                   log.debug(err.message);
+//                 }
+// 
+//                 return task.resolve();
+//               });
+//             });
+//           });
+//         });
+//       });
+//     });
+//   });
+// 
+//   return task.promise;
+// };
 
-  var task = Q.defer();
-
-  manifestTools.convertTo(w3cManifestInfo, 'chromeOS', function (err, chromeManifestInfo) {
-
-    if (err) {
-      return task.reject(wrapError('Failed to convert the Chrome manifest. The Chrome project could not be created successfully.', err));
-    }
-
-    // if the platform dir doesn't exist, create it
-    var platformDir = path.join(generatedAppDir, 'chrome');
-    mkdirp(platformDir, function (err) {
-      function createIconDownloadTask(icons, size) {
-        var downloadTask = new Q.defer();
-        var iconUrl = url.resolve(w3cManifestInfo.content.start_url, icons[size]);
-        var iconPath = url.parse(icons[size]).pathname;
-        var iconFilePath = path.join(platformDir, icons[size]);
-        var iconFolder = path.join(platformDir, iconPath.replace(/[^\/]*$/, ''));
-        mkdirp(iconFolder, function (err) {
-          if (err) {
-            log.warn('WARNING: Failed to create folder for icon files: ' + iconFolder);
-            log.debug(err.message);
-            return downloadTask.resolve();
-          }
-
-          downloader.downloadImage(iconUrl, iconFilePath, function (err) {
-            if (err) {
-              log.warn('WARNING: Failed to download icon file: ' + icons[size]);
-              log.debug(err.message);
-            } else {
-              icons[size] = iconPath;
-            }
-            
-            downloadTask.resolve();
-          });
-        });
-
-        return downloadTask.promise;
-      }
-
-      if (err && err.code !== 'EEXIST') {
-        return task.reject(wrapError('ERROR: Failed to create the platform directory. The Chrome project could not be created successfully.', err));
-      }
-
-      // download icons to the app's folder
-      var pendingDownloads = [];
-      log.info('Downloading Chrome icons...');
-      var icons = chromeManifestInfo.content.icons;
-      for (var size in icons) {
-        pendingDownloads.push(createIconDownloadTask(icons, size));
-      }
-
-      // copy the manifest assets to the app folder
-      Q.allSettled(pendingDownloads)
-      .done(function () {
-        copyDefaultChromeIcon(chromeManifestInfo.content, platformDir, function (err) {
-          if (err) {
-            log.warn('WARNING: Failed to copy the default icon for Chrome.');
-            log.debug(err.message);
-          }
-
-          log.info('Copying the Chrome manifest to the app folder...');
-          var manifestFilePath = path.join(platformDir, 'manifest.json');
-          manifestTools.writeToFile(chromeManifestInfo, manifestFilePath, function (err) {
-            if (err) {
-              return task.reject(wrapError('ERROR: Failed to copy the manifest to the Chrome platform folder. The Chrome project could not be created successfully.', err));
-            }
-
-            copyDocFile('Chrome-next-steps.md', platformDir, function (err) {
-              if (err) {
-                log.warn('WARNING: Failed to copy documentation file to the Chrome platform folder.');
-                log.debug(err.message);
-              }
-
-              createGenerationInfoFile(platformDir, function (err) {
-                if (err) {
-                  log.warn('WARNING: Failed to create generation info file for Chrome platform.');
-                  log.debug(err.message);
-                }
-
-                return task.resolve();
-              });
-            });
-          });
-        });
-      });
-    });
-  });
-
-  return task.promise;
-};
-
-var createFirefoxOSApp = function (w3cManifestInfo, generatedAppDir /*, options*/) {
-  log.info('Generating the Firefox OS application...');
-
-  var task = Q.defer();
-
-  manifestTools.convertTo(w3cManifestInfo, 'firefox', function (err, firefoxManifestInfo) {
-    if (err) {
-      return task.reject(wrapError('ERROR: Failed to convert the Firefox OS manifest. The Firefox OS project could not be created successfully.', err));
-    }
-
-    // if the platform dir doesn't exist, create it
-    var platformDir = path.join(generatedAppDir, 'firefox');
-    mkdirp(platformDir, function (err) {
-      function createDownloaderImageCallback(downloadTask, icons, size) {
-        return function (err, data) {
-          if (err) {
-            log.warn('WARNING: Failed to download icon file: ' + icons[size]);
-            log.debug(err.message);
-          } else {
-            var localPath = path.basename(data.path);
-            icons[size] = localPath;
-          }
-
-          downloadTask.resolve();
-        };
-      }
-
-      if (err && err.code !== 'EEXIST') {
-        return task.reject(wrapError('ERROR: Failed to create the platform directory. The Firefox OS project could not be created successfully.', err));
-      }
-
-      // download icons to the app's folder
-      var pendingDownloads = [];
-      log.info('Downloading Firefox OS icons...');
-      var icons = firefoxManifestInfo.content.icons;
-      for (var size in icons) {
-        var downloadTask = new Q.defer();
-        pendingDownloads.push(downloadTask.promise);
-        var iconUrl = url.resolve(w3cManifestInfo.content.start_url, icons[size]);
-        var iconFileName = url.parse(icons[size]).pathname.split('/').pop();
-        var iconFilePath = path.join(platformDir, iconFileName);
-        downloader.downloadImage(iconUrl, iconFilePath, createDownloaderImageCallback(downloadTask, icons, size));
-      }
-
-      // copy the manifest assets to the app folder
-      Q.allSettled(pendingDownloads)
-        .done(function () {
-        copyDefaultFirefoxIcon(firefoxManifestInfo.content, platformDir, function (err) {
-          if (err) {
-            log.warn('WARNING: Failed to copy the default icon for Firefox OS.');
-            log.debug(err.message);
-          }
-
-          log.info('Copying the Firefox OS manifest to the app folder...');
-          var manifestFilePath = path.join(platformDir, 'manifest.webapp');
-          manifestTools.writeToFile(firefoxManifestInfo, manifestFilePath, function (err) {
-            if (err) {
-              return task.reject(wrapError('ERROR: Failed to copy the manifest to the Firefox OS platform folder. The Firefox OS project could not be created successfully.', err));
-            }
-
-            copyDocFile('Firefox-next-steps.md', platformDir, function (err) {
-              if (err) {
-                log.warn('WARNING: Failed to copy documentation file to the Firefox OS platform folder.');
-                log.debug(err.message);
-              }
-
-              createGenerationInfoFile(platformDir, function (err) {
-                if (err) {
-                  log.warn('WARNING: Failed to create generation info file for Firefox OS platform.');
-                  log.debug(err.message);
-                }
-
-                return task.resolve();
-              });
-            });
-          });
-        });
-      });
-    });
-  });
-
-  return task.promise;
-};
+// var createFirefoxOSApp = function (w3cManifestInfo, generatedAppDir /*, options*/) {
+//   log.info('Generating the Firefox OS application...');
+// 
+//   var task = Q.defer();
+// 
+//   manifestTools.convertTo(w3cManifestInfo, 'firefox', function (err, firefoxManifestInfo) {
+//     if (err) {
+//       return task.reject(wrapError('ERROR: Failed to convert the Firefox OS manifest. The Firefox OS project could not be created successfully.', err));
+//     }
+// 
+//     // if the platform dir doesn't exist, create it
+//     var platformDir = path.join(generatedAppDir, 'firefox');
+//     mkdirp(platformDir, function (err) {
+//       function createDownloaderImageCallback(downloadTask, icons, size) {
+//         return function (err, data) {
+//           if (err) {
+//             log.warn('WARNING: Failed to download icon file: ' + icons[size]);
+//             log.debug(err.message);
+//           } else {
+//             var localPath = path.basename(data.path);
+//             icons[size] = localPath;
+//           }
+// 
+//           downloadTask.resolve();
+//         };
+//       }
+// 
+//       if (err && err.code !== 'EEXIST') {
+//         return task.reject(wrapError('ERROR: Failed to create the platform directory. The Firefox OS project could not be created successfully.', err));
+//       }
+// 
+//       // download icons to the app's folder
+//       var pendingDownloads = [];
+//       log.info('Downloading Firefox OS icons...');
+//       var icons = firefoxManifestInfo.content.icons;
+//       for (var size in icons) {
+//         var downloadTask = new Q.defer();
+//         pendingDownloads.push(downloadTask.promise);
+//         var iconUrl = url.resolve(w3cManifestInfo.content.start_url, icons[size]);
+//         var iconFileName = url.parse(icons[size]).pathname.split('/').pop();
+//         var iconFilePath = path.join(platformDir, iconFileName);
+//         downloader.downloadImage(iconUrl, iconFilePath, createDownloaderImageCallback(downloadTask, icons, size));
+//       }
+// 
+//       // copy the manifest assets to the app folder
+//       Q.allSettled(pendingDownloads)
+//         .done(function () {
+//         copyDefaultFirefoxIcon(firefoxManifestInfo.content, platformDir, function (err) {
+//           if (err) {
+//             log.warn('WARNING: Failed to copy the default icon for Firefox OS.');
+//             log.debug(err.message);
+//           }
+// 
+//           log.info('Copying the Firefox OS manifest to the app folder...');
+//           var manifestFilePath = path.join(platformDir, 'manifest.webapp');
+//           manifestTools.writeToFile(firefoxManifestInfo, manifestFilePath, function (err) {
+//             if (err) {
+//               return task.reject(wrapError('ERROR: Failed to copy the manifest to the Firefox OS platform folder. The Firefox OS project could not be created successfully.', err));
+//             }
+// 
+//             copyDocFile('Firefox-next-steps.md', platformDir, function (err) {
+//               if (err) {
+//                 log.warn('WARNING: Failed to copy documentation file to the Firefox OS platform folder.');
+//                 log.debug(err.message);
+//               }
+// 
+//               createGenerationInfoFile(platformDir, function (err) {
+//                 if (err) {
+//                   log.warn('WARNING: Failed to create generation info file for Firefox OS platform.');
+//                   log.debug(err.message);
+//                 }
+// 
+//                 return task.resolve();
+//               });
+//             });
+//           });
+//         });
+//       });
+//     });
+//   });
+// 
+//   return task.promise;
+// };
 
 var updateProjectFiles = function (sourceDir, w3cManifestInfo, callback) {
   var packageManifestPath = path.join(sourceDir, 'package.appxmanifest');

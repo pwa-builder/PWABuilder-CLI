@@ -50,45 +50,45 @@ function convertToBase(manifestInfo, callback) {
   return callback(undefined, convertedManifestInfo);
 }
 
-function convertFromBase(manifestInfo, callback) {
-  if (!manifestInfo || !manifestInfo.content) {
-    return callback(new Error('Manifest content is empty or not initialized.'));
-  }
-
-  var originalManifest = manifestInfo.content;
-
-  if (!originalManifest.start_url) {
-    return callback(new Error('Start url is required.'));
-  }
-
-  var manifest = {
-    'name': originalManifest.short_name || originalManifest.start_url,
-    'description': originalManifest.name || 'Content from ' + originalManifest.start_url,
-    'launch_path': url.parse(originalManifest.start_url).pathname || '/'
-  };
-
-  if (originalManifest.icons && originalManifest.icons.length) {
-    var icons = {};
-
-    var supportedSizes = ['16', '32', '48', '60', '64', '90', '128', '256', '512'];
-    for (var i = 0; i < originalManifest.icons.length; i++) {
-      var icon = originalManifest.icons[i];
-      var iconDimensions = icon.sizes.split('x');
-      if (supportedSizes.indexOf(iconDimensions[0]) >= 0 && iconDimensions[0] === iconDimensions[1]) {
-        icons[iconDimensions[0]] = icon.src;
-      }
-    }
-
-    manifest.icons = icons;
-  }
-
-  var convertedManifestInfo = {
-    'content': manifest,
-    'format': c.FIREFOX_MANIFEST_FORMAT
-  };
-
-  return callback(undefined, convertedManifestInfo);
-}
+// function convertFromBase(manifestInfo, callback) {
+//   if (!manifestInfo || !manifestInfo.content) {
+//     return callback(new Error('Manifest content is empty or not initialized.'));
+//   }
+// 
+//   var originalManifest = manifestInfo.content;
+// 
+//   if (!originalManifest.start_url) {
+//     return callback(new Error('Start url is required.'));
+//   }
+// 
+//   var manifest = {
+//     'name': originalManifest.short_name || originalManifest.start_url,
+//     'description': originalManifest.name || 'Content from ' + originalManifest.start_url,
+//     'launch_path': url.parse(originalManifest.start_url).pathname || '/'
+//   };
+// 
+//   if (originalManifest.icons && originalManifest.icons.length) {
+//     var icons = {};
+// 
+//     var supportedSizes = ['16', '32', '48', '60', '64', '90', '128', '256', '512'];
+//     for (var i = 0; i < originalManifest.icons.length; i++) {
+//       var icon = originalManifest.icons[i];
+//       var iconDimensions = icon.sizes.split('x');
+//       if (supportedSizes.indexOf(iconDimensions[0]) >= 0 && iconDimensions[0] === iconDimensions[1]) {
+//         icons[iconDimensions[0]] = icon.src;
+//       }
+//     }
+// 
+//     manifest.icons = icons;
+//   }
+// 
+//   var convertedManifestInfo = {
+//     'content': manifest,
+//     'format': c.FIREFOX_MANIFEST_FORMAT
+//   };
+// 
+//   return callback(undefined, convertedManifestInfo);
+// }
 
 var requiredRootProperties = ['name', 'version', 'app'];
 
@@ -150,6 +150,6 @@ function matchFormat(manifestObj) {
 
 module.exports = {
   convertToBase: convertToBase,
-  convertFromBase: convertFromBase,
+  // convertFromBase: convertFromBase,
   matchFormat: matchFormat
 };
