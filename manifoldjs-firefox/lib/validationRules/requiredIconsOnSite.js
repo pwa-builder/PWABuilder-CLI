@@ -11,8 +11,13 @@ var request = require('request').defaults({
   }
 }),
   url = require('url'),
-  Q = require('q'),
-  validationConstants = require('../../validationConstants');
+  Q = require('q');
+
+var manifoldjsLib = require('manifoldjs-lib');
+
+var validationConstants = manifoldjsLib.constants.validation;
+
+var constants = require('../constants');
 
 module.exports = function (manifestContent, callback) {
   var icons = manifestContent.icons;
@@ -71,7 +76,7 @@ module.exports = function (manifestContent, callback) {
       } else {
         var result = {
           description: 'The app icons need to be hosted in the web site',
-          platform: validationConstants.platforms.firefox,
+          platform: constants.platform.name,
           level: validationConstants.levels.warning,
           member: validationConstants.manifestMembers.icons,
           code: validationConstants.codes.missingImageOnsite,

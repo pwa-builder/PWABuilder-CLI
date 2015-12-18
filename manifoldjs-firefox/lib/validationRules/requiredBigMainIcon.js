@@ -1,11 +1,15 @@
 'use strict';
 
-var validationConstants = require('../../validationConstants'),
-imageValidation = require('../../validationUtils/imageValidation');
+var manifoldjsLib = require('manifoldjs-lib');
+
+var validationConstants = manifoldjsLib.constants.validation,
+    imageValidation =  manifoldjsLib.manifestTools.imageValidation;
+
+var constants = require('../constants');
 
 module.exports = function (manifestContent, callback) {
   var description = 'Firefox 2.0 onwards, an 512x512 icon is recommended for Firefox Marketplace and devices',
-  platform = validationConstants.platforms.firefox,
+  platform = constants.platform.name,
   level = validationConstants.levels.suggestion,
   requiredIconSizes = ['512x512'];
 
