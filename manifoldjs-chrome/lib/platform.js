@@ -7,7 +7,7 @@ var manifoldjsLib = require('manifoldjs-lib');
 
 var PlatformBase = manifoldjsLib.PlatformBase,
     manifestTools = manifoldjsLib.manifestTools,
-    CustomError = manifoldjsLib.utils.customError,
+    CustomError = manifoldjsLib.CustomError,
     log = manifoldjsLib.log,
     fileTools = manifoldjsLib.fileTools,
     iconTools = manifoldjsLib.iconTools;
