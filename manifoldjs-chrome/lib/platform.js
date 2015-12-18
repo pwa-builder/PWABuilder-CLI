@@ -24,23 +24,23 @@ function Platform(platformId, packageName) {
   // override create function
   self.create = function(w3cManifestInfo, rootDir, options, callback) {
 
-    self.info('Generating the Chrome application...');
+    self.info('Generating the ' + constants.platform.displayName + ' application...')
     
-    var platformDir = path.join(rootDir, 'chrome');
+    var platformDir = path.join(rootDir, platformId);
     
-    // convert the W3C manifest to a Chrome manifest
-    var chromeManifestInfo;
+    // convert the W3C manifest to a platform-specific manifest
+    var platformManifestInfo;
     return manifest.convertFromBase(w3cManifestInfo)
       // if the platform dir doesn't exist, create it
       .then(function (manifestInfo) {
-        chromeManifestInfo = manifestInfo;         
-        self.info('Creating the Chrome app folder...');
+        platformManifestInfo = manifestInfo;         
+        self.info('Creating the ' + constants.platform.name + ' app folder...');
         return fileTools.mkdirp(platformDir);
       })
       // download icons to the app's folder
       .then(function () {
-        self.info('Downloading Chrome icons...');
-        var icons = chromeManifestInfo.content.icons;
+        self.info('Downloading the ' + constants.platform.name + ' icons...');
+        var icons = platformManifestInfo.content.icons;
         
         // TODO: verify if using all instead of allSettled  is correct
         return Q.all(Object.keys(icons).map(function (size) {
@@ -49,7 +49,7 @@ function Platform(platformId, packageName) {
       })
       // copy default platform icon
       .then(function () {
-        return self.copyDefaultPlatformIcon(chromeManifestInfo, '128', platformDir)
+        return self.copyDefaultPlatformIcon(platformManifestInfo, '128', platformDir)
       })
       // copy the documentation file
       .then(function () {
@@ -61,15 +61,15 @@ function Platform(platformId, packageName) {
       })
       // persist the Chrome manifest
       .then(function () {
-        self.info('Copying the Chrome manifest to the app folder...');
+        self.info('Copying the ' + constants.platform.name + ' manifest to the app folder...');        
         var manifestFilePath = path.join(platformDir, 'manifest.json');
-        return manifestTools.writeToFile(chromeManifestInfo, manifestFilePath);
+        return manifestTools.writeToFile(platformManifestInfo, manifestFilePath);
       })
       .then(function () {
-        self.info('Created Chrome OS platform app!')
+        self.info('Created the ' + constants.platform.displayName + ' app!');        
       })
       .catch(function (err) {
-        return Q.reject(new CustomError('The Chrome app could not be created successfully.', err));        
+        return Q.reject(new CustomError('The ' + constants.platform.name + ' app could not be created successfully.', err));        
       })
       .nodeify(callback);
   };
