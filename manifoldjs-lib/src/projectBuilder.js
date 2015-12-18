@@ -540,177 +540,177 @@ var createWindows10App = function (w3cManifestInfo, generatedAppDir /*, options*
   return task.promise;
 };
 
-var createCordovaApp = function (w3cManifestInfo, generatedAppDir, platforms, options) {
-  log.info('Generating the Cordova application...');
-
-  var task = Q.defer();
-
-  // path to cordova shell command
-  var appDir = path.dirname(require.main.filename);
-  var cordovaPath = path.resolve(appDir, 'node_modules', 'cordova', 'bin', 'cordova');
-
-  // go to the directory where the app will be created
-  process.chdir(generatedAppDir);
-
-  // generate a reverse-domain-style package name from the manifest's start_url
-  var packageName = '';
-  url.parse(w3cManifestInfo.content.start_url)
-            .hostname
-            .replace(/-/g, '')
-            .split('.')
-            .map(function (segment) {
-    // BUG:  Issue 149 aparently "in" is a reserved word for andorid package names
-    if(segment === 'in'){ 
-      segment = segment.replace('in', 'ind');
-      }
-    packageName = segment + (packageName ? '.' : '') + packageName;
-  });
-
-  var cordovaAppName = utils.sanitizeName(w3cManifestInfo.content.short_name);
-  packageName = utils.sanitizeName(packageName);
-
-  // create the Cordova project
-  log.info('Creating the Cordova project...');
-  var cmdLine = '"' + cordovaPath + '" create cordova ' + packageName + ' ' + cordovaAppName;
-  log.debug('** ' + cmdLine);
-  exec(cmdLine, function (err) {
-
-    if (err) {
-      return task.reject(wrapError('ERROR: Failed to create the base application. The Cordova project could not be created successfully.', err));
-    }
-
-    // copy the manifest file to the app folder
-    log.info('Copying the W3C manifest to the app folder...');
-    var platformDir = path.join(generatedAppDir, 'cordova');
-    var manifestFilePath = path.join(platformDir, 'manifest.json');
-    manifestTools.writeToFile(w3cManifestInfo, manifestFilePath, function (err) {
-
-      if (err) {
-        return task.reject(wrapError('ERROR: Failed to copy the manifest to the app folder. The Cordova project could not be created successfully.', err));
-      }
-
-      createGenerationInfoFile(platformDir, function (err) {
-        if (err) {
-          log.warn('WARNING: Failed to create generation info file in the Cordova\'s root folder.');
-          log.debug(err.message);
-        }
-
-        // set generated app's directory as current
-        process.chdir(platformDir);
-
-        // add the Hosted Web App plugin
-        log.info('Adding the Hosted Web Application plugin to the Cordova project...');
-        cmdLine = '"' + cordovaPath + '" plugin add ' + pluginIdOrUrl;
-        if (options.crosswalk) {
-          cmdLine += ' cordova-plugin-crosswalk-webview';
-        }
-
-        if (options.webAppToolkit) {
-          cmdLine += ' cordova-plugin-webapptoolkit';
-          log.warn('\n*******************************************************************************');
-          log.warn('The WAT plugin requires you to perform manual steps before running the app');
-          log.warn('Follow the steps described here: https://github.com/manifoldjs/Web-App-ToolKit');
-          log.warn('*******************************************************************************\n');
-        }
-
-        // Fixes an issue in Cordova that requires a version of cordova-ios that is not released yet
-        // and stops automated plugin installations - see https://issues.apache.org/jira/browse/CB-9232
-        // and https://issues.apache.org/jira/browse/CB-916) - Needs to be removed once a fix is released!!!!
-        cmdLine += ' cordova-plugin-whitelist@1.0.0';
-
-        log.debug('** ' + cmdLine);
-        exec(cmdLine, function (err) {
-
-          if (err) {
-            return task.reject(wrapError('ERROR: Failed to add the Hosted Web Application plugin. The Cordova project could not be created successfully.', err));
-          }
-
-          var allPlatforms = platforms.join(' ');
-
-          log.info('Adding the following Cordova platforms: ' + allPlatforms + '...');
-          cmdLine = '"' + cordovaPath + '" platform add ' + allPlatforms;
-          log.debug('** ' + cmdLine);
-          exec(cmdLine, function (err) {
-
-            if (err) {
-              return task.reject(wrapError('WARNING: Failed to add the Cordova platforms: ' + allPlatforms + '.', err));
-            }
-
-            // customize each platform
-            var pendingTasks = [];
-            platforms.forEach(function (platform) {
-              var platformTask = Q.defer();
-              pendingTasks.push(platformTask.promise);
-
-              log.info('Processing Cordova platform: ' + platform + '...');
-
-              var cordovaPlatformPath = path.join(platformDir, 'platforms', platform);
-
-              copyDocFile(getCordovaDocFilename(platform), cordovaPlatformPath, function (err) {
-                if (err) {
-                  log.warn('WARNING: Failed to copy documentation file to the Cordova platform folder.');
-                  log.debug(err.message);
-                }
-
-                createCordovaPlatformShortcut(generatedAppDir, platform, function (err) {
-                  if (err) {
-                    log.warn('WARNING: Failed to create shortcut for Cordova platform: ' + platform + '.');
-                    log.debug(err.message);
-                  }
-
-                  createGenerationInfoFile(cordovaPlatformPath, function (err) {
-                    if (err) {
-                      log.warn('WARNING: Failed to create generation info file for Cordova platform: ' + platform + '.');
-                      log.debug(err.message);
-                    }
-
-                    platformTask.resolve();
-                  });
-                });
-              });
-            });
-
-            // build the projects
-            if (options.build) {
-              var buildTask = Q.defer();
-              pendingTasks.push(buildTask.promise);
-              log.info('Building the following Cordova platforms: ' + allPlatforms + '...');
-              cmdLine = '"' + cordovaPath + '" build ' + allPlatforms;
-              log.debug('** ' + cmdLine);
-              exec(cmdLine, function (err) {
-                if (err) {
-                  return buildTask.reject(wrapError('WARNING: Failed to build one or more of the Cordova platforms.', err));
-                }
-
-                buildTask.resolve();
-              });
-            }
-
-            Q.allSettled(pendingTasks)
-            .done(function (results) {
-              // restore the original working directory (so that the generated folder can be deleted)
-              process.chdir(originalPath);
-
-              var innerErrors = results.filter(function (platformTask) {
-                return platformTask.state !== 'fulfilled';
-              }).map(function (platformTask) {
-                return platformTask.reason;
-              });
-
-              if (innerErrors && innerErrors.length) {
-                return task.reject(wrapError('One or more tasks failed while generating the Cordova application.', innerErrors));
-              }
-
-              return task.resolve();
-            });
-          });
-        });
-      });
-    });
-  });
-
-  return task.promise;
-};
+// var createCordovaApp = function (w3cManifestInfo, generatedAppDir, platforms, options) {
+//   log.info('Generating the Cordova application...');
+// 
+//   var task = Q.defer();
+// 
+//   // path to cordova shell command
+//   var appDir = path.dirname(require.main.filename);
+//   var cordovaPath = path.resolve(appDir, 'node_modules', 'cordova', 'bin', 'cordova');
+// 
+//   // go to the directory where the app will be created
+//   process.chdir(generatedAppDir);
+// 
+//   // generate a reverse-domain-style package name from the manifest's start_url
+//   var packageName = '';
+//   url.parse(w3cManifestInfo.content.start_url)
+//             .hostname
+//             .replace(/-/g, '')
+//             .split('.')
+//             .map(function (segment) {
+//     // BUG:  Issue 149 aparently "in" is a reserved word for andorid package names
+//     if(segment === 'in'){ 
+//       segment = segment.replace('in', 'ind');
+//       }
+//     packageName = segment + (packageName ? '.' : '') + packageName;
+//   });
+// 
+//   var cordovaAppName = utils.sanitizeName(w3cManifestInfo.content.short_name);
+//   packageName = utils.sanitizeName(packageName);
+// 
+//   // create the Cordova project
+//   log.info('Creating the Cordova project...');
+//   var cmdLine = '"' + cordovaPath + '" create cordova ' + packageName + ' ' + cordovaAppName;
+//   log.debug('** ' + cmdLine);
+//   exec(cmdLine, function (err) {
+// 
+//     if (err) {
+//       return task.reject(wrapError('ERROR: Failed to create the base application. The Cordova project could not be created successfully.', err));
+//     }
+// 
+//     // copy the manifest file to the app folder
+//     log.info('Copying the W3C manifest to the app folder...');
+//     var platformDir = path.join(generatedAppDir, 'cordova');
+//     var manifestFilePath = path.join(platformDir, 'manifest.json');
+//     manifestTools.writeToFile(w3cManifestInfo, manifestFilePath, function (err) {
+// 
+//       if (err) {
+//         return task.reject(wrapError('ERROR: Failed to copy the manifest to the app folder. The Cordova project could not be created successfully.', err));
+//       }
+// 
+//       createGenerationInfoFile(platformDir, function (err) {
+//         if (err) {
+//           log.warn('WARNING: Failed to create generation info file in the Cordova\'s root folder.');
+//           log.debug(err.message);
+//         }
+// 
+//         // set generated app's directory as current
+//         process.chdir(platformDir);
+// 
+//         // add the Hosted Web App plugin
+//         log.info('Adding the Hosted Web Application plugin to the Cordova project...');
+//         cmdLine = '"' + cordovaPath + '" plugin add ' + pluginIdOrUrl;
+//         if (options.crosswalk) {
+//           cmdLine += ' cordova-plugin-crosswalk-webview';
+//         }
+// 
+//         if (options.webAppToolkit) {
+//           cmdLine += ' cordova-plugin-webapptoolkit';
+//           log.warn('\n*******************************************************************************');
+//           log.warn('The WAT plugin requires you to perform manual steps before running the app');
+//           log.warn('Follow the steps described here: https://github.com/manifoldjs/Web-App-ToolKit');
+//           log.warn('*******************************************************************************\n');
+//         }
+// 
+//         // Fixes an issue in Cordova that requires a version of cordova-ios that is not released yet
+//         // and stops automated plugin installations - see https://issues.apache.org/jira/browse/CB-9232
+//         // and https://issues.apache.org/jira/browse/CB-916) - Needs to be removed once a fix is released!!!!
+//         cmdLine += ' cordova-plugin-whitelist@1.0.0';
+// 
+//         log.debug('** ' + cmdLine);
+//         exec(cmdLine, function (err) {
+// 
+//           if (err) {
+//             return task.reject(wrapError('ERROR: Failed to add the Hosted Web Application plugin. The Cordova project could not be created successfully.', err));
+//           }
+// 
+//           var allPlatforms = platforms.join(' ');
+// 
+//           log.info('Adding the following Cordova platforms: ' + allPlatforms + '...');
+//           cmdLine = '"' + cordovaPath + '" platform add ' + allPlatforms;
+//           log.debug('** ' + cmdLine);
+//           exec(cmdLine, function (err) {
+// 
+//             if (err) {
+//               return task.reject(wrapError('WARNING: Failed to add the Cordova platforms: ' + allPlatforms + '.', err));
+//             }
+// 
+//             // customize each platform
+//             var pendingTasks = [];
+//             platforms.forEach(function (platform) {
+//               var platformTask = Q.defer();
+//               pendingTasks.push(platformTask.promise);
+// 
+//               log.info('Processing Cordova platform: ' + platform + '...');
+// 
+//               var cordovaPlatformPath = path.join(platformDir, 'platforms', platform);
+// 
+//               copyDocFile(getCordovaDocFilename(platform), cordovaPlatformPath, function (err) {
+//                 if (err) {
+//                   log.warn('WARNING: Failed to copy documentation file to the Cordova platform folder.');
+//                   log.debug(err.message);
+//                 }
+// 
+//                 createCordovaPlatformShortcut(generatedAppDir, platform, function (err) {
+//                   if (err) {
+//                     log.warn('WARNING: Failed to create shortcut for Cordova platform: ' + platform + '.');
+//                     log.debug(err.message);
+//                   }
+// 
+//                   createGenerationInfoFile(cordovaPlatformPath, function (err) {
+//                     if (err) {
+//                       log.warn('WARNING: Failed to create generation info file for Cordova platform: ' + platform + '.');
+//                       log.debug(err.message);
+//                     }
+// 
+//                     platformTask.resolve();
+//                   });
+//                 });
+//               });
+//             });
+// 
+//             // build the projects
+//             if (options.build) {
+//               var buildTask = Q.defer();
+//               pendingTasks.push(buildTask.promise);
+//               log.info('Building the following Cordova platforms: ' + allPlatforms + '...');
+//               cmdLine = '"' + cordovaPath + '" build ' + allPlatforms;
+//               log.debug('** ' + cmdLine);
+//               exec(cmdLine, function (err) {
+//                 if (err) {
+//                   return buildTask.reject(wrapError('WARNING: Failed to build one or more of the Cordova platforms.', err));
+//                 }
+// 
+//                 buildTask.resolve();
+//               });
+//             }
+// 
+//             Q.allSettled(pendingTasks)
+//             .done(function (results) {
+//               // restore the original working directory (so that the generated folder can be deleted)
+//               process.chdir(originalPath);
+// 
+//               var innerErrors = results.filter(function (platformTask) {
+//                 return platformTask.state !== 'fulfilled';
+//               }).map(function (platformTask) {
+//                 return platformTask.reason;
+//               });
+// 
+//               if (innerErrors && innerErrors.length) {
+//                 return task.reject(wrapError('One or more tasks failed while generating the Cordova application.', innerErrors));
+//               }
+// 
+//               return task.resolve();
+//             });
+//           });
+//         });
+//       });
+//     });
+//   });
+// 
+//   return task.promise;
+// };
 
 var loadedPlatforms;
 

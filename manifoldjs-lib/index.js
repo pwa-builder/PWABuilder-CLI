@@ -14,5 +14,6 @@ module.exports = {
   packageTools: require('./src/packageTools'),
   fileTools: require('./src/fileTools'),
   iconTools: require('./src/iconTools'),
-  log: require('./src/log')
+  log: require('./src/log'),
+  exec: require('./src/exec')
 };

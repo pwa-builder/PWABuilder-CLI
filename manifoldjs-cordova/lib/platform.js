@@ -1,0 +1,135 @@
+'use strict';
+
+var path = require('path'),
+    url = require('url'),
+    Q = require('q');
+
+var manifoldjsLib = require('manifoldjs-lib');
+
+var PlatformBase = manifoldjsLib.PlatformBase,
+    manifestTools = manifoldjsLib.manifestTools,
+    CustomError = manifoldjsLib.CustomError,
+    log = manifoldjsLib.log,
+    fileTools = manifoldjsLib.fileTools,
+    iconTools = manifoldjsLib.iconTools,
+    utils = manifoldjsLib.utils,
+    exec = manifoldjsLib.exec;
+
+var constants = require('./constants');
+  
+function Platform(platformId, packageName) {
+
+  // npm command in Windows is a batch file and needs to include extension to be resolved by spawn call
+  var cordova = (process.platform === 'win32' ? 'cordova.cmd' : 'cordova');
+  // path to cordova shell command
+  var cordovaPath = path.resolve(__dirname, '..', 'node_modules', '.bin', cordova);
+  
+  // ID or URL of the Hosted Web App plugin - THIS SETTING WILL NEED TO BE UPDATED IF THE PLUGIN IS RELOCATED
+  // TODO: make this overridable via environment variable
+  var pluginIdOrUrl = 'cordova-plugin-hostedwebapp@>=0.2.0 <0.3.0';
+  
+  function createApp(rootDir, appName, packageName, cordovaAppName, callback) {
+    self.info('Creating the Cordova project...');    
+    return exec(cordovaPath, ['create', appName, packageName, cordovaAppName], { cwd: rootDir })
+          .catch(function (err) {
+            return Q.reject(new CustomError('Failed to create the base application. The Cordova project could not be created successfully.', err));          
+          })
+          .nodeify(callback);
+  }
+  
+  function addPlatforms(rootDir, platforms, callback) {
+    var allPlatforms = platforms.join(' ');
+    self.info('Adding the following Cordova platforms: ' + allPlatforms + '...');
+    return exec(cordovaPath, ['platform', 'add'].concat(platforms), { cwd: rootDir })
+          .catch(function (err) {
+            return Q.reject(new CustomError('Failed to add the Cordova platforms: ' + allPlatforms + '.', err));
+          })
+          .nodeify(callback);
+  }
+  
+  function addPlugins(rootDir, options, callback) {
+    var pluginList = [pluginIdOrUrl];
+    if (options.crosswalk) {
+      pluginList.push('cordova-plugin-crosswalk-webview');
+    }
+  
+    if (options.webAppToolkit) {
+      pluginList.push('cordova-plugin-webapptoolkit');
+      self.warn('\n*******************************************************************************');
+      self.warn('The WAT plugin requires you to perform manual steps before running the app');
+      self.warn('Follow the steps described here: https://github.com/manifoldjs/Web-App-ToolKit');
+      self.warn('*******************************************************************************\n');
+    }
+  
+    // Fixes an issue in Cordova that requires a version of cordova-ios that is not released yet
+    // and stops automated plugin installations - see https://issues.apache.org/jira/browse/CB-9232
+    // and https://issues.apache.org/jira/browse/CB-916) - Needs to be removed once a fix is released!!!!
+    pluginList.push('cordova-plugin-whitelist@1.0.0');
+  
+    var allPlugins = pluginList.join(' ');
+    self.info('Adding the following plugins to the Cordova project: ' + allPlugins + '...');
+    
+    return exec(cordovaPath, ['plugin', 'add'].concat(pluginList), { cwd: rootDir })
+          .catch(function (err) {
+            return Q.reject(new CustomError('Failed to add one or more plugins. The Cordova project could not be created successfully.', err));
+          })
+          .nodeify(callback);
+  }
+
+  Object.assign(this, PlatformBase.prototype);
+  PlatformBase.apply(this, [platformId, constants.platform.name, constants.platform.displayName, packageName, __dirname]);
+  var self = this;
+
+  // override create function
+  self.create = function(w3cManifestInfo, rootDir, options, callback) {
+
+    self.info('Generating the ' + constants.platform.displayName + ' application...')
+    
+    var platformDir = path.join(rootDir, platformId);
+    
+    // generate a reverse-domain-style package name from the manifest's start_url
+    var packageName = '';
+    url.parse(w3cManifestInfo.content.start_url)
+              .hostname
+              .replace(/-/g, '')
+              .split('.')
+              .map(function (segment) {
+      
+      // BUG:  Issue 149 aparently "in" is a reserved word for android package names
+      if(segment === 'in') { 
+        segment = segment.replace('in', 'ind');
+      }
+      
+      packageName = segment + (packageName ? '.' : '') + packageName;
+    });
+  
+    var cordovaAppName = utils.sanitizeName(w3cManifestInfo.content.short_name);
+    packageName = utils.sanitizeName(packageName);
+  
+    // create the base Cordova app
+    return createApp(rootDir, platformId, packageName, cordovaAppName)
+            // persist the manifest
+            .then(function () {
+              self.info('Copying the ' + constants.platform.name + ' manifest to the app folder...');        
+              var manifestFilePath = path.join(platformDir, 'manifest.json');
+              return manifestTools.writeToFile(w3cManifestInfo, manifestFilePath);
+            })            
+            // add the plugins
+            .then (function () {
+              return addPlugins(platformDir, options);              
+            })
+            // add the platforms
+            .then (function () {
+              return addPlatforms(platformDir, ['android', 'ios', 'windows']);
+            })
+            .then(function () {
+              self.info('Created the ' + constants.platform.displayName + ' app!');        
+            })
+            .catch(function (err) {
+              return Q.reject(new CustomError('The ' + constants.platform.name + ' app could not be created successfully.', err));        
+            })
+            .nodeify(callback);            
+  };
+}
+
+module.exports = Platform;

@@ -34,7 +34,8 @@
     "Windows"
   ],
   "dependencies": {
-    "manifoldjs-lib": "file:../manifoldjs-lib"
+    "manifoldjs-lib": "file:../manifoldjs-lib",
+    "cordova": "5.4.1"
   },
   "devDependencies": {
   },
