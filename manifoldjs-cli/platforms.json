@@ -8,7 +8,13 @@
   "windows10": {
     "packageName" : "manifoldjs-windows10", "source" : "../manifoldjs-windows10"
   },
-  "cordova": {
+  "android": {
+    "packageName" : "manifoldjs-cordova", "source" : "../manifoldjs-cordova"
+  },
+  "ios": {
+    "packageName" : "manifoldjs-cordova", "source" : "../manifoldjs-cordova"
+  },
+  "windows": {
     "packageName" : "manifoldjs-cordova", "source" : "../manifoldjs-cordova"
   }
 }
