@@ -18,8 +18,8 @@ log.methodFactory = function (methodName, logLevel, loggerName) {
 		source = source || loggerName || app.name;
 		severity = severity || methodName;
 		rawMethod(
-			'[' + severity + Array(maxLenSeverity - severity.length + 1).join(' ') + '] '
-			+ source + Array(maxLenSource - source.length + 1).join(' ') + ': '
+			'[' + severity + Array(Math.max(maxLenSeverity - severity.length + 1, 0)).join(' ') + '] '
+			+ source + Array(Math.max(maxLenSource - source.length + 1, 0)).join(' ') + ': '
 			+ message);
 	};
 }
