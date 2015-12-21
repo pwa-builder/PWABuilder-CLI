@@ -17,7 +17,14 @@ var PlatformBase = manifoldjsLib.PlatformBase,
 
 var constants = require('./constants');
   
-function Platform(platformId, packageName) {
+function Platform(packageName, platforms) {
+
+  var self = this;
+  Object.assign(this, PlatformBase.prototype);
+  PlatformBase.apply(this, [constants.platform.id, constants.platform.name, packageName, __dirname]);
+  
+  // save platform list
+  self.platforms = platforms;
 
   // npm command in Windows is a batch file and needs to include extension to be resolved by spawn call
   var cordova = (process.platform === 'win32' ? 'cordova.cmd' : 'cordova');
@@ -76,16 +83,14 @@ function Platform(platformId, packageName) {
           .nodeify(callback);
   }
 
-  Object.assign(this, PlatformBase.prototype);
-  PlatformBase.apply(this, [platformId, constants.platform.name, constants.platform.displayName, packageName, __dirname]);
-  var self = this;
-
   // override create function
   self.create = function(w3cManifestInfo, rootDir, options, callback) {
 
-    self.info('Generating the ' + constants.platform.displayName + ' application...')
+    self.platforms.forEach(function (platformId) {
+      self.info('Generating the ' + constants.platform.subPlatforms[platformId].name + ' app!');      
+    });
     
-    var platformDir = path.join(rootDir, platformId);
+    var platformDir = path.join(rootDir, constants.platform.id);
     
     // generate a reverse-domain-style package name from the manifest's start_url
     var packageName = '';
@@ -107,7 +112,7 @@ function Platform(platformId, packageName) {
     packageName = utils.sanitizeName(packageName);
   
     // create the base Cordova app
-    return createApp(rootDir, platformId, packageName, cordovaAppName)
+    return createApp(rootDir, constants.platform.id, packageName, cordovaAppName)
             // persist the manifest
             .then(function () {
               self.info('Copying the ' + constants.platform.name + ' manifest to the app folder...');        
@@ -120,7 +125,7 @@ function Platform(platformId, packageName) {
             })
             // add the platforms
             .then (function () {
-              return addPlatforms(platformDir, ['android', 'ios', 'windows']);
+              return addPlatforms(platformDir, self.platforms);
             })
             .then(function () {
               self.info('Created the ' + constants.platform.displayName + ' app!');        

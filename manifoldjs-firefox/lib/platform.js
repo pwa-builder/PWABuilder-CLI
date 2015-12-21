@@ -99,18 +99,21 @@ var constants = require('./constants'),
 //   return task.promise;
 // };
     
-function Platform(platformId, packageName) {
+function Platform(packageName, platforms) {
 
-  Object.assign(this, PlatformBase.prototype);
-  PlatformBase.apply(this, [platformId, constants.platform.name, constants.platform.displayName, packageName, __dirname]);
   var self = this;
+  Object.assign(this, PlatformBase.prototype);
+  PlatformBase.apply(this, [constants.platform.id, constants.platform.name, packageName, __dirname]);
+
+  // save platform list
+  self.platforms = platforms;
 
   // override create function
-  self.create = function(w3cManifestInfo, rootDir, options, callback) {
+  self.create = function (w3cManifestInfo, rootDir, options, callback) {
 
-    self.info('Generating the ' + constants.platform.displayName + ' application...')
+    self.info('Generating the ' + constants.platform.name + ' app...')
     
-    var platformDir = path.join(rootDir, platformId);
+    var platformDir = path.join(rootDir, constants.platform.id);
     
     // convert the W3C manifest to a platform-specific manifest
     var platformManifestInfo;
@@ -118,15 +121,15 @@ function Platform(platformId, packageName) {
       // if the platform dir doesn't exist, create it
       .then(function (manifestInfo) {
         platformManifestInfo = manifestInfo;         
-        self.info('Creating the ' + constants.platform.name + ' app folder...');
+        self.debug('Creating the ' + constants.platform.name + ' app folder...');
         return fileTools.mkdirp(platformDir);
       })
       // download icons to the app's folder
       .then(function () {
-        self.info('Downloading the ' + constants.platform.name + ' icons...');
+        self.debug('Downloading the ' + constants.platform.name + ' icons...');
         var icons = platformManifestInfo.content.icons;
         
-        // TODO: verify if using all instead of allSettled  is correct
+        // TODO: verify if using all instead of allSettled is correct
         return Q.all(Object.keys(icons).map(function (size) {
           return iconTools.getIcon(w3cManifestInfo.content.start_url, icons, size, platformDir);          
         }));
@@ -143,14 +146,14 @@ function Platform(platformId, packageName) {
       .then(function () {
         return self.createGenerationInfo(platformDir);
       })
-      // persist the Chrome manifest
+      // persist the platform-specific manifest
       .then(function () {
-        self.info('Copying the ' + constants.platform.name + ' manifest to the app folder...');        
+        self.debug('Copying the ' + constants.platform.name + ' manifest to the app folder...');        
         var manifestFilePath = path.join(platformDir, 'manifest.json');
         return manifestTools.writeToFile(platformManifestInfo, manifestFilePath);
       })
       .then(function () {
-        self.info('Created the ' + constants.platform.displayName + ' app!');        
+        self.info('Created the ' + constants.platform.name + ' app!');        
       })
       .catch(function (err) {
         return Q.reject(new CustomError('The ' + constants.platform.name + ' app could not be created successfully.', err));        
