@@ -148,36 +148,36 @@ PlatformBase.prototype.createGenerationInfo = function (targetPath, callback) {
 /**
  * Outputs a debug message to the log.
  */
-PlatformBase.prototype.debug = function (message) {
-  this.log.info(message);
+PlatformBase.prototype.debug = function (message, source) {
+  this.log.info(message, source);
 };
 
 /**
  * Outputs an informational message to the log.
  */
-PlatformBase.prototype.info = function (message) {
-  this.log.info(message);
+PlatformBase.prototype.info = function (message, source) {
+  this.log.info(message, source);
 };
 
 /**
  * Outputs a warning message to the log.
  */
-PlatformBase.prototype.warn = function (message) {
-  this.log.warn(message);
+PlatformBase.prototype.warn = function (message, source) {
+  this.log.warn(message, source);
 };
 
 /**
  * Outputs an informational message to the log.
  */
-PlatformBase.prototype.error = function (message) {
-  this.log.info(message);
+PlatformBase.prototype.error = function (message, source) {
+  this.log.info(message, source);
 };
 
 /**
  * Outputs a stack trace to the log.
  */
-PlatformBase.prototype.trace = function (message) {
-  this.log.trace(message);
+PlatformBase.prototype.trace = function (message, source) {
+  this.log.trace(message, source);
 };
 
 module.exports = PlatformBase;
