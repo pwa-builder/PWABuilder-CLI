@@ -33,9 +33,9 @@
     "iOS"
   ],
   "dependencies": {
-    "commander": "^2.8.1",
-    "manifoldjs-lib": "file:../manifoldjs-lib",
-    "q": "^1.2.0"
+    "commander": "^2.9.0",
+    "q": "^1.4.1",
+    "manifoldjs-lib": "file:../manifoldjs-lib"
   },
   "devDependencies": {
     "blanket": "1.1.6",
