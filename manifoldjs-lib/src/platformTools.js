@@ -3,55 +3,95 @@
 var path = require('path'),
     Q = require('q');
 
-var npm = require('./npm'),
+var packageTools = require('./packageTools'),
     CustomError = require('./customError'),
     log = require('./log');
 
 var registeredPlatforms = {};
+var loadedPackages = {};
 
-function loadPlatform(platformId, packageName, source, callback) {
+function getPlatformModule(packageName, source) {
   
   if (!packageName) {
-      return Q.reject(new Error('Platform name is missing or invalid.')).nodeify(callback);
+      return Q.reject(new Error('Platform name is missing or invalid.'));
   }
 
   if (!source) {
-      return Q.reject(new Error('Platform package path is missing or invalid.')).nodeify(callback);
+      return Q.reject(new Error('Platform package source is missing or invalid.'));
   }
 
-  return npm.installPackage(packageName, source)
-    .then(function (platformModule) {
-      // create new instance of platform
-      var platform = new platformModule.Platform(platformId, packageName);
-      if (!platform) {
-        return Q.reject(new Error('Failed to create instance of platform: \'' + platformId + '\''));
-      }
-      
-      // cache platform instance
-      registeredPlatforms[platformId].instance = platform;
-      return Q.resolve(platform);
-    })
-    .catch (function (err) {
-      return Q.reject(new CustomError('Failed to install platform: \'' + platformId + '\'.', err));      
+  try {
+    var module = require(packageName);
+    return Q.resolve(module);
+  }
+  catch (err) {
+    if (err.code !== 'MODULE_NOT_FOUND') {
+      return Q.reject(new CustomError('Failed to resolve module: \'' + packageName + '\'.', err));
+    }
+    
+    return packageTools.installPackage(packageName, source);
+  }
+}
+
+function loadPlatform(packageName, source, callback) {
+  log.debug('Loading platform module: ' + packageName);
+  return getPlatformModule(packageName, source)
+    .then(function(module) {
+      return module.Platform;
     })
     .nodeify(callback);
 }
 
 function loadPlatforms(platforms, callback) {
-  var tasks = platforms.map(function (platformId) {
+	var platformMap = {};
+	// load all platform modules and map the corresponding platforms to each one, taking into account that
+	// multiple platforms may map to a single module (e.g. manifoldjs-cordova => android, ios, windows...)
+	var tasks = platforms.reduce(function (taskList, platformId) {
+
+		// ensure that the platform is registered and is assigned a package name
     var platformInfo = registeredPlatforms[platformId];
-    if (!platformInfo) {
-      return Q.reject(new Error('The requested platform \'' + platformId + '\' is not registered.'));
-    }
+		if (platformInfo && platformInfo.packageName) {
+      var packageName = platformInfo.packageName;
+      
+			// check if the module has already been loaded
+			var platformList = platformMap[packageName];
+			if (!platformList) {
 
-    log.debug('Loading platform \'' + platformId + '\'...');
-    return loadPlatform(platformId, platformInfo.packageName, platformInfo.source);
-  });
+				// create a new task to load the platform module
+				platformMap[packageName] = platformList = [];
+				var task = loadPlatform(packageName, platformInfo.source)
+                      .then(function(Platform) {
+                        return { id: packageName, Platform: Platform, platforms: platformList };						
+                      });
 
-  return Q.all(tasks).then(function (platforms) {
-    log.debug('Loaded all registered platforms.');
-    return platforms;
-  });
+				taskList.push(task);
+			}
+
+			// assign the current platform to the module
+			platformList.push(platformId);
+		}
+		else {
+			taskList.push(Q.reject(new Error('Platform \'' + platformId + '\' is not registered!')));
+		}
+
+		return taskList;
+	}, []);
+
+	// wait for all loading tasks to complete
+	return Q.all(tasks)
+		.then(function (platforms) {
+			// create instances of each loaded platform
+			return platforms.map(function (module) {
+				return new module.Platform(module.id, module.platforms);
+			});
+		})
+		.finally(function () {
+			// ensure that all loading tasks have finished even if one of them fails;
+			// otherwise, you see the failure message for one platform followed by the 
+			// success messages for the other platforms.
+			return Q.allSettled(tasks);
+		})
+    .nodeify(callback);
 }
 
 function enablePlatforms(platformConfig) {
