@@ -10,13 +10,12 @@ var	manifestTools = require('./manifestTools'),
     packageTools = require('./packageTools'),
     logger = require('./log');
 
-function PlatformBase (id, name, displayName, packageName, baseDir) {
+function PlatformBase (id, name, packageName, baseDir) {
   var self = this;
   
   self.id = id;
   self.name = name;
   self.packageName = packageName;
-  self.displayName = displayName || name;
   self.baseDir = baseDir;
   self.log = logger.getLogger(id);
 }
