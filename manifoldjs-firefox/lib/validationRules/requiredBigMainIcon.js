@@ -9,7 +9,7 @@ var constants = require('../constants');
 
 module.exports = function (manifestContent, callback) {
   var description = 'Firefox 2.0 onwards, an 512x512 icon is recommended for Firefox Marketplace and devices',
-  platform = constants.platform.name,
+  platform = constants.platform.id,
   level = validationConstants.levels.suggestion,
   requiredIconSizes = ['512x512'];
 

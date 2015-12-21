@@ -9,7 +9,7 @@ var constants = require('../constants');
 
 module.exports = function (manifestContent, callback) {
   var description = 'A 128x128 icon is required for the installation process and the Chrome Web Store',
-  platform = constants.platform.name,
+  platform = constants.platform.id,
   level = validationConstants.levels.warning,
   requiredIconSizes = ['128x128'];
 

@@ -76,7 +76,7 @@ module.exports = function (manifestContent, callback) {
       } else {
         var result = {
           description: 'The app icons need to be hosted in the web site',
-          platform: constants.platform.name,
+          platform: constants.platform.id,
           level: validationConstants.levels.warning,
           member: validationConstants.manifestMembers.icons,
           code: validationConstants.codes.missingImageOnsite,

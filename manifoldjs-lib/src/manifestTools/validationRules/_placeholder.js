@@ -1,6 +1,6 @@
 'use strict';
 
-// var validationConstants = require('../../constants').validation;
+var validationConstants = require('../../constants').validation;
 
 module.exports = function (manifestContent, callback) {
   return callback();

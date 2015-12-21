@@ -9,7 +9,7 @@ var constants = require('../constants');
 
 module.exports = function (manifestContent, callback) {
   var description = 'It is recommended to have a 16x16 favicon',
-  platform = constants.platform.name,
+  platform = constants.platform.id,
   level = validationConstants.levels.suggestion,
   requiredIconSizes = ['16x16'];
 

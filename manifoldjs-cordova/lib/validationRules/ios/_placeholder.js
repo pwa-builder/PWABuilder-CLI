@@ -3,9 +3,10 @@
 var manifoldjsLib = require('manifoldjs-lib');
 
 var validationConstants = manifoldjsLib.constants.validation,
-    imageValidation =  manifoldjsLib.manifestTools.imageValidation;
+    imageValidation =  manifoldjsLib.manifestTools.imageValidation,
+    imageGroupValidation =  manifoldjsLib.manifestTools.imageGroupValidation;
 
-var constants = require('../../constants');
+var constants = require('../constants');
 
 module.exports = function (manifestContent, callback) {
   return callback();
@@ -14,7 +15,7 @@ module.exports = function (manifestContent, callback) {
   //--------------------------------
   // return callback(undefined, {
   //   'description': 'You may want to add the X icon',
-  //   'platform': constants.platform.name,
+  //   'platform': constants.platform.id,
   //   'level': validationConstants.levels.suggestion,
   //   'members': validationConstants.manifestMembers.icons,
   //   'code': validationConstants.codes.missingImage
@@ -24,14 +25,14 @@ module.exports = function (manifestContent, callback) {
   //--------------------------------
   // return callback(undefined, [{
   //   'description': 'You may want to add the X icon',
-  //   'platform': constants.platform.name,
+  //   'platform': constants.platform.id,
   //   'level': validationConstants.levels.suggestion,
   //   'members': validationConstants.manifestMembers.icons,
   //   'code': validationConstants.codes.missingImage
   // },
   // {
   //   'description': 'An issue with the icons format',
-  //   'platform': constants.platform.name,
+  //   'platform': constants.platform.id,
   //   'level': validationConstants.levels.suggestion,
   //   'members': validationConstants.manifestMembers.icons,
   //   'code': validationConstants.codes.missingImage
