@@ -32,7 +32,7 @@ var validationConstants = {
     mjs_extended_scope: 'mjs_extended_scope'
   },
   platforms: {
-    all: 'All Platforms'
+    all: 'general'
   }
 };
 
