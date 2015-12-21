@@ -2,8 +2,8 @@
 
 var constants = {
   platform: {
-    name: 'Firefox',
-    displayName: 'Firefox OS Platform'
+    id: 'firefox',
+    name: 'Firefox OS Platform'
   }
 };
 

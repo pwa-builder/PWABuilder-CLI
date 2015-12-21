@@ -2,8 +2,8 @@
 
 var constants = {
   platform: {
-    name: 'Chrome',
-    displayName: 'Chrome OS Platform'
+    id: 'chrome',
+    name: 'Chrome OS Platform'
   }
 };
 
