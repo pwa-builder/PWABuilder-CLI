@@ -5,6 +5,10 @@ var http = require('http'),
     semver = require('semver'),
     Q = require('q');
 
+var exec = require('./exec'),
+    log = require('./log'),
+    CustomError = require('./customError');
+
 function getPackageInformation(packageName) {
   var packagePath = path.dirname(require.main.filename);
   if (packageName) {
@@ -54,8 +58,27 @@ var checkForUpdate = function (callback) {
           .nodeify(callback);
 };
 
+function installPackage(packageName, source, callback) {
+
+  log.info('Installing new module: ' + packageName);
+
+  // npm command in Windows is a batch file and needs to include extension to be resolved by spawn call
+  var npm = (process.platform === 'win32' ? 'npm.cmd' : 'npm');
+  var appRoot = path.dirname(require.main.filename);
+  return exec(npm, ['install', source], { cwd: appRoot })
+    .then(function () {
+      var module = require(packageName);
+      return Q.resolve(module);
+    })
+    .catch(function (err) {
+      return Q.reject(new CustomError('Failed to install module: \'' + packageName + '\'.', err));
+    })
+    .nodeify(callback);
+}
+
 module.exports = {
   getPackageInformation: getPackageInformation,
   getNpmPackageLatestVersion: getNpmPackageLatestVersion,
-  checkForUpdate: checkForUpdate
+  checkForUpdate: checkForUpdate,
+  installPackage: installPackage
 };
