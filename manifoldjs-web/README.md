@@ -1,2 +1,2 @@
 # manifoldjs-web
-ManifoldJS Web platform
+ManifoldJS Web Platform

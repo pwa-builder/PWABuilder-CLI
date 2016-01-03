@@ -1,2 +1,2 @@
 # manifoldjs-firefox
-ManifoldJS Firefox OS platform
+ManifoldJS Firefox OS Platform

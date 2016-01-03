@@ -1,2 +1,2 @@
 # manifoldjs-lib
-Manifoldjs core libraries
+ManifoldJS Core Library

@@ -1,2 +1,2 @@
 # manifoldjs-cordova
-ManifoldJS Cordova platform
+ManifoldJS Cordova Platform
