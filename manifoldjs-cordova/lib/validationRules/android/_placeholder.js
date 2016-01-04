@@ -6,7 +6,7 @@ var validationConstants = manifoldjsLib.constants.validation,
     imageValidation =  manifoldjsLib.manifestTools.imageValidation,
     imageGroupValidation =  manifoldjsLib.manifestTools.imageGroupValidation;
 
-var constants = require('../constants');
+var constants = require('../../constants');
 
 module.exports = function (manifestContent, callback) {
   return callback();

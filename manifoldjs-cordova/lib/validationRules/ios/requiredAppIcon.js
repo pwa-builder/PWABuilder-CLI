@@ -5,7 +5,7 @@ var manifoldjsLib = require('manifoldjs-lib');
 var validationConstants = manifoldjsLib.constants.validation,
     imageValidation =  manifoldjsLib.manifestTools.imageValidation;
 
-var constants = require('../constants');
+var constants = require('../../constants');
 
 module.exports = function (manifestContent, callback) {
   var description = 'An app icon of the following sizes is required: 76x76, 120x120, 152x152 and 180x180',
