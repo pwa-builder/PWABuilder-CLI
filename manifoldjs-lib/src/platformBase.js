@@ -66,17 +66,21 @@ PlatformBase.prototype.open = function (callback) {
  */
 PlatformBase.prototype.getValidationRules = function (callback) {
   
-  if (this.baseDir) {
-    var validationRulesDir = path.join(this.baseDir, 'validationRules');
-    var stats = fs.statSync(validationRulesDir);
-    if (stats.isDirectory()) {
-      return manifestTools.loadValidationRules(validationRulesDir).nodeify(callback);
-    }
+  if (!this.baseDir) {
+    return this.warn('Missing base directory for platform: ' + this.id + '.');
   }
   
-  this.warn('Failed to retrieve the validation rules for platform: ' + this.id + '. The validation rules folder is missing or invalid.');
-  
-  return Q.resolve([]).nodeify(callback);
+  var validationRulesDir = path.join(this.baseDir, 'validationRules');
+  return Q.nfcall(fs.stat, validationRulesDir)
+          .then(function (stats) {
+            if (stats.isDirectory()) {
+              return manifestTools.loadValidationRules(validationRulesDir);
+            }
+                      
+            this.warn('Failed to retrieve the validation rules for platform: ' + this.id + '. The validation rules folder is missing or invalid.');
+            return Q.resolve([]).nodeify(callback);
+          })
+          .nodeify(callback);
 };
     
 /**
