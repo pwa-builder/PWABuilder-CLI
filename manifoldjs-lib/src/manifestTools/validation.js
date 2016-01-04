@@ -9,21 +9,55 @@ var constants = require('../constants'),
 
 var toStringFunction = Object.prototype.toString;
 
-function loadValidationRules(validationRulesDir, callback) {
+function loadValidationRules(validationRulesDir, platforms, callback) {
 
+  var stat = Q.nfbind(fs.stat); 
+
+  // list contents of the validation rules folder
   return Q.nfbind(fs.readdir)(validationRulesDir)
     .then(function (files) {
-      var validationRules = [];
-      files.forEach(function (file) {
-        try {
-          validationRules.push(require(path.join(validationRulesDir, file)));
-        }
-        catch (err) {
-          log.error('Failed to load validation rule from file: \'' + file + '\'. ' + err.message + '.');
-        }
+      return Q.allSettled(files.map(function (file) {
+        var filePath = path.join(validationRulesDir, file);
+        return stat(filePath).then(function (info) {
+          // test if file system object is a directory or a file
+          if (info.isDirectory()) {
+            // ignore any directory that doesn't  match one of the requested platforms 
+            if (platforms.indexOf(file) < 0) {
+                return Q.resolve();
+            }
+            
+            // process the rules in the platform folder
+            return loadValidationRules(filePath, []);
+          }
+          
+          try {
+            // load the rule from the file
+            return require(path.join(validationRulesDir, file));
+          }
+          catch (err) {
+            return Q.reject(new Error('Failed to load validation rule from file: \'' + file + '\'. ' + err.message + '.'));
+          }
+        })
+      })).then (function (results) {
+        // verify the results and consolidate the loaded rules  
+        return results.reduce(function (validationRules, result) {
+          if (result.state === 'fulfilled') {
+            if (result.value) {
+              if (Array.isArray(result.value)) {
+                validationRules.push.apply(validationRules, result.value);
+              }
+              else {
+                validationRules.push(result.value);            
+              }              
+            }            
+          }
+          else {
+            console.log(result.reason);
+          }
+          
+          return validationRules;
+        }, []);
       });
-
-      return Q.resolve(validationRules);
     })
     .catch(function (err) {
       return Q.reject(new Error('Failed to read validation rules from the specified folder: \'' + validationRulesDir + '\'. ' + err.message + '.'));
@@ -60,7 +94,7 @@ function runValidationRules(w3cManifestInfo, rules, callback) {
     .nodeify(callback);
 }
 
-function validateManifest(w3cManifestInfo, targetPlatforms, callback) {
+function validateManifest(w3cManifestInfo, platformModules, platforms, callback) {
 
   if (!w3cManifestInfo || !w3cManifestInfo.content) {
     return Q.reject(new Error('Manifest content is empty or invalid.')).nodeify(callback);
@@ -81,8 +115,8 @@ function validateManifest(w3cManifestInfo, targetPlatforms, callback) {
   })
     .then(function () {
       // run platform-specific validation rules 
-      var platformTasks = targetPlatforms.map(function (platform) {
-        return platform.getValidationRules().then(function (rules) {
+      var platformTasks = platformModules.map(function (platform) {
+        return platform.getValidationRules(platforms).then(function (rules) {
           return runValidationRules(w3cManifestInfo, rules).then(function (results) {
             allResults.push.apply(allResults, results);
           });

@@ -712,7 +712,7 @@ var createWindows10App = function (w3cManifestInfo, generatedAppDir /*, options*
 //   return task.promise;
 // };
 
-var loadedPlatforms;
+var platformModules;
 
 var createApps = function (w3cManifestInfo, rootDir, platforms, options, callback) {
 
@@ -723,9 +723,9 @@ var createApps = function (w3cManifestInfo, rootDir, platforms, options, callbac
 		return platformTools.loadPlatforms(platforms)		
 	})
 	// validate the manifest
-	.then(function (platforms) {
-		loadedPlatforms = platforms;		
-		return manifestTools.validateManifest(w3cManifestInfo, loadedPlatforms);
+	.then(function (modules) {
+		platformModules = modules;		
+		return manifestTools.validateManifest(w3cManifestInfo, platformModules, platforms);
 	})
 	// output validation results
 	.then(function (validationResults) {
@@ -741,7 +741,7 @@ var createApps = function (w3cManifestInfo, rootDir, platforms, options, callbac
 	})
 	.then(function () {
 		// create apps for each platform
-		var tasks = loadedPlatforms.map(function (platform) {
+		var tasks = platformModules.map(function (platform) {
 			if (!platform) {
 				return Q.resolve();
 			};

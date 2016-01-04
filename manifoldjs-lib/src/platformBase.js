@@ -64,7 +64,7 @@ PlatformBase.prototype.open = function (callback) {
  * 
  * By default, it loads validation rules from the 'validationRules' folder of the platform project. 
  */
-PlatformBase.prototype.getValidationRules = function (callback) {
+PlatformBase.prototype.getValidationRules = function (platforms, callback) {
   
   if (!this.baseDir) {
     return this.warn('Missing base directory for platform: ' + this.id + '.');
@@ -74,7 +74,7 @@ PlatformBase.prototype.getValidationRules = function (callback) {
   return Q.nfcall(fs.stat, validationRulesDir)
           .then(function (stats) {
             if (stats.isDirectory()) {
-              return manifestTools.loadValidationRules(validationRulesDir);
+              return manifestTools.loadValidationRules(validationRulesDir, platforms);
             }
                       
             this.warn('Failed to retrieve the validation rules for platform: ' + this.id + '. The validation rules folder is missing or invalid.');
