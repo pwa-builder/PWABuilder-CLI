@@ -16,5 +16,8 @@
   },
   "windows": {
     "packageName" : "manifoldjs-cordova", "source" : "../manifoldjs-cordova"
+  },
+  "web": {
+    "packageName" : "manifoldjs-web", "source" : "../manifoldjs-web"
   }
 }
