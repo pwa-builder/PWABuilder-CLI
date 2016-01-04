@@ -146,89 +146,89 @@ var getCordovaDocFilename = function (platform) {
   }
 };
 
-var createWebApp = function (w3cManifestInfo, generatedAppDir /*, options*/) {
-  log.info('Generating the Web application...');
-
-  var task = Q.defer();
-
-  // if the platform dir doesn't exist, create it
-  var platformDir = path.join(generatedAppDir, 'web');
-  mkdirp(platformDir, function (err) {
-    function createDownloaderImageCallback(downloadTask, iconUrl) {
-      return function (err) {
-        if (err) {
-          log.warn('WARNING: Failed to download icon file: ' + iconUrl);
-          log.debug(err.message);
-        }
-
-        downloadTask.resolve();
-      };
-    }
-    function createMkdirpCallback(iconUrl, iconFilePath, downloadTask) {
-      return function (err) {
-        if (err) {
-          return task.reject(wrapError('WARNING: Failed to create the icon folder.', err));
-        }
-
-        downloader.downloadImage(iconUrl, iconFilePath, createDownloaderImageCallback(downloadTask, iconUrl));
-      };
-    }
-
-    if (err && err.code !== 'EEXIST') {
-      return task.reject(wrapError('ERROR: The Web project could not be created successfully.', err));
-    }
-
-    // download icons to the app's folder
-    var pendingDownloads = [];
-    log.info('Downloading icons...');
-    var icons = w3cManifestInfo.content.icons;
-    if (icons) {
-      for (var i = 0; i < icons.length; i++) {
-        var downloadTask = new Q.defer();
-        var iconPath = url.parse(icons[i].src).pathname;
-        pendingDownloads.push(downloadTask.promise);
-        var iconUrl = url.resolve(w3cManifestInfo.content.start_url, icons[i].src);
-        var iconFolder = path.join(platformDir, iconPath.replace(/[^\/]*$/, ''));
-        var iconFileName = iconPath.split('/').pop();
-        var iconFilePath = path.join(iconFolder, iconFileName);
-
-        mkdirp(iconFolder, createMkdirpCallback(iconUrl, iconFilePath, downloadTask));
-        icons[i].src = iconPath;
-      }
-    }
-
-    // copy the manifest file to the app folder
-    Q.allSettled(pendingDownloads)
-    .done(function () {
-      log.info('Copying the W3C manifest to the app folder...');
-      var manifestFilePath = path.join(platformDir, 'manifest.json');
-
-      manifestTools.writeToFile(w3cManifestInfo, manifestFilePath, function (err) {
-        if (err) {
-          return task.reject(wrapError('ERROR: Failed to copy the manifest to the Web platform folder. The Web project could not be created successfully.', err));
-        }
-
-        copyDocFile('Web-next-steps.md', platformDir, function (err) {
-          if (err) {
-            log.warn('WARNING: Failed to copy documentation file to the Web platform folder.');
-            log.debug(err.message);
-          }
-
-          createGenerationInfoFile(platformDir, function (err) {
-            if (err) {
-              log.warn('WARNING: Failed to create generation info file for Web platform.');
-              log.debug(err.message);
-            }
-
-            return task.resolve();
-          });
-        });
-      });
-    });
-  });
-
-  return task.promise;
-};
+// var createWebApp = function (w3cManifestInfo, generatedAppDir /*, options*/) {
+//   log.info('Generating the Web application...');
+// 
+//   var task = Q.defer();
+// 
+//   // if the platform dir doesn't exist, create it
+//   var platformDir = path.join(generatedAppDir, 'web');
+//   mkdirp(platformDir, function (err) {
+//     function createDownloaderImageCallback(downloadTask, iconUrl) {
+//       return function (err) {
+//         if (err) {
+//           log.warn('WARNING: Failed to download icon file: ' + iconUrl);
+//           log.debug(err.message);
+//         }
+// 
+//         downloadTask.resolve();
+//       };
+//     }
+//     function createMkdirpCallback(iconUrl, iconFilePath, downloadTask) {
+//       return function (err) {
+//         if (err) {
+//           return task.reject(wrapError('WARNING: Failed to create the icon folder.', err));
+//         }
+// 
+//         downloader.downloadImage(iconUrl, iconFilePath, createDownloaderImageCallback(downloadTask, iconUrl));
+//       };
+//     }
+// 
+//     if (err && err.code !== 'EEXIST') {
+//       return task.reject(wrapError('ERROR: The Web project could not be created successfully.', err));
+//     }
+// 
+//     // download icons to the app's folder
+//     var pendingDownloads = [];
+//     log.info('Downloading icons...');
+//     var icons = w3cManifestInfo.content.icons;
+//     if (icons) {
+//       for (var i = 0; i < icons.length; i++) {
+//         var downloadTask = new Q.defer();
+//         var iconPath = url.parse(icons[i].src).pathname;
+//         pendingDownloads.push(downloadTask.promise);
+//         var iconUrl = url.resolve(w3cManifestInfo.content.start_url, icons[i].src);
+//         var iconFolder = path.join(platformDir, iconPath.replace(/[^\/]*$/, ''));
+//         var iconFileName = iconPath.split('/').pop();
+//         var iconFilePath = path.join(iconFolder, iconFileName);
+// 
+//         mkdirp(iconFolder, createMkdirpCallback(iconUrl, iconFilePath, downloadTask));
+//         icons[i].src = iconPath;
+//       }
+//     }
+// 
+//     // copy the manifest file to the app folder
+//     Q.allSettled(pendingDownloads)
+//     .done(function () {
+//       log.info('Copying the W3C manifest to the app folder...');
+//       var manifestFilePath = path.join(platformDir, 'manifest.json');
+// 
+//       manifestTools.writeToFile(w3cManifestInfo, manifestFilePath, function (err) {
+//         if (err) {
+//           return task.reject(wrapError('ERROR: Failed to copy the manifest to the Web platform folder. The Web project could not be created successfully.', err));
+//         }
+// 
+//         copyDocFile('Web-next-steps.md', platformDir, function (err) {
+//           if (err) {
+//             log.warn('WARNING: Failed to copy documentation file to the Web platform folder.');
+//             log.debug(err.message);
+//           }
+// 
+//           createGenerationInfoFile(platformDir, function (err) {
+//             if (err) {
+//               log.warn('WARNING: Failed to create generation info file for Web platform.');
+//               log.debug(err.message);
+//             }
+// 
+//             return task.resolve();
+//           });
+//         });
+//       });
+//     });
+//   });
+// 
+//   return task.promise;
+// };
 
 // var createChromeApp = function (w3cManifestInfo, generatedAppDir /*, options*/) {
 //   log.info('Generating the Chrome application...');
