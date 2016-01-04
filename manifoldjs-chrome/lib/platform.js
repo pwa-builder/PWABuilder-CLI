@@ -47,7 +47,8 @@ function Platform(packageName, platforms) {
         
         // TODO: verify if using all instead of allSettled  is correct
         return Q.all(Object.keys(icons).map(function (size) {
-          return iconTools.getIcon(w3cManifestInfo.content.start_url, icons, size, platformDir);          
+          var iconPath = icons[size];
+          return iconTools.getIcon(iconPath, w3cManifestInfo.content.start_url, platformDir);          
         }));
       })
       // copy default platform icon
