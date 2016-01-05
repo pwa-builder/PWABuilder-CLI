@@ -7,6 +7,7 @@ var child_process = require('child_process'),
 
 var log = require('./log');
 var stat = Q.nfbind(fs.stat);   
+var node_modules = 'node_modules';
 
 function writeOutput(text, bufferedOutput, source, title) {
 
@@ -106,7 +107,7 @@ function exec (command, args, options, callback) {
 
 function getCommandPath(currentPath, command) {
   if (!currentPath) {
-    return Q.resolve(undefined);
+    return undefined;
   }
   
   var testPath = path.join(currentPath, 'node_modules', '.bin', command);
@@ -118,8 +119,17 @@ function getCommandPath(currentPath, command) {
     if (err.code !== 'ENOENT') {
       return Q.reject(err);
     }
-    currentPath = currentPath.substring(0, currentPath.lastIndexOf('node_modules'));
-    return getCommandPath(currentPath, command);
+    
+    currentPath = currentPath.substring(0, currentPath.lastIndexOf(path.sep));    
+    if (currentPath.indexOf(node_modules) >= 0) {
+      if (currentPath.substr(currentPath.length - node_modules.length) === node_modules) {
+        currentPath = currentPath.substring(0, currentPath.length - node_modules.length);
+      }
+      
+      return getCommandPath(currentPath, command);    
+    }
+    
+    return undefined;
   });  
 }
 
