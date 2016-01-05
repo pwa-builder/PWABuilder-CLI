@@ -9,7 +9,7 @@ var constants = require('../../constants');
 
 module.exports = function (manifestContent, callback) {
   var description = 'An 1024x1024 app icon for the App Store is required',
-  platform = constants.platform.id,
+  platform = constants.platform.subPlatforms.ios.id,
   level = validationConstants.levels.warning,
   requiredIconSizes = ['1024x1024'];
 
