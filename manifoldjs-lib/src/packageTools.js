@@ -9,6 +9,9 @@ var exec = require('./processTools').exec,
     log = require('./log'),
     CustomError = require('./customError');
 
+var installTask;
+var installQueue = [];
+
 function getPackageInformation(packageName) {
   var packagePath = path.dirname(require.main.filename);
   if (packageName) {
@@ -76,9 +79,62 @@ function installPackage(packageName, source, callback) {
     .nodeify(callback);
 }
 
+// Returns a promise that is fulfilled when the requested package is installed.
+//
+// Queued installation is recommended when installing multiple packages. This builds a queue of packages to install and then 
+// launches a single npm instance to install all of them in a single operation. Launching multiple npm instances in parallel 
+// sometimes runs into issues if an npm instance detects that some dependencies are missing because they are still being installed 
+// by a different instance (npm WARN unmet dependency ...)
+function queuePackageInstallation(packageName, source, callback) {
+  installQueue.push({ packageName: packageName, source: source });
+  if (!installTask) {
+    installTask = Q.defer();
+  }
+  
+  return installTask.promise.nodeify(callback);
+}
+
+// Triggers the installation of all queued packages.
+function installQueuedPackages() {
+
+  if (installQueue.length == 0) {
+    return;
+  }
+
+  var moduleList = installQueue.reduce(function (previous, current) { return previous + (previous ? ', ' : '') + current.packageName; }, '');
+
+  log.info('Installing the following modules: \'' + moduleList + '\'...');
+
+  // npm command in Windows is a batch file and needs to include extension to be resolved by spawn call
+  var npm = (process.platform === 'win32' ? 'npm.cmd' : 'npm');
+  var appRoot = path.dirname(require.main.filename);
+
+  // build package list                    
+  var sources = installQueue.map(function (item) { 
+    return item.source;
+  });
+  
+  // launch npm  
+  return exec(npm, ['install'].concat(sources), { cwd: appRoot })
+    .then(function () {
+      // signal completion
+      installTask.resolve(installQueue);
+    })
+    .catch(function (err) {
+      return installTask.reject(new CustomError('Failed to install the following modules: \'' + moduleList + '\'.', err));
+    })
+    .finally(function () {
+      // clear queue
+      installTask = undefined;
+      installQueue = [];      
+    });
+}
+
 module.exports = {
   getPackageInformation: getPackageInformation,
   getNpmPackageLatestVersion: getNpmPackageLatestVersion,
   checkForUpdate: checkForUpdate,
-  installPackage: installPackage
+  installPackage: installPackage,
+  queuePackageInstallation: queuePackageInstallation,
+  installQueuePackages: installQueuedPackages
 };
