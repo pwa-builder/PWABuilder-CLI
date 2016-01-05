@@ -1,9 +1,12 @@
 'use strict';
 
 var child_process = require('child_process'),
+    fs = require('fs'),
+    path = require('path'),
     Q = require('q');
 
 var log = require('./log');
+var stat = Q.nfbind(fs.stat);   
 
 function writeOutput(text, bufferedOutput, source, title) {
 
@@ -101,4 +104,26 @@ function exec (command, args, options, callback) {
   return deferred.promise.nodeify(callback);
 };
 
-module.exports = exec;
+function getCommandPath(currentPath, command) {
+  if (!currentPath) {
+    return Q.resolve(undefined);
+  }
+  
+  var testPath = path.join(currentPath, 'node_modules', '.bin', command);
+  return stat(testPath).then(function (fileInfo) {
+    if (fileInfo.isFile()) {
+      return Q.resolve(testPath);
+    }
+  }).catch(function (err) {
+    if (err.code !== 'ENOENT') {
+      return Q.reject(err);
+    }
+    currentPath = currentPath.substring(0, currentPath.lastIndexOf('node_modules'));
+    return getCommandPath(currentPath, command);
+  });  
+}
+
+module.exports = {
+  exec: exec,
+  getCommandPath: getCommandPath
+};
