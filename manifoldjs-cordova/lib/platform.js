@@ -9,11 +9,9 @@ var manifoldjsLib = require('manifoldjs-lib');
 var PlatformBase = manifoldjsLib.PlatformBase,
     manifestTools = manifoldjsLib.manifestTools,
     CustomError = manifoldjsLib.CustomError,
-    log = manifoldjsLib.log,
-    fileTools = manifoldjsLib.fileTools,
-    iconTools = manifoldjsLib.iconTools,
     utils = manifoldjsLib.utils,
-    exec = manifoldjsLib.processTools.exec;
+    processTools = manifoldjsLib.processTools,
+    exec = processTools.exec;
 
 var constants = require('./constants');
   
@@ -26,18 +24,35 @@ function Platform(packageName, platforms) {
   // save platform list
   self.platforms = platforms;
 
-  // npm command in Windows is a batch file and needs to include extension to be resolved by spawn call
-  var cordova = (process.platform === 'win32' ? 'cordova.cmd' : 'cordova');
-  // path to cordova shell command
-  var cordovaPath = path.resolve(__dirname, '..', 'node_modules', '.bin', cordova);
-  
+  // returns the path to the cordova shell command
+  var cachedCordovaPath;
+  function getCordovaPath() {
+    if (!cachedCordovaPath) {
+      // npm command in Windows is a batch file and needs to include extension to be resolved by spawn call
+      var cordova = (process.platform === 'win32' ? 'cordova.cmd' : 'cordova');
+      return processTools.getCommandPath(__dirname, cordova)
+            .then(function (commandPath) {
+              cachedCordovaPath = commandPath;
+              if (!commandPath) {
+                return Q.reject('Failed to locate the Cordova shell command: \'' + cordova + '\'.');
+              }
+              
+              return cachedCordovaPath = commandPath;
+            });
+    }
+    
+    return Q.resolve(cachedCordovaPath);
+  }
+
   // ID or URL of the Hosted Web App plugin - THIS SETTING WILL NEED TO BE UPDATED IF THE PLUGIN IS RELOCATED
   // TODO: make this overridable via environment variable
   var pluginIdOrUrl = 'cordova-plugin-hostedwebapp@>=0.2.0 <0.3.0';
   
   function createApp(rootDir, appName, packageName, cordovaAppName, callback) {
     self.info('Creating the Cordova project...');    
-    return exec(cordovaPath, ['create', appName, packageName, cordovaAppName], { cwd: rootDir })
+    return getCordovaPath().then(function (cordovaPath) {
+            return exec(cordovaPath, ['create', appName, packageName, cordovaAppName], { cwd: rootDir });
+          })
           .catch(function (err) {
             return Q.reject(new CustomError('Failed to create the base application. The Cordova project could not be created successfully.', err));          
           })
@@ -47,7 +62,9 @@ function Platform(packageName, platforms) {
   function addPlatforms(rootDir, platforms, callback) {
     var allPlatforms = platforms.join(' ');
     self.info('Adding the following Cordova platforms: ' + allPlatforms + '...');
-    return exec(cordovaPath, ['platform', 'add'].concat(platforms), { cwd: rootDir })
+    return getCordovaPath().then(function (cordovaPath) {
+            return exec(cordovaPath, ['platform', 'add'].concat(platforms), { cwd: rootDir });
+          })
           .catch(function (err) {
             return Q.reject(new CustomError('Failed to add the Cordova platforms: ' + allPlatforms + '.', err));
           })
@@ -76,7 +93,9 @@ function Platform(packageName, platforms) {
     var allPlugins = pluginList.join(' ');
     self.info('Adding the following plugins to the Cordova project: ' + allPlugins + '...');
     
-    return exec(cordovaPath, ['plugin', 'add'].concat(pluginList), { cwd: rootDir })
+    return getCordovaPath().then(function (cordovaPath) {
+            return exec(cordovaPath, ['plugin', 'add'].concat(pluginList), { cwd: rootDir });
+          })
           .catch(function (err) {
             return Q.reject(new CustomError('Failed to add one or more plugins. The Cordova project could not be created successfully.', err));
           })
