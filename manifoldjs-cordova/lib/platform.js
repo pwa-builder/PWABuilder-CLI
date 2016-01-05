@@ -13,7 +13,7 @@ var PlatformBase = manifoldjsLib.PlatformBase,
     fileTools = manifoldjsLib.fileTools,
     iconTools = manifoldjsLib.iconTools,
     utils = manifoldjsLib.utils,
-    exec = manifoldjsLib.exec;
+    exec = manifoldjsLib.processTools.exec;
 
 var constants = require('./constants');
   

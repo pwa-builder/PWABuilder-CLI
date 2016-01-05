@@ -12,8 +12,8 @@ module.exports = {
   platformTools: require('./src/platformTools'),
   platformUtils: require('./src/platformUtils'),
   packageTools: require('./src/packageTools'),
+  processTools: require('./src/processTools'),
   fileTools: require('./src/fileTools'),
   iconTools: require('./src/iconTools'),
   log: require('./src/log'),
-  exec: require('./src/exec')
 };

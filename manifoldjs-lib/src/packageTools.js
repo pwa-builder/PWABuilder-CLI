@@ -5,7 +5,7 @@ var http = require('http'),
     semver = require('semver'),
     Q = require('q');
 
-var exec = require('./exec'),
+var exec = require('./processTools').exec,
     log = require('./log'),
     CustomError = require('./customError');
 
