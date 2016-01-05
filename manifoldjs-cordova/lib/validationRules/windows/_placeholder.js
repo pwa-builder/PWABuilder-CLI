@@ -15,7 +15,7 @@ module.exports = function (manifestContent, callback) {
   //--------------------------------
   // return callback(undefined, {
   //   'description': 'You may want to add the X icon',
-  //   'platform': constants.platform.id,
+  //   'platform': constants.platform.subPlatforms.windows.id,
   //   'level': validationConstants.levels.suggestion,
   //   'members': validationConstants.manifestMembers.icons,
   //   'code': validationConstants.codes.missingImage
@@ -25,14 +25,14 @@ module.exports = function (manifestContent, callback) {
   //--------------------------------
   // return callback(undefined, [{
   //   'description': 'You may want to add the X icon',
-  //   'platform': constants.platform.id,
+  //   'platform': constants.platform.subPlatforms.windows.id,
   //   'level': validationConstants.levels.suggestion,
   //   'members': validationConstants.manifestMembers.icons,
   //   'code': validationConstants.codes.missingImage
   // },
   // {
   //   'description': 'An issue with the icons format',
-  //   'platform': constants.platform.id,
+  //   'platform': constants.platform.subPlatforms.windows.id,
   //   'level': validationConstants.levels.suggestion,
   //   'members': validationConstants.manifestMembers.icons,
   //   'code': validationConstants.codes.missingImage
