@@ -28,8 +28,14 @@ function getPlatformModule(packageName, source) {
     if (err.code !== 'MODULE_NOT_FOUND') {
       return Q.reject(new CustomError('Failed to resolve module: \'' + packageName + '\'.', err));
     }
-    
-    return packageTools.installPackage(packageName, source);
+
+    // queue the installation of the package, it will be installed once installQueuedPackages 
+    // is called, then re-attempt to require the package.
+    return packageTools.queuePackageInstallation(packageName, source)
+            .then(function() {
+              var module = require(packageName);
+              return Q.resolve(module);              
+            });
   }
 }
 
@@ -76,6 +82,9 @@ function loadPlatforms(platforms, callback) {
 
 		return taskList;
 	}, []);
+
+  // launch the installation of all queued packages
+  packageTools.installQueuedPackages();
 
 	// wait for all loading tasks to complete
 	return Q.all(tasks)
