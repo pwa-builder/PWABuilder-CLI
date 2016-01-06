@@ -136,5 +136,5 @@ module.exports = {
   checkForUpdate: checkForUpdate,
   installPackage: installPackage,
   queuePackageInstallation: queuePackageInstallation,
-  installQueuePackages: installQueuedPackages
+  installQueuedPackages: installQueuedPackages
 };
