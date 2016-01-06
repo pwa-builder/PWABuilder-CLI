@@ -103,7 +103,7 @@ function installQueuedPackages() {
 
   var moduleList = installQueue.reduce(function (previous, current) { return previous + (previous ? ', ' : '') + current.packageName; }, '');
 
-  log.info('Installing the following modules: \'' + moduleList + '\'...');
+  log.info('Installing the following module(s): \'' + moduleList + '\'...');
 
   // npm command in Windows is a batch file and needs to include extension to be resolved by spawn call
   var npm = (process.platform === 'win32' ? 'npm.cmd' : 'npm');
@@ -121,7 +121,7 @@ function installQueuedPackages() {
       installTask.resolve(installQueue);
     })
     .catch(function (err) {
-      return installTask.reject(new CustomError('Failed to install the following modules: \'' + moduleList + '\'.', err));
+      return installTask.reject(new CustomError('Failed to install the following module(s): \'' + moduleList + '\'.', err));
     })
     .finally(function () {
       // clear queue
