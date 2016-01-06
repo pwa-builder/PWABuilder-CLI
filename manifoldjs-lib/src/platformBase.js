@@ -152,35 +152,35 @@ PlatformBase.prototype.createGenerationInfo = function (targetPath, callback) {
  * Outputs a debug message to the log.
  */
 PlatformBase.prototype.debug = function (message, source) {
-  this.log.info(message, source);
+  this.log.debug(message, source || this.id);
 };
 
 /**
  * Outputs an informational message to the log.
  */
 PlatformBase.prototype.info = function (message, source) {
-  this.log.info(message, source);
+  this.log.info(message, source || this.id);
 };
 
 /**
  * Outputs a warning message to the log.
  */
 PlatformBase.prototype.warn = function (message, source) {
-  this.log.warn(message, source);
+  this.log.warn(message, source || this.id);
 };
 
 /**
  * Outputs an informational message to the log.
  */
 PlatformBase.prototype.error = function (message, source) {
-  this.log.info(message, source);
+  this.log.error(message, source || this.id);
 };
 
 /**
  * Outputs a stack trace to the log.
  */
 PlatformBase.prototype.trace = function (message, source) {
-  this.log.trace(message, source);
+  this.log.trace(message, source || this.id);
 };
 
 module.exports = PlatformBase;
