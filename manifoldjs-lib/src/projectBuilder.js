@@ -80,14 +80,14 @@ var copyDocFile = function (docFilename, targetPath, callback) {
   fileTools.copyFile(source, target, callback);
 };
 
-var copyOfflineFile = function (docFilename, targetPath, callback) {
-  var source = path.join(__dirname, 'manifestTools', 'assets', 'windows10', docFilename);
-  var target = path.join(targetPath, docFilename);
-
-  log.info('Copying offline file "' + docFilename + '" to target: ' + target + '...');
-
-  fileTools.copyFile(source, target, callback);
-};
+// var copyOfflineFile = function (docFilename, targetPath, callback) {
+//   var source = path.join(__dirname, 'manifestTools', 'assets', 'windows10', docFilename);
+//   var target = path.join(targetPath, docFilename);
+// 
+//   log.info('Copying offline file "' + docFilename + '" to target: ' + target + '...');
+// 
+//   fileTools.copyFile(source, target, callback);
+// };
 
 
 var createGenerationInfoFile = function (targetPath, callback) {
