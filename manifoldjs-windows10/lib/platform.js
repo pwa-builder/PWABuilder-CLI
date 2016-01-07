@@ -34,6 +34,7 @@ function Platform(packageName, platforms) {
     var platformDir = path.join(rootDir, constants.platform.id);
     var manifestDir = path.join(platformDir, 'manifest');
     var imagesDir = path.join(manifestDir, 'images');
+    var sourceDir = path.join(platformDir, 'source');   
 
     
     // convert the W3C manifest to a platform-specific manifest
@@ -79,6 +80,14 @@ function Platform(packageName, platforms) {
         self.info('Copying offline file "' + fileName + '" to target: ' + target + '...');
       
         return fileTools.copyFile(source, target);        
+      })
+      // copy project assets to the source folder 
+      .then(function () {
+        var projectAssetsDir = path.join(assetsDir, 'project');
+        return fileTools.copyFolder(projectAssetsDir, sourceDir)
+          .catch(function (err) {
+            return Q.reject(new CustomError('Failed to copy the project assets to the source folder.', err));
+          });
       })
       // copy the documentation file
       .then(function () {
