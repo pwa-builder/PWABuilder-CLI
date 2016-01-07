@@ -8,7 +8,7 @@ var	manifestTools = require('./manifestTools'),
     iconTools = require('./iconTools'),
     fileTools = require('./fileTools'),
     packageTools = require('./packageTools'),
-    logger = require('./log');
+    log = require('./log');
 
 function PlatformBase (id, name, packageName, baseDir) {
   var self = this;
@@ -17,7 +17,7 @@ function PlatformBase (id, name, packageName, baseDir) {
   self.name = name;
   self.packageName = packageName;
   self.baseDir = baseDir;
-  self.log = logger.getLogger(id);
+  self.log = log;
 }
 
 /**
