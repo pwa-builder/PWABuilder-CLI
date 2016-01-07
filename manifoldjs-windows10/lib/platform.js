@@ -2,13 +2,13 @@
 
 var fs = require('fs'),
     path = require('path'),
-    url = require('url'),
-    Q = require('q');
+    url = require('url');
+    
+var Q = require('q');
 
 var manifoldjsLib = require('manifoldjs-lib');
 
 var PlatformBase = manifoldjsLib.PlatformBase,
-    manifestTools = manifoldjsLib.manifestTools,
     CustomError = manifoldjsLib.CustomError,
     fileTools = manifoldjsLib.fileTools,
     iconTools = manifoldjsLib.iconTools;
