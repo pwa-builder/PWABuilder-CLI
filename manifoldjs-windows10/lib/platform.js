@@ -30,6 +30,7 @@ function Platform(packageName, platforms) {
 
     self.info('Generating the ' + constants.platform.name + ' app...');
     
+    var assetsDir = path.join(self.baseDir, 'assets');
     var platformDir = path.join(rootDir, constants.platform.id);
     var manifestDir = path.join(platformDir, 'manifest');
     var imagesDir = path.join(manifestDir, 'images');
@@ -69,7 +70,16 @@ function Platform(packageName, platforms) {
               });
           });
       })
-
+      // copy the offline page
+      .then(function () {
+        var fileName = 'msapp-error.html';
+        var source = path.join(assetsDir, fileName);
+        var target = path.join(manifestDir, fileName);
+      
+        self.info('Copying offline file "' + fileName + '" to target: ' + target + '...');
+      
+        return fileTools.copyFile(source, target);        
+      })
       // copy the documentation file
       .then(function () {
         return self.copyDocumentationFile('Windows10-next-steps.md', platformDir);
