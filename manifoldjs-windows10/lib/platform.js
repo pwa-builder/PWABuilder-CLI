@@ -36,7 +36,6 @@ function Platform(packageName, platforms) {
     var imagesDir = path.join(manifestDir, 'images');
     var sourceDir = path.join(platformDir, 'source');   
 
-    
     // convert the W3C manifest to a platform-specific manifest
     var platformManifestInfo;
     return manifest.convertFromBase(w3cManifestInfo)
@@ -46,6 +45,17 @@ function Platform(packageName, platforms) {
         self.debug('Creating the ' + constants.platform.name + ' app folder...');
         return fileTools.mkdirp(platformDir);
       })
+      // persist the platform-specific manifest
+      .then(function () {
+        return fileTools.mkdirp(manifestDir).then(function () {
+          self.debug('Copying the ' + constants.platform.name + ' manifest to the app folder...');
+          var manifestFilePath = path.join(manifestDir, 'appxmanifest.xml');
+          return Q.nfcall(fs.writeFile, manifestFilePath, platformManifestInfo.content.rawData)
+                  .catch(function (err) {
+                    return Q.reject(new CustomError('Failed to copy the manifest to the platform folder.', err));
+                  });
+        })
+      })     
       // download icons to the app's folder
       .then(function () {
         self.debug('Downloading the ' + constants.platform.name + ' icons...');
@@ -114,12 +124,6 @@ function Platform(packageName, platforms) {
       // create generation info
       .then(function () {
         return self.createGenerationInfo(platformDir);
-      })
-      // persist the platform-specific manifest
-      .then(function () {
-        self.debug('Copying the ' + constants.platform.name + ' manifest to the app folder...');
-        var manifestFilePath = path.join(platformDir, 'appxmanifest.xml');
-        return Q.nfcall(fs.writeFile, manifestFilePath, platformManifestInfo.content.rawData);
       })
       .then(function () {
         self.info('Created the ' + constants.platform.name + ' app!');
