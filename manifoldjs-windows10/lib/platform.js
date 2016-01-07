@@ -89,6 +89,17 @@ function Platform(packageName, platforms) {
             return Q.reject(new CustomError('Failed to copy the project assets to the source folder.', err));
           });
       })
+      // update the source project's application manifest (package.appxmanifest) 
+      .then(function () {
+        var packageManifestPath = path.join(sourceDir, 'package.appxmanifest');
+        return fileTools.replaceFileContent(packageManifestPath,
+          function (data) {
+            return manifest.replaceManifestValues(w3cManifestInfo, data);
+          })
+          .catch(function (err) {
+            return Q.reject(new CustomError('Failed to update the application manifest \'package.appxmanifest\'.', err));
+          });
+      })     
       // copy the documentation file
       .then(function () {
         return self.copyDocumentationFile('Windows10-next-steps.md', platformDir);
@@ -112,14 +123,5 @@ function Platform(packageName, platforms) {
       .nodeify(callback);
   };
 }
-
-var updateProjectFiles = function (sourceDir, w3cManifestInfo, callback) {
-  var packageManifestPath = path.join(sourceDir, 'package.appxmanifest');
-  fileTools.replaceFileContent(packageManifestPath,
-    function (data) {
-      return manifest.replaceManifestValues(w3cManifestInfo, data);
-    },
-    callback);
-};
 
 module.exports = Platform;
