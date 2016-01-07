@@ -31,6 +31,9 @@ function Platform(packageName, platforms) {
     self.info('Generating the ' + constants.platform.name + ' app...');
     
     var platformDir = path.join(rootDir, constants.platform.id);
+    var manifestDir = path.join(platformDir, 'manifest');
+    var imagesDir = path.join(manifestDir, 'images');
+
     
     // convert the W3C manifest to a platform-specific manifest
     var platformManifestInfo;
@@ -44,19 +47,29 @@ function Platform(packageName, platforms) {
       // download icons to the app's folder
       .then(function () {
         self.debug('Downloading the ' + constants.platform.name + ' icons...');
-        var icons = platformManifestInfo.content.icons;
-        
-        // TODO: verify if using all instead of allSettled  is correct
-        return Q.all(Object.keys(icons).map(function (size) {
-          var iconUrl = url.resolve(w3cManifestInfo.content.start_url, icons[size].url);
-          var iconFilePath = path.join(platformDir, 'images', icons[size].fileName);
-          return iconTools.getIcon(iconUrl, iconFilePath);          
-        }));
+     
+        // create images folder  
+        return fileTools.mkdirp(imagesDir)    
+          // download all icons in the manifest
+          // TODO: verify if using all instead of allSettled is correct
+          .then(function () {
+            var icons = platformManifestInfo.content.icons;     
+            return Q.all(Object.keys(icons).map(function (size) {
+                var iconUrl = url.resolve(w3cManifestInfo.content.start_url, icons[size].url);
+                var iconFilePath = path.join(imagesDir, icons[size].fileName);
+                return iconTools.getIcon(iconUrl, iconFilePath);          
+              }))
+              // replace any missing icons with default images from the project's assets 
+              .then(function (icons) {
+                var defaultImagesDir = path.join(self.baseDir, 'assets', 'images');
+                return fileTools.copyFolder(defaultImagesDir, imagesDir, { clobber: false })
+                      .catch (function (err) {
+                          return Q.reject(new CustomError('Failed to copy the default icons to the project folder.', err));    
+                      });
+              });
+          });
       })
-      // // copy default platform icon
-      // .then(function () {
-      //   return self.copyDefaultPlatformIcon(platformManifestInfo, '128', platformDir)
-      // })
+
       // copy the documentation file
       .then(function () {
         return self.copyDocumentationFile('Windows10-next-steps.md', platformDir);
