@@ -240,5 +240,6 @@ function replaceManifestValues(w3cManifestInfo, content) {
 }
 
 module.exports = {
-  convertFromBase: convertFromBase
+  convertFromBase: convertFromBase,
+  replaceManifestValues: replaceManifestValues
 }
