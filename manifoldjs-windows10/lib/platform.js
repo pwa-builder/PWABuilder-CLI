@@ -89,6 +89,13 @@ function Platform(packageName, platforms) {
             return Q.reject(new CustomError('Failed to copy the project assets to the source folder.', err));
           });
       })
+      // copy the manifest and icon files to the source project
+      .then(function () {
+        self.info('Copying files to the ' + constants.platform.name + ' source project...');
+        return fileTools.copyFolder(manifestDir, sourceDir, {
+          clobber: true,
+          filter: function (file) { return path.basename(file) !== 'appxmanifest.xml'; } });
+      })      
       // update the source project's application manifest (package.appxmanifest) 
       .then(function () {
         var packageManifestPath = path.join(sourceDir, 'package.appxmanifest');
