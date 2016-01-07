@@ -8,10 +8,8 @@ var fileTools = require('./fileTools'),
 		download = require('./download'),
 		log = require('./log');
 
-function getIcon(iconPath, startUrl, baseDir, callback) {
+function getIcon(iconUrl, iconFilePath, callback) {
 
-	var iconUrl = url.resolve(startUrl, iconPath);
-	var iconFilePath = path.join(baseDir, iconPath);
 	var iconFolder = path.dirname(iconFilePath);
 
 	log.debug('Downloading icon file from [' + iconUrl + '] to [' + iconFilePath + ']');
