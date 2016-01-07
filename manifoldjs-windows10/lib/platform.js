@@ -193,4 +193,13 @@ function Platform(packageName, platforms) {
   };
 }
 
+var updateProjectFiles = function (sourceDir, w3cManifestInfo, callback) {
+  var packageManifestPath = path.join(sourceDir, 'package.appxmanifest');
+  fileTools.replaceFileContent(packageManifestPath,
+    function (data) {
+      return manifest.replaceManifestValues(w3cManifestInfo, data);
+    },
+    callback);
+};
+
 module.exports = Platform;
