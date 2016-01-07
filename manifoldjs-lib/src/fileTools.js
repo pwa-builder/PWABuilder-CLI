@@ -2,8 +2,10 @@
 'use strict';
 
 var fs = require('fs'),
-    path = require('path'),
-    _mkdirp = require('mkdirp'),
+    path = require('path');
+
+var _mkdirp = require('mkdirp'),
+    ncp = require('ncp'), 
     Q = require('q');
 
 function copyFile(source, target, callback) {
@@ -27,6 +29,32 @@ function copyFile(source, target, callback) {
   rd.pipe(wr);
 
   return deferred.promise.nodeify(callback);
+}
+
+function copyFolder(source, target, options, callback) {
+
+  if (arguments.length == 3) {
+    if (typeof options === "function") {
+      callback = options;
+      options = {};      
+    }
+  }
+  
+  return Q.nfcall(ncp, source, target, options || {})
+          .catch(function (err) {
+            // flatten errors, otherwise it breaks things downstream
+            // see https://github.com/AvianFlu/ncp/issues/52
+            if (Array.isArray(err)) {
+              var msg = err.reduce(function (previous, current) {
+                return previous += (previous.length ? '\n' : '') + current.message;
+              }, '');
+              
+              err = new Error(msg);              
+            }
+            
+            return Q.reject(err);
+          })
+          .nodeify(callback);
 }
 
 function replaceFileContent(source, replacementFunc, callback) {
@@ -54,6 +82,7 @@ function mkdirp(filePath, callback) {
 
 module.exports = {
   copyFile: copyFile,
+  copyFolder: copyFolder,
   mkdirp: mkdirp,
   replaceFileContent: replaceFileContent
 };
