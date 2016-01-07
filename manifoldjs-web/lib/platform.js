@@ -1,6 +1,7 @@
 'use strict';
 
 var path = require('path'),
+    url = require('url'),
     Q = require('q');
 
 var manifoldjsLib = require('manifoldjs-lib');
@@ -39,7 +40,9 @@ function Platform(packageName, platforms) {
         // TODO: verify if using all instead of allSettled  is correct
         return Q.all(Object.keys(icons).map(function (size) {
           var iconPath = icons[size].src;
-          return iconTools.getIcon(iconPath, w3cManifestInfo.content.start_url, platformDir);          
+          var iconUrl = url.resolve(w3cManifestInfo.content.start_url, iconPath);
+          var iconFilePath = path.join(platformDir, iconPath);
+          return iconTools.getIcon(iconUrl, iconFilePath);
         }));
       })
       // copy the documentation file

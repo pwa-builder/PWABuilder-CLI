@@ -1,6 +1,7 @@
 'use strict';
 
 var path = require('path'),
+    url = require('url'),
     Q = require('q');
 
 var manifoldjsLib = require('manifoldjs-lib');
@@ -8,7 +9,7 @@ var manifoldjsLib = require('manifoldjs-lib');
 var PlatformBase = manifoldjsLib.PlatformBase,
     manifestTools = manifoldjsLib.manifestTools,
     CustomError = manifoldjsLib.CustomError,
-    fileTools = manifoldjsLib.fileTools,    
+    fileTools = manifoldjsLib.fileTools,
     iconTools = manifoldjsLib.iconTools;
 
 var constants = require('./constants'),
@@ -46,8 +47,10 @@ function Platform(packageName, platforms) {
         
         // TODO: verify if using all instead of allSettled is correct
         return Q.all(Object.keys(icons).map(function (size) {
-          var iconPath = icons[size];
-          return iconTools.getIcon(iconPath, w3cManifestInfo.content.start_url, platformDir);          
+          var iconUrl = url.resolve(w3cManifestInfo.content.start_url, icons[size]);
+          var iconFileName = url.parse(iconUrl).pathname.split('/').pop();
+          var iconFilePath = path.join(platformDir, iconFileName);
+          return iconTools.getIcon(iconUrl, iconFilePath);          
         }));
       })
       // copy default platform icon
