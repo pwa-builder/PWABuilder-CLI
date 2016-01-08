@@ -1,6 +1,7 @@
 'use strict';
 
-var path = require('path'),
+var fs = require('fs'),
+    path = require('path'),
     url = require('url');
 
 var Q = require('q');
@@ -12,6 +13,7 @@ var PlatformBase = manifoldjsLib.PlatformBase,
     CustomError = manifoldjsLib.CustomError,
     utils = manifoldjsLib.utils,
     processTools = manifoldjsLib.processTools,
+    fileTools = manifoldjsLib.fileTools,
     exec = processTools.exec;
 
 var constants = require('./constants');
@@ -103,6 +105,32 @@ function Platform (packageName, platforms) {
           .nodeify(callback);
   }
 
+  function processPlatforms (rootDir, platformDir, platforms) {
+    
+    return Q.allSettled(platforms.map(function (platform) {
+      self.info('Processing the \'' + platform + '\' Cordova platform...');
+
+      var cordovaPlatformPath = path.join(platformDir, 'platforms', platform);
+
+      // copy the documentation file
+      return self.copyDocumentation(cordovaPlatformPath, platform)
+        // create top-level platform shortcut
+        .then(function () {
+          // don't create a shortcut for the Windows platform
+          if (platform.toUpperCase() !== 'WINDOWS') {
+            self.info('Creating a shortcut for the \'' + platform + '\' Cordova platform...');
+            var srcpath = path.resolve(platformDir, 'platforms', platform);
+            var dstpath = path.resolve(rootDir, platform);
+            return fileTools.createShortcut(srcpath, dstpath);
+          }
+        })
+        // create generation info
+        .then(function () {          
+          return self.createGenerationInfo(cordovaPlatformPath);
+        });
+    }));
+  }
+
   // override create function
   self.create = function (w3cManifestInfo, rootDir, options, callback) {
 
@@ -147,6 +175,10 @@ function Platform (packageName, platforms) {
             // add the platforms
             .then (function () {
               return addPlatforms(platformDir, self.platforms);
+            })
+            // process individual platforms
+            .then (function () {
+              return processPlatforms(rootDir, platformDir, self.platforms);
             })
             .then(function () {
               self.info('Created the ' + constants.platform.displayName + ' app!');        
