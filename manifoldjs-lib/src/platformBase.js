@@ -115,7 +115,7 @@ PlatformBase.prototype.copyDocumentation = function (targetPath, platform, callb
     }
   }
   
-  var sourcePath = path.join(this.baseDir, 'docs', platform);
+  var sourcePath = path.join(this.baseDir, 'docs', platform || '');
 
   this.info('Copying documentation from \'' + sourcePath + '\' to \'' + targetPath + '\'...');
 
