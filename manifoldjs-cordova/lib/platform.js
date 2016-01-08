@@ -106,9 +106,11 @@ function Platform (packageName, platforms) {
   // override create function
   self.create = function (w3cManifestInfo, rootDir, options, callback) {
 
-    self.platforms.forEach(function (platformId) {
-      self.info('Generating the ' + constants.platform.subPlatforms[platformId].name + ' app!');      
-    });
+    var allPlatforms = self.platforms.map(function (platformId) {
+      return constants.platform.subPlatforms[platformId].name;      
+    }).join(', ');
+    
+    self.info('Generating the ' + allPlatforms + ' app(s)...');
     
     var platformDir = path.join(rootDir, constants.platform.id);
     
