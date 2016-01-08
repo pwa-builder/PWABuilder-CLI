@@ -80,9 +80,15 @@ function mkdirp(filePath, callback) {
     .nodeify(callback);
 }
 
+function createShortcut(srcpath, dstpath, callback) {
+  return Q.nfcall(fs.symlink, srcpath, dstpath, 'junction')
+          .nodeify(callback);
+}
+
 module.exports = {
   copyFile: copyFile,
   copyFolder: copyFolder,
   mkdirp: mkdirp,
+  createShortcut: createShortcut,
   replaceFileContent: replaceFileContent
 };
