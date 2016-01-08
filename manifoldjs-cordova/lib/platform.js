@@ -55,7 +55,7 @@ function Platform (packageName, platforms) {
             return exec(cordovaPath, ['create', appName, packageName, cordovaAppName], { cwd: rootDir });
           })
           .catch(function (err) {
-            return Q.reject(new CustomError('Failed to create the base application. The Cordova project could not be created successfully.', err));          
+            return Q.reject(new CustomError('Failed to create the base application.', err));          
           })
           .nodeify(callback);
   }
@@ -98,7 +98,7 @@ function Platform (packageName, platforms) {
             return exec(cordovaPath, ['plugin', 'add'].concat(pluginList), { cwd: rootDir });
           })
           .catch(function (err) {
-            return Q.reject(new CustomError('Failed to add one or more plugins. The Cordova project could not be created successfully.', err));
+            return Q.reject(new CustomError('Failed to add one or more plugins.', err));
           })
           .nodeify(callback);
   }
