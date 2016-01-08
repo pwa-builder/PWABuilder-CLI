@@ -10,7 +10,6 @@ module.exports = {
   projectBuilder: require('./src/projectBuilder'),
   projectTools: require('./src/projectTools'),
   platformTools: require('./src/platformTools'),
-  platformUtils: require('./src/platformUtils'),
   packageTools: require('./src/packageTools'),
   processTools: require('./src/processTools'),
   fileTools: require('./src/fileTools'),

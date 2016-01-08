@@ -14,7 +14,8 @@ var PlatformBase = manifoldjsLib.PlatformBase,
     iconTools = manifoldjsLib.iconTools;
 
 var constants = require('./constants'),
-    manifest = require('./manifest');
+    manifest = require('./manifest'),
+    appPackage = require('/appPackage');
    
 function Platform (packageName, platforms) {
 
@@ -133,6 +134,20 @@ function Platform (packageName, platforms) {
       })
       .nodeify(callback);
   };
+
+  // override package function
+  self.package = function (rootDir, outputPath, callback) {
+
+    self.info('Packaging the ' + constants.platform.name + ' app...');
+    
+    var platformDir = path.join(rootDir, constants.platform.id);
+    var directory = path.join(platformDir, 'manifest');
+
+    // creates App Store package for publishing
+    return appPackage.makeAppx(directory, outputPath).then(function () {
+      self.info('The app store package was created successfully!');
+    });
+  }  
 }
 
 module.exports = Platform;

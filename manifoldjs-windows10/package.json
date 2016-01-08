@@ -31,6 +31,8 @@
     "Windows"
   ],
   "dependencies": {
+    "archiver": "^0.20.0",
+    "cloudappx-server": "^0.0.4",
     "manifoldjs-lib": "file:../manifoldjs-lib"
   },
   "devDependencies": {
