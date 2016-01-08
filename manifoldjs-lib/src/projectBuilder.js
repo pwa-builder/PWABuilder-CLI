@@ -740,7 +740,8 @@ var createApps = function (w3cManifestInfo, rootDir, platforms, options, callbac
     w3cManifestInfo.timestamp = new Date().toISOString().replace(/T/, ' ').replace(/\.[0-9]+/, ' ');
     
     // create app directory
-    return fileTools.mkdirp(generatedAppDir);
+    return fileTools.mkdirp(generatedAppDir)
+			.thenResolve(generatedAppDir);
   })
 	.then(function (generatedAppDir) {
 		// create apps for each platform
