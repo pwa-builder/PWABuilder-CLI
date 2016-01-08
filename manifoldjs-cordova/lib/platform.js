@@ -1,8 +1,9 @@
 'use strict';
 
 var path = require('path'),
-    url = require('url'),
-    Q = require('q');
+    url = require('url');
+
+var Q = require('q');
 
 var manifoldjsLib = require('manifoldjs-lib');
 
@@ -15,7 +16,7 @@ var PlatformBase = manifoldjsLib.PlatformBase,
 
 var constants = require('./constants');
   
-function Platform(packageName, platforms) {
+function Platform (packageName, platforms) {
 
   var self = this;
   Object.assign(this, PlatformBase.prototype);
@@ -26,7 +27,7 @@ function Platform(packageName, platforms) {
 
   // returns the path to the cordova shell command
   var cachedCordovaPath;
-  function getCordovaPath() {
+  function getCordovaPath () {
     if (!cachedCordovaPath) {
       // npm command in Windows is a batch file and needs to include extension to be resolved by spawn call
       var cordova = (process.platform === 'win32' ? 'cordova.cmd' : 'cordova');
@@ -48,7 +49,7 @@ function Platform(packageName, platforms) {
   // TODO: make this overridable via environment variable
   var pluginIdOrUrl = 'cordova-plugin-hostedwebapp@>=0.2.0 <0.3.0';
   
-  function createApp(rootDir, appName, packageName, cordovaAppName, callback) {
+  function createApp (rootDir, appName, packageName, cordovaAppName, callback) {
     self.info('Creating the Cordova project...');    
     return getCordovaPath().then(function (cordovaPath) {
             return exec(cordovaPath, ['create', appName, packageName, cordovaAppName], { cwd: rootDir });
@@ -59,7 +60,7 @@ function Platform(packageName, platforms) {
           .nodeify(callback);
   }
   
-  function addPlatforms(rootDir, platforms, callback) {
+  function addPlatforms (rootDir, platforms, callback) {
     var allPlatforms = platforms.join(' ');
     self.info('Adding the following Cordova platforms: ' + allPlatforms + '...');
     return getCordovaPath().then(function (cordovaPath) {
@@ -71,7 +72,7 @@ function Platform(packageName, platforms) {
           .nodeify(callback);
   }
   
-  function addPlugins(rootDir, options, callback) {
+  function addPlugins (rootDir, options, callback) {
     var pluginList = [pluginIdOrUrl];
     if (options.crosswalk) {
       pluginList.push('cordova-plugin-crosswalk-webview');
@@ -103,7 +104,7 @@ function Platform(packageName, platforms) {
   }
 
   // override create function
-  self.create = function(w3cManifestInfo, rootDir, options, callback) {
+  self.create = function (w3cManifestInfo, rootDir, options, callback) {
 
     self.platforms.forEach(function (platformId) {
       self.info('Generating the ' + constants.platform.subPlatforms[platformId].name + ' app!');      
@@ -118,14 +119,13 @@ function Platform(packageName, platforms) {
               .replace(/-/g, '')
               .split('.')
               .map(function (segment) {
-      
-      // BUG:  Issue 149 aparently "in" is a reserved word for android package names
-      if(segment === 'in') { 
-        segment = segment.replace('in', 'ind');
-      }
-      
-      packageName = segment + (packageName ? '.' : '') + packageName;
-    });
+                // BUG:  Issue 149 aparently "in" is a reserved word for android package names
+                if(segment === 'in') { 
+                  segment = segment.replace('in', 'ind');
+                }
+                
+                packageName = segment + (packageName ? '.' : '') + packageName;
+              });
   
     var cordovaAppName = utils.sanitizeName(w3cManifestInfo.content.short_name);
     packageName = utils.sanitizeName(packageName);
