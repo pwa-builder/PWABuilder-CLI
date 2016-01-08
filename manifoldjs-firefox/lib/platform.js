@@ -1,8 +1,9 @@
 'use strict';
 
 var path = require('path'),
-    url = require('url'),
-    Q = require('q');
+    url = require('url');
+
+var Q = require('q');
 
 var manifoldjsLib = require('manifoldjs-lib');
 
@@ -15,7 +16,7 @@ var PlatformBase = manifoldjsLib.PlatformBase,
 var constants = require('./constants'),
     manifest = require('./manifest');
 
-function Platform(packageName, platforms) {
+function Platform (packageName, platforms) {
 
   var self = this;
   Object.assign(this, PlatformBase.prototype);
@@ -57,9 +58,9 @@ function Platform(packageName, platforms) {
       .then(function () {
         return self.copyDefaultPlatformIcon(platformManifestInfo, '128', platformDir)
       })
-      // copy the documentation file
+      // copy the documentation
       .then(function () {
-        return self.copyDocumentationFile('Firefox-next-steps.md', platformDir);
+        return self.copyDocumentation(platformDir);
       })      
       // create generation info
       .then(function () {

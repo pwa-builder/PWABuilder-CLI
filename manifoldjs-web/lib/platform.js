@@ -1,8 +1,9 @@
 'use strict';
 
 var path = require('path'),
-    url = require('url'),
-    Q = require('q');
+    url = require('url');
+
+var Q = require('q');
 
 var manifoldjsLib = require('manifoldjs-lib');
 
@@ -14,7 +15,7 @@ var PlatformBase = manifoldjsLib.PlatformBase,
 
 var constants = require('./constants');
 
-function Platform(packageName, platforms) {
+function Platform (packageName, platforms) {
 
   var self = this;
   Object.assign(this, PlatformBase.prototype);
@@ -45,9 +46,9 @@ function Platform(packageName, platforms) {
           return iconTools.getIcon(iconUrl, iconFilePath);
         }));
       })
-      // copy the documentation file
+      // copy the documentation
       .then(function () {
-        return self.copyDocumentationFile('Web-next-steps.md', platformDir);
+        return self.copyDocumentation(platformDir);
       })      
       // create generation info
       .then(function () {

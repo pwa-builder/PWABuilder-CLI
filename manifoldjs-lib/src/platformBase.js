@@ -102,23 +102,29 @@ PlatformBase.prototype.copyDefaultPlatformIcon = function (manifestInfo, iconSiz
 };
 
 /**
- * Copies a documentation file to the generated app's folder.
+ * Copies the documentation to the generated app's folder.
  * 
- * The file must be placed in the 'docs' folder of the platform. 
+ * All documents must be placed in the 'docs' folder of the platform. 
  */
-PlatformBase.prototype.copyDocumentationFile = function (filename, targetPath, callback) {
-  var source = path.join(this.baseDir, 'docs', filename);
-  var target = path.join(targetPath, filename);
+PlatformBase.prototype.copyDocumentation = function (targetPath, platform, callback) {
 
-  this.info('Copying documentation file \'' + filename + '\' to \'' + target + '\'...');
+  if (arguments.length > 1) {
+    if (typeof platform === "function") {
+      callback = platform;
+      platform = '';
+    }
+  }
+  
+  var sourcePath = path.join(this.baseDir, 'docs', platform);
 
-  return fileTools.copyFile(source, target)
-                  .catch (function (err) {
-                    // failure to copy the documentation file is not considered fatal
-                    // so catch the error and log as warning
-                    this.warn('Failed to copy the documentation file to the platform folder - ' + err.getMessage);
-                  })
-                  .nodeify(callback);
+  this.info('Copying documentation from \'' + sourcePath + '\' to \'' + targetPath + '\'...');
+
+  return fileTools.copyFolder(sourcePath, targetPath)
+    .catch (function (err) {
+      // failure to copy the documentation is not considered fatal, so catch the error and log as a warning
+      this.warn('Failed to copy the documentation for the \'' + platform + '\' Cordova platform. ' + err.getMessage());
+    })
+    .nodeify(callback);
 };
 
 PlatformBase.prototype.createGenerationInfo = function (targetPath, callback) {

@@ -16,7 +16,7 @@ var PlatformBase = manifoldjsLib.PlatformBase,
 var constants = require('./constants'),
     manifest = require('./manifest');
    
-function Platform(packageName, platforms) {
+function Platform (packageName, platforms) {
 
   var self = this;
   Object.assign(this, PlatformBase.prototype);
@@ -117,9 +117,9 @@ function Platform(packageName, platforms) {
             return Q.reject(new CustomError('Failed to update the application manifest \'package.appxmanifest\'.', err));
           });
       })     
-      // copy the documentation file
+      // copy the documentation
       .then(function () {
-        return self.copyDocumentationFile('Windows10-next-steps.md', platformDir);
+        return self.copyDocumentation(platformDir);
       })      
       // create generation info
       .then(function () {
