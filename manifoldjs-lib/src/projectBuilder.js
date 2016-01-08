@@ -1,84 +1,76 @@
-// ID or URL of the Hosted Web App plugin - THIS SETTING WILL NEED TO BE UPDATED IF THE PLUGIN IS RELOCATED
-var pluginIdOrUrl = 'cordova-plugin-hostedwebapp@">=0.2.0 <0.3.0"';
-
-var manifestTools = require('./manifestTools'),
-    path = require('path'),
+var path = require('path'),
     url = require('url'),
-    execute = require('child_process').exec,
-    fs = require('fs'),
+    fs = require('fs');
+
+var Q = require('q');    
+
+var fileTools = require('./fileTools'),
     log = require('./log'),
-    downloader = require('./download'),
-    Q = require('q'),
-    _mkdirp = require('mkdirp'),
-    ncp = require('ncp'),
-    fileTools = require('./fileTools'),
+    manifestTools = require('./manifestTools'),
+    platformTools = require('./platformTools'),
     utils = require('./utils'),
-// TODO: temporarily remove to avoid cyclic reference
-    // windows10Utils = require('manifoldjs-windows10').windows10Utils,
-    validationConstants = require('./constants').validation,
-    packageTools = require('./packageTools'),
-    platformTools = require('./platformTools');
+		validationConstants = require('./constants').validation;
 
-var originalPath = process.cwd();
+// var originalPath = process.cwd();
 
-var mkdirp = function (filePath, callback) {
-  var fullPath = path.resolve(filePath);
-  var rootPath = path.parse(fullPath).root;
-  fs.stat(rootPath, function (err) {
-    if (err) {
-      return callback(err);
-    }
+// var mkdirp = function (filePath, callback) {
+//   var fullPath = path.resolve(filePath);
+//   var rootPath = path.parse(fullPath).root;
+//   fs.stat(rootPath, function (err) {
+//     if (err) {
+//       return callback(err);
+//     }
+// 
+//     _mkdirp(filePath, callback);
+//   });
+// };
 
-    _mkdirp(filePath, callback);
-  });
-};
+// var exec = function (cmdLine, callback) {
+//   execute(cmdLine, { maxBuffer: 1024*1024 }, function (err, stdout, stderr) {
+//     if (stdout.length) {
+//       log.debug(stdout);
+//     }
+// 
+//     if (stderr.length) {
+//       // replaced log.error with log.debug because Cordova writes some informational messages to stderr
+//       log.debug(stderr);
+//     }
+// 
+//     return callback && callback(err);
+//   });
+// };
 
-var exec = function (cmdLine, callback) {
-  execute(cmdLine, { maxBuffer: 1024*1024 }, function (err, stdout, stderr) {
-    if (stdout.length) {
-      log.debug(stdout);
-    }
+// var wrapError = function (msg, innerErrors) {
+//   var err = new Error(msg);
+// 
+//   if (innerErrors) {
+//     err.innerErrors = (innerErrors instanceof Array) ? innerErrors : [innerErrors];
+//   }
+// 
+//   return err;
+// };
 
-    if (stderr.length) {
-      // replaced log.error with log.debug because Cordova writes some informational messages to stderr
-      log.debug(stderr);
-    }
+// var createCordovaPlatformShortcut = function (projectPath, platform, callback) {
+//   if (platform.toUpperCase() !== 'WINDOWS') {
+//     log.info('Creating Cordova shortcut for platform: ' + platform + '...');
+//     var srcpath = path.resolve(projectPath, 'cordova', 'platforms', platform);
+//     var dstpath = path.resolve(projectPath, platform);
+//     fs.symlink(srcpath, dstpath, 'junction', function (err) {
+//       return callback && callback(err);
+//     });
+//   } else {
+//       return callback && callback(undefined);
+//   }
+// };
 
-    return callback && callback(err);
-  });
-};
-
-var wrapError = function (msg, innerErrors) {
-  var err = new Error(msg);
-
-  if (innerErrors) {
-    err.innerErrors = (innerErrors instanceof Array) ? innerErrors : [innerErrors];
-  }
-
-  return err;
-};
-
-var createCordovaPlatformShortcut = function (projectPath, platform, callback) {
-  if (platform.toUpperCase() !== 'WINDOWS') {
-    log.info('Creating Cordova shortcut for platform: ' + platform + '...');
-    var srcpath = path.resolve(projectPath, 'cordova', 'platforms', platform);
-    var dstpath = path.resolve(projectPath, platform);
-    fs.symlink(srcpath, dstpath, 'junction', function (err) {
-      return callback && callback(err);
-    });
-  } else {
-      return callback && callback(undefined);
-  }
-};
-
-var copyDocFile = function (docFilename, targetPath, callback) {
-  var source = path.join(__dirname, '..', 'docs', docFilename);
-  var target = path.join(targetPath, docFilename);
-
-  log.info('Copying documentation file "' + docFilename + '" to target: ' + target + '...');
-
-  fileTools.copyFile(source, target, callback);
-};
+// var copyDocFile = function (docFilename, targetPath, callback) {
+//   var source = path.join(__dirname, '..', 'docs', docFilename);
+//   var target = path.join(targetPath, docFilename);
+// 
+//   log.info('Copying documentation file "' + docFilename + '" to target: ' + target + '...');
+// 
+//   fileTools.copyFile(source, target, callback);
+// };
 
 // var copyOfflineFile = function (docFilename, targetPath, callback) {
 //   var source = path.join(__dirname, 'manifestTools', 'assets', 'windows10', docFilename);
@@ -90,61 +82,61 @@ var copyDocFile = function (docFilename, targetPath, callback) {
 // };
 
 
-var createGenerationInfoFile = function (targetPath, callback) {
-  var generationInfoFilePath = path.join(targetPath, 'generationInfo.json');
-  var generationInfo = {
-    'manifoldJSVersion': packageTools.getCurrentPackageVersion()
-  };
+// var createGenerationInfoFile = function (targetPath, callback) {
+//   var generationInfoFilePath = path.join(targetPath, 'generationInfo.json');
+//   var generationInfo = {
+//     'manifoldJSVersion': packageTools.getCurrentPackageVersion()
+//   };
+// 
+//   log.info('Creating generation info file: ' + generationInfoFilePath + '...');
+//   fs.writeFile(generationInfoFilePath, JSON.stringify(generationInfo, null, 4), function (err) {
+//     if (err) {
+//       callback(err);
+//     } else {
+//       callback(undefined);
+//     }
+//   });
+// };
+// 
+// var copyDefaultHostedWebAppIcon = function(webAppManifest, platform, iconFilename, iconSize, targetPath, callback) {
+//   if (webAppManifest.icons) {
+//     callback(undefined);
+//   } else {
+//     log.info('Copying default icon for ' + platform + '...');
+//     var source = path.join(__dirname, 'projectBuilder', 'assets', platform, 'images', iconFilename);
+//     var target = path.join(targetPath, iconFilename);
+// 
+//     fileTools.copyFile(source, target, function (err) {
+//       if (err) {
+//         callback(err);
+//       } else {
+//         webAppManifest.icons = {};
+//         webAppManifest.icons[iconSize] = iconFilename;
+//         callback(undefined);
+//       }
+//     });
+//   }
+// };
 
-  log.info('Creating generation info file: ' + generationInfoFilePath + '...');
-  fs.writeFile(generationInfoFilePath, JSON.stringify(generationInfo, null, 4), function (err) {
-    if (err) {
-      callback(err);
-    } else {
-      callback(undefined);
-    }
-  });
-};
-
-var copyDefaultHostedWebAppIcon = function(webAppManifest, platform, iconFilename, iconSize, targetPath, callback) {
-  if (webAppManifest.icons) {
-    callback(undefined);
-  } else {
-    log.info('Copying default icon for ' + platform + '...');
-    var source = path.join(__dirname, 'projectBuilder', 'assets', platform, 'images', iconFilename);
-    var target = path.join(targetPath, iconFilename);
-
-    fileTools.copyFile(source, target, function (err) {
-      if (err) {
-        callback(err);
-      } else {
-        webAppManifest.icons = {};
-        webAppManifest.icons[iconSize] = iconFilename;
-        callback(undefined);
-      }
-    });
-  }
-};
-
-var copyDefaultFirefoxIcon = function (firefoxManifest, targetPath, callback) {
-  copyDefaultHostedWebAppIcon(firefoxManifest, 'firefox', 'icon128.png', '128', targetPath, callback);
-};
-
-var copyDefaultChromeIcon = function (chromeManifest, targetPath, callback) {
-  copyDefaultHostedWebAppIcon(chromeManifest, 'chrome', 'icon128.png', '128', targetPath, callback);
-};
-
-var getCordovaDocFilename = function (platform) {
-  if (platform.toUpperCase() === 'WINDOWS') {
-    return 'WindowsCordova-next-steps.md';
-  } else if (platform.toUpperCase() === 'ANDROID') {
-    return 'Android-next-steps.md';
-  } else if (platform.toUpperCase() === 'IOS') {
-    return 'Apple-next-steps.md';
-  } else {
-    return platform + '-next-steps.md';
-  }
-};
+// var copyDefaultFirefoxIcon = function (firefoxManifest, targetPath, callback) {
+//   copyDefaultHostedWebAppIcon(firefoxManifest, 'firefox', 'icon128.png', '128', targetPath, callback);
+// };
+// 
+// var copyDefaultChromeIcon = function (chromeManifest, targetPath, callback) {
+//   copyDefaultHostedWebAppIcon(chromeManifest, 'chrome', 'icon128.png', '128', targetPath, callback);
+// };
+// 
+// var getCordovaDocFilename = function (platform) {
+//   if (platform.toUpperCase() === 'WINDOWS') {
+//     return 'WindowsCordova-next-steps.md';
+//   } else if (platform.toUpperCase() === 'ANDROID') {
+//     return 'Android-next-steps.md';
+//   } else if (platform.toUpperCase() === 'IOS') {
+//     return 'Apple-next-steps.md';
+//   } else {
+//     return platform + '-next-steps.md';
+//   }
+// };
 
 // var createWebApp = function (w3cManifestInfo, generatedAppDir /*, options*/) {
 //   log.info('Generating the Web application...');
@@ -712,10 +704,10 @@ var getCordovaDocFilename = function (platform) {
 //   return task.promise;
 // };
 
-var platformModules;
-
 var createApps = function (w3cManifestInfo, rootDir, platforms, options, callback) {
 
+	var platformModules;
+	
   // enable all registered platforms
   Q.fcall(platformTools.enablePlatforms)
 	// load all platforms specified in the command line
@@ -739,7 +731,18 @@ var createApps = function (w3cManifestInfo, rootDir, platforms, options, callbac
       }
 		});
 	})
-	.then(function () {
+  .then(function () {
+    // determine the path where the Cordova app will be created
+    options.appName = utils.sanitizeName(w3cManifestInfo.content.short_name);
+    var generatedAppDir = path.join(rootDir, options.appName);
+
+    // Add timestamp to manifest information for telemetry purposes only
+    w3cManifestInfo.timestamp = new Date().toISOString().replace(/T/, ' ').replace(/\.[0-9]+/, ' ');
+    
+    // create app directory
+    return fileTools.mkdirp(generatedAppDir);
+  })
+	.then(function (generatedAppDir) {
 		// create apps for each platform
 		var tasks = platformModules.map(function (platform) {
 			if (!platform) {
@@ -747,7 +750,7 @@ var createApps = function (w3cManifestInfo, rootDir, platforms, options, callbac
 			};
 						
 			log.debug('Creating app for platform \'' + platform.name + '\'...');
-			return Q.nfcall(platform.create, w3cManifestInfo, rootDir, options)
+			return Q.nfcall(platform.create, w3cManifestInfo, generatedAppDir, options)
 					.then(function () {
 						log.info(platform.name + ' app is created!');
 					})
