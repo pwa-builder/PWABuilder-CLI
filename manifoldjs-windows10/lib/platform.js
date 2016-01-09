@@ -15,7 +15,7 @@ var PlatformBase = manifoldjsLib.PlatformBase,
 
 var constants = require('./constants'),
     manifest = require('./manifest'),
-    appPackage = require('/appPackage');
+    appPackage = require('./appPackage');
    
 function Platform (packageName, platforms) {
 
