@@ -93,5 +93,6 @@ module.exports = {
   newGuid: newGuid,
   sanitizeName: sanitizeName,
   removeDupesInPlace: removeDupesInPlace,
-  isURL: isURL  
+  isURL: isURL,
+  isWindows: /^win/.test(os.platform())
 };

@@ -96,6 +96,5 @@ var makeAppx = function (appFolder, outputPath, callback) {
 };
 
 module.exports = {
-  isWindows: /^win/.test(os.platform()),
   makeAppx: makeAppx
 };
