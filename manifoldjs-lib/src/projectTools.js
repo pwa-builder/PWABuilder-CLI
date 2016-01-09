@@ -1,10 +1,12 @@
-﻿var validations = require('./validations'),
-    platformUtils = require('./platformUtils'),
+﻿var exec = require('child_process').exec,
     fs = require('fs'),
-    path = require('path'),
-    exec = require('child_process').exec,
-    log = require('loglevel'),
-    hwa = require('hwa');
+    path = require('path');
+
+var hwa = require('hwa');
+
+var log = require('./log'),
+    utils = require('./utils'),
+    validations = require('./validations');
 
 var originalPath = process.cwd();
 
@@ -114,7 +116,7 @@ var runApp = function (platform, callback) {
   }
 
   if (platform.toUpperCase() === 'WINDOWS') {
-    if (!platformUtils.isWindows) {
+    if (!utils.isWindows) {
       return callback(new Error('Windows projects can only be executed in Windows environments.'));
     }
 
@@ -170,7 +172,7 @@ var openVisualStudioFile = function (visualStudioFilePath, callback) {
 };
 
 var openVisualStudio = function (callback) {
-  if (!platformUtils.isWindows) {
+  if (!utils.isWindows) {
     return callback(new Error('Visual Studio projects can only be opened in Windows environments.'));
   }
 
