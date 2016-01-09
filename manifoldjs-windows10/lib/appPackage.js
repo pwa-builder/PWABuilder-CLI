@@ -1,12 +1,12 @@
 var fs = require('fs'),
     os = require('os'),
     path = require('path'),
-    request = require('request'),
     url = require('url');
     
 var archiver = require('archiver'),
     cloudappx = require('cloudappx-server'),
-    Q = require('q');
+    Q = require('q'),
+    request = require('request');
     
 var manifoldjsLib = require('manifoldjs-lib');
 
