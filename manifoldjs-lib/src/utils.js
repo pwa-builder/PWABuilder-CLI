@@ -1,5 +1,7 @@
 'use strict';
 
+var os = require('os');
+
 function parseJSON(data) {
   try {
     var jsonString = data.toString().replace(/^\uFEFF/, '');
