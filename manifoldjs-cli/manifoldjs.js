@@ -5,7 +5,7 @@ var manifoldLib = require('manifoldjs-lib'),
     manifestTools = manifoldLib.manifestTools,
     projectBuilder = manifoldLib.projectBuilder,
     projectTools = manifoldLib.projectTools,
-    platformUtils = manifoldLib.platformUtils,
+    utils = manifoldLib.utils,
     packageTools = manifoldLib.packageTools,
     log = manifoldLib.log,
     url = require('url'),
@@ -197,7 +197,7 @@ if (program.run) {
   // remove windows as default platform if run on Linux or MacOS
   // Fix for issue # 115: https://github.com/manifoldjs/ManifoldJS/issues/115
   // it should be removed once cordova adds support for Windows on Linux and MacOS
-  if (!platformUtils.isWindows && 
+  if (!utils.isWindows && 
        program.rawArgs.indexOf('-p') === -1 && 
        program.rawArgs.indexOf('--platforms')  === -1) {
     platforms.splice(platforms.indexOf('windows'), 1);
