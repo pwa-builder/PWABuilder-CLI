@@ -72,12 +72,7 @@ function download (inputUri, outputFilePath, callback) {
 
     // If Not Modified, ignore
     if (res.statusCode === 304) {
-      return deferred.resolve({ 'path': outputFilePath, 'statusCode': res.statusCode, 'statusMessage': res.statusMessage });
-    }
-
-    // If not an image, throw error
-    if (!res.headers['content-type'].match(/image/)) {
-      return deferred.reject(new Error('Unexpected Content-Type: ' + res.headers['content-type']));
+      return deferred.resolve({ 'path': outputFilePath, 'statusCode': res.statusCode, 'statusMessage': res.statusMessage, 'contentType': res.headers['content-type'] });
     }
 
     // Else save
@@ -92,7 +87,7 @@ function download (inputUri, outputFilePath, callback) {
             return deferred.reject(err);
           }
 
-          return deferred.resolve({ 'path': outputFilePath, 'statusCode': res.statusCode, 'statusMessage': res.statusMessage });
+          return deferred.resolve({ 'path': outputFilePath, 'statusCode': res.statusCode, 'statusMessage': res.statusMessage, 'contentType': res.headers['content-type']  });
         });
       });
   }).on('error', function (err) {
