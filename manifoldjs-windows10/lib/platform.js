@@ -62,11 +62,10 @@ function Platform (packageName, platforms) {
         self.debug('Downloading the ' + constants.platform.name + ' icons...');
      
         // create images folder  
-        return fileTools.mkdirp(imagesDir)    
+        return fileTools.mkdirp(imagesDir).then(function () {
           // download all icons in the manifest
-          .then(function () {
-            var icons = platformManifestInfo.content.icons;
-                       
+          var icons = platformManifestInfo.content.icons;
+          if (icons) {
             var downloadTasks = Object.keys(icons).map(function (size) {            
               var iconUrl = url.resolve(w3cManifestInfo.content.start_url, icons[size].url);
               var iconFilePath = path.join(imagesDir, icons[size].fileName);
@@ -87,8 +86,9 @@ function Platform (packageName, platforms) {
                 .catch (function (err) {
                     return Q.reject(new CustomError('Failed to copy the default icons to the project folder.', err));    
                 });
-            });                
-          });
+            });
+          }
+        });
       })
       // copy the offline page
       .then(function () {
@@ -144,18 +144,17 @@ function Platform (packageName, platforms) {
   };
 
   // override package function
-  self.package = function (rootDir, outputPath, callback) {
-
+  self.package = function (platformDir, outputPath, options, callback) {
+ 
     self.info('Packaging the ' + constants.platform.name + ' app...');
     
-    var platformDir = path.join(rootDir, constants.platform.id);
     var directory = path.join(platformDir, 'manifest');
 
     // creates App Store package for publishing
     return appPackage.makeAppx(directory, outputPath).then(function () {
       self.info('The app store package was created successfully!');
     });
-  }  
+  }
 }
 
 module.exports = Platform;

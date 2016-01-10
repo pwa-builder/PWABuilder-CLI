@@ -37,21 +37,22 @@ function Platform (packageName, platforms) {
       .then(function () {
         self.debug('Downloading the ' + constants.platform.name + ' icons...');
         var icons = w3cManifestInfo.content.icons;
-                
-        var downloadTasks = Object.keys(icons).map(function (size) {
-          var iconPath = icons[size].src;
-          var iconUrl = url.resolve(w3cManifestInfo.content.start_url, iconPath);
-          var iconFilePath = path.join(platformDir, iconPath);
-          return iconTools.getIcon(iconUrl, iconFilePath);
-        });
-        
-        return Q.allSettled(downloadTasks).then(function (results) {
-          results.forEach(function (result) {
-            if (result.state === 'rejected') {
-              self.warn('Error downloading an icon file. ' + result.reason.message);
-            }
-          })
-        });
+        if (icons) {
+          var downloadTasks = Object.keys(icons).map(function (size) {
+            var iconPath = icons[size].src;
+            var iconUrl = url.resolve(w3cManifestInfo.content.start_url, iconPath);
+            var iconFilePath = path.join(platformDir, iconPath);
+            return iconTools.getIcon(iconUrl, iconFilePath);
+          });
+          
+          return Q.allSettled(downloadTasks).then(function (results) {
+            results.forEach(function (result) {
+              if (result.state === 'rejected') {
+                self.warn('Error downloading an icon file. ' + result.reason.message);
+              }
+            })
+          });
+        }
       })
       // copy the documentation
       .then(function () {
