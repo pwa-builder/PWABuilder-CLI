@@ -1,13 +1,14 @@
 'use strict';
 
-var http = require('http'),
+var fs = require('fs'),
+    http = require('http'),
     https = require('https'),
     url = require('url'),
-    path = require('path'),
-    fs = require('fs'),
-    Q = require('q');
+    path = require('path');
+    
+var Q = require('q');
 
-function download(inputUri, outputFilePath, callback) {
+function download (inputUri, outputFilePath, callback) {
 
   var uri = url.parse(inputUri);
 
@@ -21,12 +22,12 @@ function download(inputUri, outputFilePath, callback) {
   }
 
   if (!(uri.protocol === 'http:' || uri.protocol === 'https:')) {
-    return Q.reject(new Error('Invalid protocol, only http & https are supported')).nodeify(callback);
+    return Q.reject(new Error('Invalid protocol. Only http & https are supported.')).nodeify(callback);
   }
 
   var downloadDir = path.dirname(outputFilePath);
   if (!fs.existsSync(downloadDir)) {
-    return Q.reject(new Error('Invalid download directory: ' + downloadDir)).nodeify(callback);
+    return Q.reject(new Error('Invalid download directory \'' + downloadDir + '\'.')).nodeify(callback);
   }
 
   var lastModified;
@@ -53,19 +54,25 @@ function download(inputUri, outputFilePath, callback) {
 
   var deferred = Q.defer();
   protocol.get(options, function (res) {
+    
     // If Moved Permanently or Found, redirect to new URL
     if ([301, 302].indexOf(res.statusCode) > -1) {
-      return download(res.headers.location, outputFilePath);
+      return download(res.headers.location, outputFilePath)
+        .then(function (result) { deferred.resolve(result); })
+        .catch(function (err) { deferred.reject(err); })
     }
-
+    
     // If not OK or Not Modified, throw error
     if ([200, 304].indexOf(res.statusCode) === -1) {
-      return deferred.reject(new Error('Invalid status code: ' + res.statusCode + ' - ' + res.statusMessage));
+      var err = new Error('Error downloading \'' + inputUri + '\'. Response was \'' + res.statusCode + ' - ' + res.statusMessage + '\'.');
+      err.statusCode = res.statusCode;
+      err.statusMessage = res.statusMessage;
+      return deferred.reject(err);
     }
 
     // If Not Modified, ignore
     if (res.statusCode === 304) {
-      return deferred.resolve(undefined, { 'path': outputFilePath, 'statusCode': res.statusCode, 'statusMessage': res.statusMessage });
+      return deferred.resolve({ 'path': outputFilePath, 'statusCode': res.statusCode, 'statusMessage': res.statusMessage });
     }
 
     // If not an image, throw error
