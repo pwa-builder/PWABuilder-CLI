@@ -64,22 +64,30 @@ function Platform (packageName, platforms) {
         // create images folder  
         return fileTools.mkdirp(imagesDir)    
           // download all icons in the manifest
-          // TODO: verify if using all instead of allSettled is correct
           .then(function () {
-            var icons = platformManifestInfo.content.icons;     
-            return Q.all(Object.keys(icons).map(function (size) {
-                var iconUrl = url.resolve(w3cManifestInfo.content.start_url, icons[size].url);
-                var iconFilePath = path.join(imagesDir, icons[size].fileName);
-                return iconTools.getIcon(iconUrl, iconFilePath);          
-              }))
-              // replace any missing icons with default images from the project's assets 
-              .then(function (icons) {
-                var defaultImagesDir = path.join(self.baseDir, 'assets', 'images');
-                return fileTools.copyFolder(defaultImagesDir, imagesDir, { clobber: false })
-                      .catch (function (err) {
-                          return Q.reject(new CustomError('Failed to copy the default icons to the project folder.', err));    
-                      });
-              });
+            var icons = platformManifestInfo.content.icons;
+                       
+            var downloadTasks = Object.keys(icons).map(function (size) {            
+              var iconUrl = url.resolve(w3cManifestInfo.content.start_url, icons[size].url);
+              var iconFilePath = path.join(imagesDir, icons[size].fileName);
+              return iconTools.getIcon(iconUrl, iconFilePath);
+            });
+            
+            return Q.allSettled(downloadTasks).then(function (results) {
+              results.forEach(function (result) {
+                if (result.state === 'rejected') {
+                  self.warn('Error downloading an icon file. ' + result.reason.message);
+                }
+              })
+            })
+            // replace any missing icons with default images from the project's assets 
+            .then(function (icons) {
+              var defaultImagesDir = path.join(self.baseDir, 'assets', 'images');
+              return fileTools.copyFolder(defaultImagesDir, imagesDir, { clobber: false })
+                .catch (function (err) {
+                    return Q.reject(new CustomError('Failed to copy the default icons to the project folder.', err));    
+                });
+            });                
           });
       })
       // copy the offline page

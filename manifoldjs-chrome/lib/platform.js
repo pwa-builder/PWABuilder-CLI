@@ -46,13 +46,20 @@ function Platform (packageName, platforms) {
         self.debug('Downloading the ' + constants.platform.name + ' icons...');
         var icons = platformManifestInfo.content.icons;
         
-        // TODO: verify if using all instead of allSettled  is correct
-        return Q.all(Object.keys(icons).map(function (size) {
+        var downloadTasks = Object.keys(icons).map(function (size) {
           var iconPath = icons[size];
           var iconUrl = url.resolve(w3cManifestInfo.content.start_url, iconPath);
           var iconFilePath = path.join(platformDir, iconPath);
-          return iconTools.getIcon(iconUrl, iconFilePath);          
-        }));
+          return iconTools.getIcon(iconUrl, iconFilePath);
+        });
+        
+        return Q.allSettled(downloadTasks).then(function (results) {
+          results.forEach(function (result) {
+            if (result.state === 'rejected') {
+              self.warn('Error downloading an icon file. ' + result.reason.message);
+            }
+          })
+        });
       })
       // copy default platform icon
       .then(function () {
