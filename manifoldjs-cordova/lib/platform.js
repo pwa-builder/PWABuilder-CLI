@@ -30,18 +30,19 @@ function Platform (packageName, platforms) {
   // returns the path to the cordova shell command
   var cachedCordovaPath;
   function getCordovaPath () {
+    
     if (!cachedCordovaPath) {
       // npm command in Windows is a batch file and needs to include extension to be resolved by spawn call
       var cordova = (process.platform === 'win32' ? 'cordova.cmd' : 'cordova');
       return processTools.getCommandPath(__dirname, cordova)
-            .then(function (commandPath) {
-              cachedCordovaPath = commandPath;
-              if (!commandPath) {
-                return Q.reject('Failed to locate the Cordova shell command: \'' + cordova + '\'.');
-              }
-              
-              return cachedCordovaPath = commandPath;
-            });
+      .then(function (commandPath) {
+        cachedCordovaPath = commandPath;
+        if (!commandPath) {
+          return Q.reject('Failed to locate the Cordova shell command: \'' + cordova + '\'.');
+        }
+        
+        return cachedCordovaPath = commandPath;
+      });
     }
     
     return Q.resolve(cachedCordovaPath);
@@ -54,24 +55,24 @@ function Platform (packageName, platforms) {
   function createApp (rootDir, appName, packageName, cordovaAppName, callback) {
     self.info('Creating the Cordova project...');    
     return getCordovaPath().then(function (cordovaPath) {
-            return exec(cordovaPath, ['create', appName, packageName, cordovaAppName], { cwd: rootDir });
-          })
-          .catch(function (err) {
-            return Q.reject(new CustomError('Failed to create the base application.', err));          
-          })
-          .nodeify(callback);
+      return exec(cordovaPath, ['create', appName, packageName, cordovaAppName], { cwd: rootDir });
+    })
+    .catch(function (err) {
+      return Q.reject(new CustomError('Failed to create the base Cordova application.', err));          
+    })
+    .nodeify(callback);
   }
   
   function addPlatforms (rootDir, platforms, callback) {
     var allPlatforms = platforms.join(' ');
     self.info('Adding the following Cordova platforms: ' + allPlatforms + '...');
     return getCordovaPath().then(function (cordovaPath) {
-            return exec(cordovaPath, ['platform', 'add'].concat(platforms), { cwd: rootDir });
-          })
-          .catch(function (err) {
-            return Q.reject(new CustomError('Failed to add the Cordova platforms: ' + allPlatforms + '.', err));
-          })
-          .nodeify(callback);
+      return exec(cordovaPath, ['platform', 'add'].concat(platforms), { cwd: rootDir });
+    })
+    .catch(function (err) {
+      return Q.reject(new CustomError('Failed to add the Cordova platforms: ' + allPlatforms + '.', err));
+    })
+    .nodeify(callback);
   }
   
   function addPlugins (rootDir, options, callback) {
@@ -97,12 +98,12 @@ function Platform (packageName, platforms) {
     self.info('Adding the following plugins to the Cordova project: ' + allPlugins + '...');
     
     return getCordovaPath().then(function (cordovaPath) {
-            return exec(cordovaPath, ['plugin', 'add'].concat(pluginList), { cwd: rootDir });
-          })
-          .catch(function (err) {
-            return Q.reject(new CustomError('Failed to add one or more plugins.', err));
-          })
-          .nodeify(callback);
+      return exec(cordovaPath, ['plugin', 'add'].concat(pluginList), { cwd: rootDir });
+    })
+    .catch(function (err) {
+      return Q.reject(new CustomError('Failed to add one or more plugins.', err));
+    })
+    .nodeify(callback);
   }
 
   function processPlatforms (rootDir, platformDir, platforms) {
@@ -162,32 +163,52 @@ function Platform (packageName, platforms) {
   
     // create the base Cordova app
     return createApp(rootDir, constants.platform.id, packageName, cordovaAppName)
-            // persist the manifest
-            .then(function () {
-              self.info('Copying the ' + constants.platform.name + ' manifest to the app folder...');        
-              var manifestFilePath = path.join(platformDir, 'manifest.json');
-              return manifestTools.writeToFile(w3cManifestInfo, manifestFilePath);
-            })            
-            // add the plugins
-            .then (function () {
-              return addPlugins(platformDir, options);              
-            })
-            // add the platforms
-            .then (function () {
-              return addPlatforms(platformDir, self.platforms);
-            })
-            // process individual platforms
-            .then (function () {
-              return processPlatforms(rootDir, platformDir, self.platforms);
-            })
-            .then(function () {
-              self.info('Created the ' + constants.platform.displayName + ' app!');        
-            })
-            .catch(function (err) {
-              return Q.reject(new CustomError('The ' + constants.platform.name + ' app could not be created successfully.', err));        
-            })
-            .nodeify(callback);            
+      // persist the manifest
+      .then(function () {
+        self.info('Copying the ' + constants.platform.name + ' manifest to the app folder...');        
+        var manifestFilePath = path.join(platformDir, 'manifest.json');
+        return manifestTools.writeToFile(w3cManifestInfo, manifestFilePath);
+      })            
+      // add the plugins
+      .then (function () {
+        return addPlugins(platformDir, options);              
+      })
+      // add the platforms
+      .then (function () {
+        return addPlatforms(platformDir, self.platforms);
+      })
+      // process individual platforms
+      .then (function () {
+        return processPlatforms(rootDir, platformDir, self.platforms);
+      })
+      .then(function () {
+        self.info('Created the ' + constants.platform.displayName + ' app!');        
+      })
+      .catch(function (err) {
+        return Q.reject(new CustomError('The ' + constants.platform.name + ' app could not be created successfully.', err));        
+      })
+      .nodeify(callback);            
   };
+  
+  // override package function
+  self.package = function (rootDir, outputPath, options, callback) {
+ 
+    self.info('Packaging the ' + constants.platform.name + ' app...');
+
+    var allPlatforms = self.platforms.map(function (platformId) {
+      return constants.platform.subPlatforms[platformId].name;      
+    }).join(', ');
+    
+    self.info('Building the following Cordova platforms: ' + allPlatforms + '...');
+    
+    return getCordovaPath().then(function (cordovaPath) {
+      return exec(cordovaPath, ['build'].concat(self.platforms), { cwd: rootDir });
+    })
+    .catch(function (err) {
+      return Q.reject(new CustomError('Failed to build one or more Cordova platforms.', err));
+    })
+    .nodeify(callback);
+  }
 }
 
 module.exports = Platform;
