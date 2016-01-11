@@ -181,7 +181,8 @@ if (program.run) {
   log.info('Creating a Windows Store AppX package for the Windows 10 hosted app project...');
   var directory = program.args[1];
   var outputPath = program.args[2];
-  platformUtils.makeAppx(directory, outputPath, function (err) {
+  var platforms = program.platforms.split(/[\s,]+/);
+  projectBuilder.packageApps(platforms, directory, outputPath, function (err) {
     if (err) {
       log.error('ERROR: ' + err.message);
       return;
