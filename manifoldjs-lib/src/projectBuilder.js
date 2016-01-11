@@ -195,13 +195,13 @@ function packageApps (platforms, rootDir, outputPath, options, callback) {
 				return Q.resolve();
 			};
 						
-			log.debug('Packaging app for platform \'' + platform.name + '\'...');
+			log.debug('Packaging the app for the \'' + platform.name + '\' platform...');
 			return Q.nfcall(platform.package, rootDir, outputPath, options)
 					.then(function () {
-						log.info(platform.name + ' app is packaged!');
+						log.info('The ' + platform.name + ' app is packaged!');
 					})
 					.catch(function (err) {
-						log.error(platform.name + ' app could not be packaged - '+ err.getMessage());
+						log.error('The ' + platform.name + ' app could not be packaged - '+ err.getMessage());
 					});
 		});
 
