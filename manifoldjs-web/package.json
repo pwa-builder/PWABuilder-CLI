@@ -31,7 +31,7 @@
     "Windows"
   ],
   "dependencies": {
-    "manifoldjs-lib": "file:../manifoldjs-lib"
+    "manifoldjs-lib": "git://github.com/manifoldjs/manifoldjs-lib.git"
   },
   "devDependencies": {
   },

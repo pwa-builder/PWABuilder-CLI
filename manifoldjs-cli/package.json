@@ -35,7 +35,7 @@
   "dependencies": {
     "commander": "^2.9.0",
     "q": "^1.4.1",
-    "manifoldjs-lib": "file:../manifoldjs-lib"
+    "manifoldjs-lib": "git://github.com/manifoldjs/manifoldjs-lib.git"
   },
   "devDependencies": {
     "blanket": "1.1.6",

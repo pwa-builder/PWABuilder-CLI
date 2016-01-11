@@ -32,7 +32,7 @@
     "Firefox OS"
   ],
   "dependencies": {
-    "manifoldjs-lib": "file:../manifoldjs-lib",
+    "manifoldjs-lib": "git://github.com/manifoldjs/manifoldjs-lib.git",
     "request": "^2.53.0"    
   },
   "devDependencies": {
