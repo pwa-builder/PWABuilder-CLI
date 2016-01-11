@@ -177,8 +177,7 @@ if (program.run) {
   });
 
 } else if (program.package) {
-  // creates App Store packages for publishing - currently supports Windows 10 only
-  log.info('Creating a Windows Store AppX package for the Windows 10 hosted app project...');
+  // Creates App Store packages for publishing
   var directory = program.args[1];
   var outputPath = program.args[2];
   var platforms = program.platforms.split(/[\s,]+/);
