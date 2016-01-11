@@ -27,7 +27,7 @@ function getPackageInformation(packageName) {
   return module;
 }
 
-var getNpmPackageLatestVersion = function (packageName, callback) {
+var getNpmPackageInfo = function (packageName, callback) {
   var deferred = Q.defer();
   http.get('http://registry.npmjs.org/' + packageName + '/latest', function (res) {
     var data = '';
@@ -39,7 +39,7 @@ var getNpmPackageLatestVersion = function (packageName, callback) {
     res.on('end', function () {
       try {
         var packageJson = JSON.parse(data);
-        deferred.resolve(packageJson.version);
+        deferred.resolve(packageJson);
       } catch (err) {
         deferred.reject(new Error('Error parsing version information for npm package: \'' + packageName + '\'. ' + err.message + '.'));
       }
@@ -49,6 +49,14 @@ var getNpmPackageLatestVersion = function (packageName, callback) {
   });
   
   return deferred.promise.nodeify(callback);
+};
+
+var getNpmPackageLatestVersion = function (packageName, callback) {
+  return getNpmPackageInfo(packageName)
+    .then(function (packageJson) {
+      return packageJson.version;
+    })
+    .nodeify(callback);
 };
 
 var checkForUpdate = function (callback) {
@@ -132,6 +140,7 @@ function installQueuedPackages() {
 
 module.exports = {
   getPackageInformation: getPackageInformation,
+  getNpmPackageInfo: getNpmPackageInfo,
   getNpmPackageLatestVersion: getNpmPackageLatestVersion,
   checkForUpdate: checkForUpdate,
   installPackage: installPackage,
