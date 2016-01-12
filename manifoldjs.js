@@ -44,11 +44,7 @@ function checkParameters(program) {
           return 'ERROR: You must specify a content directory.';
         }
         
-        if (program.args.length < 3) {
-          return 'ERROR: You must specify an output package path.';
-        }
-
-        unknownArgs = 3;
+        unknownArgs = 2;
         program.package = true;
         break;
       case 'visualstudio':
@@ -126,7 +122,7 @@ var program = require('commander')
                     '  -or-\n' +
                     '         manifoldjs -m <manifest-location> [options]\n' +
                     '  -or-\n' +
-                    '         manifoldjs package <content-directory> <output-package-path>\n' +
+                    '         manifoldjs package <app-directory>\n' +
                     '  -or-\n' +
                     '         manifoldjs run <windows|android>\n' +
                     '  -or-\n' +
@@ -179,9 +175,8 @@ if (program.run) {
 } else if (program.package) {
   // Creates App Store packages for publishing
   var directory = program.args[1];
-  var outputPath = program.args[2];
   var platforms = program.platforms.split(/[\s,]+/);
-  projectBuilder.packageApps(platforms, directory, outputPath, function (err) {
+  projectBuilder.packageApps(platforms, directory, function (err) {
     if (err) {
       log.error('ERROR: ' + err.message);
       return;
