@@ -30,6 +30,10 @@ function checkParameters(program) {
         unknownArgs = 1;
         program.package = true;
         break;
+      case 'platform':
+        unknownArgs = 5;
+        program.platform = true;
+        break;        
       case 'visualstudio':
         unknownArgs = 1;
         program.visualstudio = true;
@@ -66,25 +70,19 @@ function checkParameters(program) {
 
 var program = require('commander')
              .usage('<website-url> [options]'
-                    + '\n'
-                    + '\n           available options:'
-                    + '\n'
-                    + '\n             -d | --directory, -s | --short-name, -l | --loglevel,'
-                    + '\n             -p | --platforms, -m | --manifest,   -c | --crosswalk'                      
-                    + '\n  -or-'
-                    + '\n'
                     + '\n         manifoldjs -m <manifest-location> [options]'
-                    + '\n'
-                    + '\n           available options:'
-                    + '\n'
+                    + '\n           options:'
                     + '\n             -d | --directory, -s | --short-name, -l | --loglevel,'
                     + '\n             -p | --platforms, -m | --manifest,   -c | --crosswalk'                      
                     + '\n  -or-'
                     + '\n         manifoldjs package [options]'
-                    + '\n'
-                    + '\n           available options:'
-                    + '\n'
+                    + '\n           options:'
                     + '\n             -l | --loglevel,  -p | --platforms'
+                    + '\n'
+                    + '\n  -or-'
+                    + '\n         manifoldjs platform add <platform-id> <module-name> <source>'
+                    + '\n         manifoldjs platform remove <platform-id>'
+                    + '\n         manifoldjs platform list'
                     + '\n'
                     + '\n  -or-'
                     + '\n         manifoldjs run <windows|android>'
@@ -134,6 +132,9 @@ packageTools.checkForUpdate(function (err, updateAvailable) {
   }
   else if (program.package) {
     commands.package(program);
+  }
+  else if (program.platform) {
+    commands.platform(program);
   }
   else {
     commands.generate(program);
