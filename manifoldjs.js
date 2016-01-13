@@ -126,7 +126,7 @@ function launchVisualStudio() {
 function packageApps() {
   // create app store packages for publishing
   var platforms = program.platforms.split(/[\s,]+/);
-  projectBuilder.packageApps(platforms).then(function () {
+  projectBuilder.packageApps(platforms, process.cwd()).then(function () {
     log.write('The app store package(s) are ready.');
   })
   .catch(function (err) {
