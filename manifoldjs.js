@@ -1,15 +1,18 @@
 #!/usr/bin/env node
 
-var manifoldLib = require('manifoldjs-lib'),
-    validations = manifoldLib.validations, 
-    manifestTools = manifoldLib.manifestTools,
-    projectBuilder = manifoldLib.projectBuilder,
-    projectTools = manifoldLib.projectTools,
-    utils = manifoldLib.utils,
-    packageTools = manifoldLib.packageTools,
-    log = manifoldLib.log,
-    url = require('url'),
+var url = require('url'),
     path = require('path');
+
+var lib = require('manifoldjs-lib');
+
+var fileTools = lib.fileTools,
+    log = lib.log,
+    manifestTools = lib.manifestTools,
+    packageTools = lib.packageTools,
+    projectBuilder = lib.projectBuilder,
+    projectTools = lib.projectTools,
+    utils = lib.utils,
+    validations = lib.validations; 
 
 function checkParameters(program) {
   var unknownArgs = 0;
