@@ -1,21 +1,13 @@
 #!/usr/bin/env node
-
-var url = require('url'),
-    path = require('path');
-
-var Q = require('q');
+'use strict';
 
 var lib = require('manifoldjs-lib');
 
-var CustomError = lib.CustomError,
-    fileTools = lib.fileTools,
-    log = lib.log,
-    manifestTools = lib.manifestTools,
+var log = lib.log,
     packageTools = lib.packageTools,
-    projectBuilder = lib.projectBuilder,
-    projectTools = lib.projectTools,
-    utils = lib.utils,
     validations = lib.validations; 
+
+var commands = require('./commands');
 
 function checkParameters(program) {
   var unknownArgs = 0;
@@ -70,163 +62,6 @@ function checkParameters(program) {
       return 'ERROR: Invalid loglevel specified. Valid values are: debug, trace, info, warn, error';
     }
   }
-}
-
-function getW3cManifest(siteUrl, manifestLocation, callback) {
-  function resolveStartURL(err, manifestInfo) {
-    if (err) {
-      return callback(err, manifestInfo);
-    }
-
-    return manifestTools.validateAndNormalizeStartUrl(siteUrl, manifestInfo, callback);
-  }
-  
-  if (siteUrl) {
-    var parsedSiteUrl = url.parse(siteUrl);
-    if (!parsedSiteUrl.hostname) {
-      return callback(new Error('The site URL is not a valid URL.'));
-    }
-  }
-
-  if (manifestLocation) {
-    var parsedManifestUrl = url.parse(manifestLocation);
-    if (parsedManifestUrl && parsedManifestUrl.host) {
-      // download manifest from remote location
-      log.info('Downloading manifest from ' + manifestLocation + '...');
-      manifestTools.downloadManifestFromUrl(manifestLocation, resolveStartURL);
-    } else {
-      // read local manifest file
-      log.info('Reading manifest file ' + manifestLocation + '...');
-      manifestTools.getManifestFromFile(manifestLocation, resolveStartURL);
-    }
-  } else if (siteUrl) {    
-    // scan a site to retrieve its manifest
-    log.info('Scanning ' + siteUrl + ' for manifest...');
-    manifestTools.getManifestFromSite(siteUrl, resolveStartURL);
-  } else {
-    return callback(new Error('A site URL or manifest should be specified.'));
-  }
-}
-
-var isWindows10Version = function (version) {
-  return /^10/.test(version);
-};
-
-function runApp (platform) {
-  if (!validations.platformToRunValid(platform)) {
-    return log.error('Invalid platform specified.');
-  }
-
-  Q().then(function () {
-    if (platform.toUpperCase() !== 'WINDOWS') {
-      return Q.resolve(platform);
-    }
-    
-    if (!utils.isWindows) {
-      return Q.reject(new Error('Windows projects can only be executed in Windows environments.'));
-    }
-    
-    var windowsManifest = 'appxmanifest.xml';
-    return Q.nfcall(fileTools.searchFile, process.cwd(), windowsManifest).then(function (results) {
-      return Q.nfcall(projectTools.getWindowsVersion).then(function (version) {
-        if (results && results.length > 0 && isWindows10Version(version)) {
-          // If there is a windows app manifest and the OS is Windows 10, install the windows 10 app
-          return 'windows10';
-        }
-        
-        return 'windows';
-      });
-    })
-    .catch (function (err) {
-        return Q.reject(new CustomError('Failed to find the Windows app manifest.', err));      
-    })        
-  })
-  .then(projectBuilder.runApp)
-  .catch(function (err) {
-    log(err.getMessage());
-  });  
-}
-
-function launchVisualStudio() {
-  projectTools.openVisualStudio(function (err) {
-    if (err) {
-      log.error('ERROR: ' + err.message);
-    } else {
-      log.info('The Visual Studio project was opened successfully!');
-    }
-  });  
-}
-
-function packageApps() {
-  // create app store packages for publishing
-  var platforms = program.platforms.split(/[\s,]+/);
-  projectBuilder.packageApps(platforms, process.cwd()).then(function () {
-    log.write('The app store package(s) are ready.');
-  })
-  .catch(function (err) {
-    var errmsg = err.getMessage();
-    if (log.getLevel() !== log.levels.DEBUG) {
-      errmsg += '\nFor more information, run manifoldjs with the diagnostics level set to debug (e.g. manifoldjs [...] -l debug)';
-    }
-
-    log.error(errmsg);
-  })
-  .done(function () {
-    log.write('All done!');        
-  });
-}
-
-function generateApp(siteUrl) {
-  
-  var rootDir = program.directory ? path.resolve(program.directory) : process.cwd();
-  var platforms = program.platforms.split(/[\s,]+/);
-  
-  // remove windows as default platform if run on Linux or MacOS
-  // Fix for issue # 115: https://github.com/manifoldjs/ManifoldJS/issues/115
-  // it should be removed once cordova adds support for Windows on Linux and MacOS
-  if (!utils.isWindows && 
-       program.rawArgs.indexOf('-p') === -1 && 
-       program.rawArgs.indexOf('--platforms')  === -1) {
-    platforms.splice(platforms.indexOf('windows'), 1);
-  }
-  
-  getW3cManifest(siteUrl, program.manifest, function (err, manifestInfo) {
-    if (err) {
-      return log.error('ERROR: ' + err.message);
-    }
-
-      // Fix #145: don't require a short name
-    manifestInfo.content.short_name =   manifestInfo.content.short_name || 
-                                        manifestInfo.content.name ||
-                                        manifestInfo.default.short_name;
-
-    // if specified as a parameter, override the app's short name
-    if (program.shortname) {
-      manifestInfo.content.short_name = program.shortname;
-    }
- 
-    log.debug('Manifest contents:');
-    log.debug(JSON.stringify(manifestInfo.content, null, 4));
-    
-    // add generatedFrom value to manifestInfo for telemetry
-    manifestInfo.generatedFrom = 'CLI';
-
-    // Create the apps for the specified platforms
-    projectBuilder.createApps(manifestInfo, rootDir, platforms, program).then(function () {
-      log.info('The application(s) are ready.');
-    })
-    .catch(function (err) {
-      var errmsg = err.getMessage();
-      if (log.getLevel() !== log.levels.DEBUG) {
-        errmsg += '\nFor more information, run manifoldjs with the diagnostics level set to debug (e.g. manifoldjs [...] -l debug)';
-      }
-
-      log.error(errmsg);
-    })
-    .done(function () {
-      log.write('All done!');        
-    });
-  });
 }
 
 var program = require('commander')
@@ -290,16 +125,18 @@ packageTools.checkForUpdate(function (err, updateAvailable) {
     console.log('*******************************************************************************');
     console.log();
   }
+  
+  if (program.run) {
+    commands.run(program);
+  }
+  else if (program.visualstudio) {
+    commands.visualstudio(program);
+  }
+  else if (program.package) {
+    commands.package(program);
+  }
+  else {
+    commands.generate(program);
+  }  
 });
 
-if (program.run) {
-  var platform = program.args[1];
-  runApp(platform);
-} else if (program.visualstudio) {
-  launchVisualStudio();
-} else if (program.package) {
-  packageApps();
-} else {
-  var siteUrl = program.args[0];
-  generateApp(siteUrl);
-}
