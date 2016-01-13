@@ -11,17 +11,6 @@ var manifoldLib = require('manifoldjs-lib'),
     url = require('url'),
     path = require('path');
 
-packageTools.checkForUpdate(function (err, updateAvailable) {
-  if (!err && updateAvailable) {
-    console.log();
-    console.log('*******************************************************************************');
-    console.log('A new version of ManifoldJS is available (v' + updateAvailable + ').');
-    console.log('We recommend that you upgrade.');
-    console.log('*******************************************************************************');
-    console.log();
-  }
-});
-
 function checkParameters(program) {
   var unknownArgs = 0;
   if (program.args.length > 0) {
@@ -39,12 +28,8 @@ function checkParameters(program) {
         unknownArgs = 2;
         program.run = true;
         break;
-      case 'package':
-        if (program.args.length < 2) {
-          return 'ERROR: You must specify a content directory.';
-        }
-        
-        unknownArgs = 2;
+      case 'package':        
+        unknownArgs = 1;
         program.package = true;
         break;
       case 'visualstudio':
@@ -117,82 +102,48 @@ function getW3cManifest(siteUrl, manifestLocation, callback) {
   }
 }
 
-var program = require('commander')
-             .usage('<website-url> [options]\n' +
-                    '  -or-\n' +
-                    '         manifoldjs -m <manifest-location> [options]\n' +
-                    '  -or-\n' +
-                    '         manifoldjs package <app-directory>\n' +
-                    '  -or-\n' +
-                    '         manifoldjs run <windows|android>\n' +
-                    '  -or-\n' +
-                    '         manifoldjs visualstudio')
-             .option('-d, --directory <app-dir>', 'path to the generated project files')
-             .option('-s, --shortname <short-name>', 'application short name')
-             .option('-l, --loglevel <log-level>', 'debug|info|warn|error', 'warn')
-             .option('-p, --platforms <platforms>', '[windows][,windows10][,android][,ios]\n                                    ' +
-                                                    '[,chrome][,web][,firefox]', 'windows,windows10,android,ios,chrome,web,firefox')
-             .option('-b, --build', 'forces the building process', false)
-             .option('-m, --manifest <manifest-location>', 'location of the W3C Web App manifest\n                                    ' +
-                                                    'file (URL or local path)')
-             .option('-c, --crosswalk', 'enable Crosswalk for Android', false)
-             .option('-w, --webAppToolkit', 'adds the Web App Toolkit cordova plugin', false)
-             .parse(process.argv);
-
-if (!process.argv.slice(2).length) {
-  program.help();
-}
-
-var validationResult = checkParameters(program);
-if (validationResult) {
-  console.log(validationResult);
-  process.exit(1);
-}
-
-global.logLevel = program.loglevel;
-log.setLevel(global.logLevel);
-
-if (program.run) {
+function runApp(platform) {
   // Run the app for the specified platform
-
-  var platform = program.args[1];
   projectBuilder.runApp(platform, function (err) {
     if (err) {
       log.error('ERROR: ' + err.message);
     }
-  });
 
-} else if (program.visualstudio) {
+    log.write('All done!');    
+  });  
+}
 
+function launchVisualStudio() {
   projectTools.openVisualStudio(function (err) {
     if (err) {
       log.error('ERROR: ' + err.message);
     } else {
       log.info('The Visual Studio project was opened successfully!');
     }
-  });
+  });  
+}
 
-} else if (program.package) {
-  // Creates App Store packages for publishing
-  var directory = program.args[1];
+function packageApps() {
+  // create app store packages for publishing
   var platforms = program.platforms.split(/[\s,]+/);
-  projectBuilder.packageApps(platforms, directory)  
-    .then(function () {
-      log.write('The app store package(s) are ready.');
-    })
-    .catch(function (err) {
-      var errmsg = err.getMessage();
-      if (log.getLevel() !== log.levels.DEBUG) {
-        errmsg += '\nFor more information, run manifoldjs with the diagnostics level set to debug (e.g. manifoldjs [...] -l debug)';
-      }
+  projectBuilder.packageApps(platforms).then(function () {
+    log.write('The app store package(s) are ready.');
+  })
+  .catch(function (err) {
+    var errmsg = err.getMessage();
+    if (log.getLevel() !== log.levels.DEBUG) {
+      errmsg += '\nFor more information, run manifoldjs with the diagnostics level set to debug (e.g. manifoldjs [...] -l debug)';
+    }
 
-      log.error(errmsg);
-    })
-    .done(function () {
-      log.write('All done!');        
-    });
-} else {
-  var siteUrl = program.args[0];
+    log.error(errmsg);
+  })
+  .done(function () {
+    log.write('All done!');        
+  });
+}
+
+function generateApp(siteUrl) {
+  
   var rootDir = program.directory ? path.resolve(program.directory) : process.cwd();
   var platforms = program.platforms.split(/[\s,]+/);
   
@@ -227,20 +178,94 @@ if (program.run) {
     manifestInfo.generatedFrom = 'CLI';
 
     // Create the apps for the specified platforms
-    projectBuilder.createApps(manifestInfo, rootDir, platforms, program)
-      .then(function () {
-        log.info('The application(s) are ready.');
-      })
-      .catch(function (err) {
-        var errmsg = err.getMessage();
-        if (log.getLevel() !== log.levels.DEBUG) {
-          errmsg += '\nFor more information, run manifoldjs with the diagnostics level set to debug (e.g. manifoldjs [...] -l debug)';
-        }
+    projectBuilder.createApps(manifestInfo, rootDir, platforms, program).then(function () {
+      log.info('The application(s) are ready.');
+    })
+    .catch(function (err) {
+      var errmsg = err.getMessage();
+      if (log.getLevel() !== log.levels.DEBUG) {
+        errmsg += '\nFor more information, run manifoldjs with the diagnostics level set to debug (e.g. manifoldjs [...] -l debug)';
+      }
 
-        log.error(errmsg);
-      })
-      .done(function () {
-        log.write('All done!');        
-      });
+      log.error(errmsg);
+    })
+    .done(function () {
+      log.write('All done!');        
+    });
   });
+}
+
+var program = require('commander')
+             .usage('<website-url> [options]'
+                    + '\n'
+                    + '\n           available options:'
+                    + '\n'
+                    + '\n             -d | --directory, -s | --short-name, -l | --loglevel,'
+                    + '\n             -p | --platforms, -m | --manifest,   -c | --crosswalk'                      
+                    + '\n  -or-'
+                    + '\n'
+                    + '\n         manifoldjs -m <manifest-location> [options]'
+                    + '\n'
+                    + '\n           available options:'
+                    + '\n'
+                    + '\n             -d | --directory, -s | --short-name, -l | --loglevel,'
+                    + '\n             -p | --platforms, -m | --manifest,   -c | --crosswalk'                      
+                    + '\n  -or-'
+                    + '\n         manifoldjs package [options]'
+                    + '\n'
+                    + '\n           available options:'
+                    + '\n'
+                    + '\n             -l | --loglevel,  -p | --platforms'
+                    + '\n'
+                    + '\n  -or-'
+                    + '\n         manifoldjs run <windows|android>'
+                    + '\n'
+                    + '\n  -or-'
+                    + '\n         manifoldjs visualstudio')
+             .option('-d, --directory <app-dir>', 'path to the generated project files')
+             .option('-s, --shortname <short-name>', 'application short name')
+             .option('-l, --loglevel <log-level>', 'debug|info|warn|error', 'warn')
+             .option('-p, --platforms <platforms>', '[windows][,windows10][,android][,ios]\n                                    ' +
+                                                    '[,chrome][,web][,firefox]', 'windows,windows10,android,ios,chrome,web,firefox')
+             .option('-b, --build', 'forces the building process', false)
+             .option('-m, --manifest <manifest-location>', 'location of the W3C Web App manifest\n                                    ' +
+                                                    'file (URL or local path)')
+             .option('-c, --crosswalk', 'enable Crosswalk for Android', false)
+             .option('-w, --webAppToolkit', 'adds the Web App Toolkit cordova plugin', false)
+             .parse(process.argv);
+
+if (!process.argv.slice(2).length) {
+  program.help();
+}
+
+var validationResult = checkParameters(program);
+if (validationResult) {
+  console.log(validationResult);
+  process.exit(1);
+}
+
+global.logLevel = program.loglevel;
+log.setLevel(global.logLevel);
+
+packageTools.checkForUpdate(function (err, updateAvailable) {
+  if (!err && updateAvailable) {
+    console.log();
+    console.log('*******************************************************************************');
+    console.log('A new version of ManifoldJS is available (v' + updateAvailable + ').');
+    console.log('We recommend that you upgrade.');
+    console.log('*******************************************************************************');
+    console.log();
+  }
+});
+
+if (program.run) {
+  var platform = program.args[1];
+  runApp(platform);
+} else if (program.visualstudio) {
+  launchVisualStudio();
+} else if (program.package) {
+  packageApps();
+} else {
+  var siteUrl = program.args[0];
+  generateApp(siteUrl);
 }
