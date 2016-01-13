@@ -156,7 +156,7 @@ if (program.run) {
   // Run the app for the specified platform
 
   var platform = program.args[1];
-  projectTools.runApp(platform, function (err) {
+  projectBuilder.runApp(platform, function (err) {
     if (err) {
       log.error('ERROR: ' + err.message);
     }
@@ -176,14 +176,21 @@ if (program.run) {
   // Creates App Store packages for publishing
   var directory = program.args[1];
   var platforms = program.platforms.split(/[\s,]+/);
-  projectBuilder.packageApps(platforms, directory, function (err) {
-    if (err) {
-      log.error('ERROR: ' + err.message);
-      return;
-    }
+  projectBuilder.packageApps(platforms, directory)  
+    .then(function () {
+      log.write('The app store package(s) are ready.');
+    })
+    .catch(function (err) {
+      var errmsg = err.getMessage();
+      if (log.getLevel() !== log.levels.DEBUG) {
+        errmsg += '\nFor more information, run manifoldjs with the diagnostics level set to debug (e.g. manifoldjs [...] -l debug)';
+      }
 
-    log.info('The app store package was created successfully!');
-  });
+      log.error(errmsg);
+    })
+    .done(function () {
+      log.write('All done!');        
+    });
 } else {
   var siteUrl = program.args[0];
   var rootDir = program.directory ? path.resolve(program.directory) : process.cwd();
@@ -200,8 +207,7 @@ if (program.run) {
   
   getW3cManifest(siteUrl, program.manifest, function (err, manifestInfo) {
     if (err) {
-      log.error('ERROR: ' + err.message);
-      return;
+      return log.error('ERROR: ' + err.message);
     }
 
       // Fix #145: don't require a short name
@@ -221,18 +227,20 @@ if (program.run) {
     manifestInfo.generatedFrom = 'CLI';
 
     // Create the apps for the specified platforms
-    projectBuilder.createApps(manifestInfo, rootDir, platforms, program, function (err) {
-      if (err) {
-        var errmsg = err.message;
-        if (global.logLevel !== 'debug') {
-          errmsg += ' For more information, run manifoldjs with the diagnostics level set to debug (e.g. manifoldjs [...] -l debug)';
+    projectBuilder.createApps(manifestInfo, rootDir, platforms, program)
+      .then(function () {
+        log.info('The application(s) are ready.');
+      })
+      .catch(function (err) {
+        var errmsg = err.getMessage();
+        if (log.getLevel() !== log.levels.DEBUG) {
+          errmsg += '\nFor more information, run manifoldjs with the diagnostics level set to debug (e.g. manifoldjs [...] -l debug)';
         }
 
         log.error(errmsg);
-        return;
-      }
-      
-      log.info('The application(s) are ready!');
-    });
+      })
+      .done(function () {
+        log.write('All done!');        
+      });
   });
 }
