@@ -51,6 +51,15 @@ function removePlatform (program) {
   })
 }
 
+function listPlatforms (program) {
+  platformTools.listPlatforms().then(function (platforms) {
+    log.write('Available platforms are: ' + platforms.join(', '));
+  })
+  .catch(function (err) {
+    log.error(err.getMessage());
+  })
+}
+
 function platformCommands (program) {
   if (program.args.length < 2) {
     return log.error('You must specify a platform operation: add, remove, or list.');    
@@ -58,12 +67,16 @@ function platformCommands (program) {
 
   var command = program.args[1].toLowerCase();
   switch (command) {
-    case 'add':        
+    case 'add':
       addPlatform(program);
       break;
     
-    case 'remove':        
+    case 'remove':
       removePlatform(program);
+      break;
+      
+    case 'list':
+      listPlatforms(program);
       break;
       
     default:
