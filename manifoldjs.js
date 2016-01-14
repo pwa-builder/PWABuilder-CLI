@@ -5,6 +5,7 @@ var lib = require('manifoldjs-lib');
 
 var log = lib.log,
     packageTools = lib.packageTools,
+    platformTools = lib.platformTools,
     validations = lib.validations; 
 
 var commands = require('./commands');
@@ -53,6 +54,7 @@ function checkParameters(program) {
   }
 
   // check platforms
+  // TODO: loading registered platforms twice, by calling platformsValid and to generate the usage text. Consolidate!
   if (program.platforms) {
     var platforms = program.platforms.split(/[\s,]+/);
     if (!validations.platformsValid(platforms)) {
@@ -66,6 +68,29 @@ function checkParameters(program) {
       return 'Invalid loglevel specified. Valid values are: debug, info, warn, error.';
     }
   }
+}
+
+// get the list of registered platforms
+var availablePlatforms = platformTools.listPlatformsSync();
+
+// dynamically generates the help text with the list of registered
+// platforms and splits it into multiple lines so that it doesn't 
+// break the layout of the usage text
+function getPlatformHelpText() {
+  // offset of the column where the parameter help text starts
+  var columnOffset = 38;
+
+  // maximum width of the help text 
+  var maxWidth = 80;
+
+  return availablePlatforms.reduce(function (list, platform) {  
+    var segmentLength = list.length - list.lastIndexOf('\n') - 1;
+    if (segmentLength > maxWidth - columnOffset) {
+      list += '\n';
+    }
+    
+    return list + '[' + (list ? ',' : '') + platform + ']';  
+  }, '').replace(/\n/g, '\n' + Array(columnOffset - 1).join(' '));  
 }
 
 var program = require('commander')
@@ -92,8 +117,7 @@ var program = require('commander')
              .option('-d, --directory <app-dir>', 'path to the generated project files')
              .option('-s, --shortname <short-name>', 'application short name')
              .option('-l, --loglevel <log-level>', 'debug|info|warn|error', 'warn')
-             .option('-p, --platforms <platforms>', '[windows][,windows10][,android][,ios]\n                                    ' +
-                                                    '[,chrome][,web][,firefox]', 'windows,windows10,android,ios,chrome,web,firefox')
+             .option('-p, --platforms <platforms>', getPlatformHelpText(), availablePlatforms.join(',')) 
              .option('-b, --build', 'forces the building process', false)
              .option('-m, --manifest <manifest-location>', 'location of the W3C Web App manifest\n                                    ' +
                                                     'file (URL or local path)')
