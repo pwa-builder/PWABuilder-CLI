@@ -16,11 +16,11 @@ function checkParameters(program) {
     switch (command) {
       case 'run':
         if (program.args.length < 2) {
-          return 'ERROR: You must specify a platform (windows | android).';
+          return 'You must specify a platform (windows | android).';
         } 
         
         if (!validations.platformToRunValid(program.args[1])) {
-          return 'ERROR: Invalid platform specified - [' + program.args[1] + '].';
+          return 'Invalid platform specified - [' + program.args[1] + '].';
         }
 
         unknownArgs = 2;
@@ -44,26 +44,26 @@ function checkParameters(program) {
     }
   } else {
     if (!program.manifest) {
-      return 'ERROR: You must specify either the web site URL or the location of a W3C manifest (-m | --manifest).';
+      return 'You must specify either the web site URL or the location of a W3C manifest (-m | --manifest).';
     }
   }
 
   if (program.args.length > unknownArgs) {
-    return 'ERROR: Unexpected parameters - [' + program.args.slice(unknownArgs).join() + '].';
+    return 'Unexpected parameters - [' + program.args.slice(unknownArgs).join() + '].';
   }
 
   // check platforms
   if (program.platforms) {
     var platforms = program.platforms.split(/[\s,]+/);
     if (!validations.platformsValid(platforms)) {
-      return 'ERROR: Invalid platform(s) specified.';
+      return 'Invalid platform(s) specified.';
     }
   }
 
   // check log level
   if (program.loglevel) {
     if (!validations.logLevelValid(program.loglevel)) {
-      return 'ERROR: Invalid loglevel specified. Valid values are: debug, trace, info, warn, error';
+      return 'Invalid loglevel specified. Valid values are: debug, info, warn, error.';
     }
   }
 }
@@ -107,7 +107,7 @@ if (!process.argv.slice(2).length) {
 
 var validationResult = checkParameters(program);
 if (validationResult) {
-  console.log(validationResult);
+  log.error(validationResult);
   process.exit(1);
 }
 
@@ -116,12 +116,12 @@ log.setLevel(global.logLevel);
 
 packageTools.checkForUpdate(function (err, updateAvailable) {
   if (!err && updateAvailable) {
-    console.log();
-    console.log('*******************************************************************************');
-    console.log('A new version of ManifoldJS is available (v' + updateAvailable + ').');
-    console.log('We recommend that you upgrade.');
-    console.log('*******************************************************************************');
-    console.log();
+    log.write();
+    log.write('*******************************************************************************');
+    log.write('A new version of ManifoldJS is available (v' + updateAvailable + ').');
+    log.write('We recommend that you upgrade.');
+    log.write('*******************************************************************************');
+    log.write();
   }
   
   if (program.run) {
@@ -140,4 +140,3 @@ packageTools.checkForUpdate(function (err, updateAvailable) {
     commands.generate(program);
   }  
 });
-
