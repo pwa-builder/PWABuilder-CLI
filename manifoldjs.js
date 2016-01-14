@@ -16,14 +16,6 @@ function checkParameters(program) {
     var command = program.args[0].toLowerCase();
     switch (command) {
       case 'run':
-        if (program.args.length < 2) {
-          return 'You must specify a platform (windows | android).';
-        } 
-        
-        if (!validations.platformToRunValid(program.args[1])) {
-          return 'Invalid platform specified - [' + program.args[1] + '].';
-        }
-
         unknownArgs = 2;
         program.run = true;
         break;
