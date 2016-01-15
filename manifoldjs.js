@@ -94,7 +94,7 @@ var program = require('commander')
                     '\n  -or-' +
                     '\n         manifoldjs package [options]' +
                     '\n           options:' +
-                    '\n             -l | --loglevel,  -p | --platforms' +
+                    '\n             -l | --loglevel,  -p | --platforms, -S | --Sign' +
                     '\n' +
                     '\n  -or-' +
                     '\n         manifoldjs platform add <platform-id> <module-name> <source>' +
@@ -114,6 +114,7 @@ var program = require('commander')
              .option('-m, --manifest <manifest-location>', 'location of the W3C Web App manifest\n                                    ' +
                                                     'file (URL or local path)')
              .option('-c, --crosswalk', 'enable Crosswalk for Android', false)
+             .option('-S, --Sign', 'return a signed package in windows', false)
              .option('-w, --webAppToolkit', 'adds the Web App Toolkit cordova plugin', false)
              .parse(process.argv);
 
