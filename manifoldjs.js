@@ -82,30 +82,30 @@ function getPlatformHelpText() {
     }
     
     return list + '[' + (list ? ',' : '') + platform + ']';  
-  }, '').replace(/\n/g, '\n' + Array(columnOffset - 1).join(' '));  
+  }, '').replace(/\n/g, '\n' + new Array(columnOffset - 1).join(' '));  
 }
 
 var program = require('commander')
-             .usage('<website-url> [options]'
-                    + '\n         manifoldjs -m <manifest-location> [options]'
-                    + '\n           options:'
-                    + '\n             -d | --directory, -s | --short-name, -l | --loglevel,'
-                    + '\n             -p | --platforms, -m | --manifest,   -c | --crosswalk'                      
-                    + '\n  -or-'
-                    + '\n         manifoldjs package [options]'
-                    + '\n           options:'
-                    + '\n             -l | --loglevel,  -p | --platforms'
-                    + '\n'
-                    + '\n  -or-'
-                    + '\n         manifoldjs platform add <platform-id> <module-name> <source>'
-                    + '\n         manifoldjs platform remove <platform-id>'
-                    + '\n         manifoldjs platform list'
-                    + '\n'
-                    + '\n  -or-'
-                    + '\n         manifoldjs run <windows|android>'
-                    + '\n'
-                    + '\n  -or-'
-                    + '\n         manifoldjs visualstudio')
+             .usage('<website-url> [options]' +
+                    '\n         manifoldjs -m <manifest-location> [options]' +
+                    '\n           options:' +
+                    '\n             -d | --directory, -s | --short-name, -l | --loglevel,' +
+                    '\n             -p | --platforms, -m | --manifest,   -c | --crosswalk' +                    
+                    '\n  -or-' +
+                    '\n         manifoldjs package [options]' +
+                    '\n           options:' +
+                    '\n             -l | --loglevel,  -p | --platforms' +
+                    '\n' +
+                    '\n  -or-' +
+                    '\n         manifoldjs platform add <platform-id> <module-name> <source>' +
+                    '\n         manifoldjs platform remove <platform-id>' +
+                    '\n         manifoldjs platform list' +
+                    '\n' +
+                    '\n  -or-' +
+                    '\n         manifoldjs run <windows|android>' +
+                    '\n' +
+                    '\n  -or-' +
+                    '\n         manifoldjs visualstudio')
              .option('-d, --directory <app-dir>', 'path to the generated project files')
              .option('-s, --shortname <short-name>', 'application short name')
              .option('-l, --loglevel <log-level>', 'debug|info|warn|error', 'warn')
