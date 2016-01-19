@@ -52,12 +52,13 @@ function removePlatform (program) {
 }
 
 function listPlatforms (program) {
-  platformTools.listPlatforms().then(function (platforms) {
+  try {
+    var platforms = platformTools.listPlatforms();  
     log.write('Available platforms are: ' + platforms.join(', '));
-  })
-  .catch(function (err) {
+  }
+  catch (err) {
     log.error(err.getMessage());
-  })
+  }
 }
 
 function platformCommands (program) {

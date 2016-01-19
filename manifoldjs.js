@@ -63,7 +63,7 @@ function checkParameters(program) {
 }
 
 // get the list of registered platforms
-var availablePlatforms = platformTools.listPlatformsSync();
+var availablePlatforms = platformTools.listPlatforms();
 
 // dynamically generates the help text with the list of registered
 // platforms and splits it into multiple lines so that it doesn't 
