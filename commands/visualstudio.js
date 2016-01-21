@@ -2,17 +2,10 @@
 
 var lib = require('manifoldjs-lib');
 
-var log = lib.log,
-    projectTools = lib.projectTools;
+var log = lib.log;
 
-function launchVisualStudio() {
-  projectTools.openVisualStudio(function (err) {
-    if (err) {
-      log.error('ERROR: ' + err.message);
-    } else {
-      log.info('The Visual Studio project was opened successfully!');
-    }
-  });  
+function run() {
+  log.warn('The \'visualstudio\' command is deprecated. Use \'manifoldjs open <windows|windows10>\' instead.')
 }
 
-module.exports = launchVisualStudio;
+module.exports = run;

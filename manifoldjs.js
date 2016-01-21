@@ -27,6 +27,10 @@ function checkParameters(program) {
         unknownArgs = 5;
         program.platform = true;
         break;        
+      case 'open':
+        unknownArgs = 2;
+        program.open = true;
+        break;
       case 'visualstudio':
         unknownArgs = 1;
         program.visualstudio = true;
@@ -102,10 +106,10 @@ var program = require('commander')
                     '\n         manifoldjs platform list' +
                     '\n' +
                     '\n  -or-' +
-                    '\n         manifoldjs run <windows|android>' +
+                    '\n         manifoldjs run <platform>' +
                     '\n' +
                     '\n  -or-' +
-                    '\n         manifoldjs visualstudio')
+                    '\n         manifoldjs open <platform>')
              .option('-d, --directory <app-dir>', 'path to the generated project files')
              .option('-s, --shortname <short-name>', 'application short name')
              .option('-l, --loglevel <log-level>', 'debug|info|warn|error', 'warn')
@@ -143,6 +147,9 @@ packageTools.checkForUpdate(function (err, updateAvailable) {
   
   if (program.run) {
     commands.run(program);
+  }
+  else if (program.open) {
+    commands.open(program);
   }
   else if (program.visualstudio) {
     commands.visualstudio(program);
