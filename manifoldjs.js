@@ -16,7 +16,7 @@ function checkParameters(program) {
     var command = program.args[0].toLowerCase();
     switch (command) {
       case 'run':
-        unknownArgs = 2;
+        unknownArgs = 3;
         program.run = true;
         break;
       case 'package':        
@@ -28,7 +28,7 @@ function checkParameters(program) {
         program.platform = true;
         break;        
       case 'open':
-        unknownArgs = 2;
+        unknownArgs = 3;
         program.open = true;
         break;
       case 'visualstudio':
@@ -101,15 +101,21 @@ var program = require('commander')
                     '\n             -l | --loglevel,  -p | --platforms, -S | --Sign' +
                     '\n' +
                     '\n  -or-' +
-                    '\n         manifoldjs platform add <platform-id> <module-name> <source>' +
-                    '\n         manifoldjs platform remove <platform-id>' +
-                    '\n         manifoldjs platform list' +
+                    '\n         manifoldjs platform add <platform-id> <module-name> <source> [options]' +
+                    '\n         manifoldjs platform remove <platform-id> [options]' +
+                    '\n         manifoldjs platform list [options]' +
+                    '\n           options:' +
+                    '\n             -l | --loglevel' +
                     '\n' +
                     '\n  -or-' +
-                    '\n         manifoldjs run <platform>' +
+                    '\n         manifoldjs run <platform> [project-directory]' +
+                    '\n           options:' +
+                    '\n             -l | --loglevel' +
                     '\n' +
                     '\n  -or-' +
-                    '\n         manifoldjs open <platform>')
+                    '\n         manifoldjs open <platform> [project-directory]' +
+                    '\n           options:' +
+                    '\n             -l | --loglevel')
              .option('-d, --directory <app-dir>', 'path to the generated project files')
              .option('-s, --shortname <short-name>', 'application short name')
              .option('-l, --loglevel <log-level>', 'debug|info|warn|error', 'warn')

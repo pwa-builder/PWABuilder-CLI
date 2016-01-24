@@ -8,13 +8,14 @@ var log = lib.log,
     projectBuilder = lib.projectBuilder;
     
 function runApp (program) {
-  var platform = program.args[1];
 
   if (program.args.length < 2) {
     return Q.reject(new Error('You must specify a platform.'));
   } 
   
-  return projectBuilder.runApp(platform);
+  var platform = program.args[1];
+  var projectDir = program.args.length < 3 ? process.cwd() : program.args[2];
+  return projectBuilder.runApp(platform, projectDir, program);
 }
 
 module.exports = runApp;
