@@ -55,7 +55,8 @@
     "travis-cov": "^0.2.5"
   },
   "scripts": {
-    "test": "grunt"
+    "test": "grunt",
+    "debug-tests": "mocha --debug-brk"
   },
   "bin": "manifoldjs.js",
   "config": {
