@@ -20,7 +20,7 @@ function checkParameters(program) {
         program.run = true;
         break;
       case 'package':        
-        unknownArgs = 1;
+        unknownArgs = 2;
         program.package = true;
         break;
       case 'platform':
@@ -96,7 +96,7 @@ var program = require('commander')
                     '\n             -d | --directory, -s | --short-name, -l | --loglevel,' +
                     '\n             -p | --platforms, -m | --manifest,   -c | --crosswalk' +                    
                     '\n  -or-' +
-                    '\n         manifoldjs package [options]' +
+                    '\n         manifoldjs package [project-directory] [options]' +
                     '\n           options:' +
                     '\n             -l | --loglevel,  -p | --platforms, -S | --Sign' +
                     '\n' +
