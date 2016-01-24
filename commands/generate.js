@@ -12,6 +12,8 @@ var log = lib.log,
     projectBuilder = lib.projectBuilder,
     utils = lib.utils;
 
+var build = require('./package');
+
 function getW3cManifest(siteUrl, manifestLocation, callback) {
   function resolveStartURL(err, manifestInfo) {
     if (err) {
@@ -85,7 +87,16 @@ function generateApp(program) {
     manifestInfo.generatedFrom = 'CLI';
 
     // Create the apps for the specified platforms
-    return projectBuilder.createApps(manifestInfo, rootDir, platforms, program).then(function () {
+    return projectBuilder.createApps(manifestInfo, rootDir, platforms, program).then(function (projectDir) {
+      if (program.build) {
+        program.args[1] = projectDir;
+        return build(program).catch(function (err) {
+          log.warn('One or more platforms could not be built successfully. Correct any errors and then run manifoldjs package [project-directory] [options] to build the applications.');
+          // return deferred.reject(err);
+        });
+      }
+    })
+    .then(function () {
       log.info('The application(s) are ready.');
       return deferred.resolve();
     })
