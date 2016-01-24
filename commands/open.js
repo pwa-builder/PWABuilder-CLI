@@ -1,5 +1,7 @@
 'use strict';
 
+var Q = require('q');
+
 var lib = require('manifoldjs-lib');
   
 var log = lib.log,
@@ -9,12 +11,10 @@ function openApp (program) {
   var platform = program.args[1];
 
   if (program.args.length < 2) {
-    return 'You must specify a platform.';
+    return Q.reject(new Error('You must specify a platform.'));
   } 
   
-  projectBuilder.openApp(platform).catch(function (err) {
-    log.error(err.getMessage());
-  });  
+  return projectBuilder.openApp(platform);
 }
 
 module.exports = openApp;

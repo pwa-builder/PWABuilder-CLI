@@ -145,22 +145,32 @@ packageTools.checkForUpdate(function (err, updateAvailable) {
     log.write();
   }
   
+  var command;
   if (program.run) {
-    commands.run(program);
+    command = commands.run(program);
   }
   else if (program.open) {
-    commands.open(program);
+    command = commands.open(program);
   }
   else if (program.visualstudio) {
-    commands.visualstudio(program);
+    command = commands.visualstudio(program);
   }
   else if (program.package) {
-    commands.package(program);
+    command = commands.package(program);
   }
   else if (program.platform) {
-    commands.platform(program);
+    command = commands.platform(program);
   }
   else {
-    commands.generate(program);
-  }  
+    command = commands.generate(program);
+  }
+  
+  command.catch(function (err) {
+    var errmsg = err.getMessage();
+    if (log.getLevel() !== log.levels.DEBUG) {
+      errmsg += '\nFor more information, run manifoldjs with the diagnostics level set to debug (e.g. manifoldjs [...] -l debug)';
+    }
+
+    log.error(errmsg);
+  });
 });

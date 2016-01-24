@@ -3,6 +3,8 @@
 var url = require('url'),
     path = require('path');
 
+var Q = require('q');
+
 var lib = require('manifoldjs-lib');
 
 var log = lib.log,
@@ -60,44 +62,39 @@ function generateApp(program) {
        program.rawArgs.indexOf('--platforms')  === -1) {
     platforms.splice(platforms.indexOf('windows'), 1);
   }
-  
+
+  var deferred = Q.defer();  
   getW3cManifest(siteUrl, program.manifest, function (err, manifestInfo) {
     if (err) {
-      return log.error('ERROR: ' + err.message);
+      return deferred.reject(err);
     }
-
-      // Fix #145: don't require a short name
-    manifestInfo.content.short_name =   manifestInfo.content.short_name || 
-                                        manifestInfo.content.name ||
-                                        manifestInfo.default.short_name;
+    
+    // Fix #145: don't require a short name
+    manifestInfo.content.short_name = manifestInfo.content.short_name || 
+                                      manifestInfo.content.name ||
+                                      manifestInfo.default.short_name;
 
     // if specified as a parameter, override the app's short name
     if (program.shortname) {
       manifestInfo.content.short_name = program.shortname;
     }
  
-    log.debug('Manifest contents:');
-    log.debug(JSON.stringify(manifestInfo.content, null, 4));
+    log.debug('Manifest contents:\n' + JSON.stringify(manifestInfo.content, null, 4));
     
     // add generatedFrom value to manifestInfo for telemetry
     manifestInfo.generatedFrom = 'CLI';
 
     // Create the apps for the specified platforms
-    projectBuilder.createApps(manifestInfo, rootDir, platforms, program).then(function () {
+    return projectBuilder.createApps(manifestInfo, rootDir, platforms, program).then(function () {
       log.info('The application(s) are ready.');
+      return deferred.resolve();
     })
     .catch(function (err) {
-      var errmsg = err.getMessage();
-      if (log.getLevel() !== log.levels.DEBUG) {
-        errmsg += '\nFor more information, run manifoldjs with the diagnostics level set to debug (e.g. manifoldjs [...] -l debug)';
-      }
-
-      log.error(errmsg);
-    })
-    .done(function () {
-      log.write('All done!');        
+      return deferred.reject(err);
     });
   });
-}
+  
+  return deferred.promise;
+};
 
 module.exports = generateApp;

@@ -3,6 +3,8 @@
 var fs = require('fs'),
     path = require('path');
 
+var Q = require('q');
+
 var lib = require('manifoldjs-lib');
 
 var log = lib.log,
@@ -12,78 +14,69 @@ var log = lib.log,
 // registers a new platform module    
 function addPlatform (program) {
   if (program.args.length < 3) {
-    return log.error('You must specify a platform ID.');    
+    return Q.reject(new Error('You must specify a platform ID.'));    
   }
 
   if (program.args.length < 4) {
-    return log.error('You must specify the module name of the platform. This is the \'name\' property in its package.json file.');    
+    return Q.reject(new Error('You must specify the module name of the platform. This is the \'name\' property in its package.json file.'));    
   }
   
   if (program.args.length < 5) {
-    return log.error('You must specify a package source for the platform. This can be an npm package, a GitHub URL, or a local path.');    
+    return Q.reject(new Error('You must specify a package source for the platform. This can be an npm package, a GitHub URL, or a local path.'));    
   }
   
   var platformId = program.args[2].toLowerCase();
   var packageName = program.args[3];
   var source = program.args[4];
   
-  platformTools.addPlatform(platformId, packageName, source).then(function () {
+  return platformTools.addPlatform(platformId, packageName, source).then(function () {
     log.info('The \'' + platformId + '\' platform was registered successfully.');      
-  })
-  .catch(function (err) {
-    log.error(err.getMessage());
-  })
+  });
 }
 
 // removes a registered platform module
 function removePlatform (program) {
   if (program.args.length < 3) {
-    return log.error('You must specify a platform ID.');    
+    return Q.reject(new Error('You must specify a platform ID.'));    
   }
  
   var platformId = program.args[2].toLowerCase();
   
-  platformTools.removePlatform(platformId).then(function () {
+  return platformTools.removePlatform(platformId).then(function () {
     log.info('The \'' + platformId + '\' platform was unregistered successfully.');      
-  })
-  .catch(function (err) {
-    log.error(err.getMessage());
-  })
+  });
 }
 
 function listPlatforms (program) {
   try {
     var platforms = platformTools.listPlatforms();  
     log.write('Available platforms are: ' + platforms.join(', '));
+    return Q.resolve();
   }
   catch (err) {
-    log.error(err.getMessage());
+    return Q.reject(err);
   }
 }
 
 function platformCommands (program) {
   if (program.args.length < 2) {
-    return log.error('You must specify a platform operation: add, remove, or list.');    
+    return Q.reject(new Error('You must specify a platform operation: add, remove, or list.'));    
   }
 
   var command = program.args[1].toLowerCase();
   switch (command) {
     case 'add':
-      addPlatform(program);
-      break;
+      return addPlatform(program);
     
     case 'remove':
-      removePlatform(program);
-      break;
+      return removePlatform(program);
       
     case 'list':
-      listPlatforms(program);
-      break;
+      return listPlatforms(program);
       
     default:
-      log.error('Unknown option \'' + command + '\' specified.');
-      break;      
-  } 
+      return Q.reject(new Error('Unknown option \'' + command + '\' specified.'));
+  }  
 }
 
 module.exports = platformCommands; 

@@ -32,22 +32,30 @@ function runApp(program) {
   
   log.warn('The \'visualstudio\' command is deprecated. Use \'manifoldjs open <windows|windows10>\' instead.');
   
+  var deferred = Q.defer();
+  
   var dir = process.cwd();
   fileTools.searchFile(dir, 'App.jsproj', function (err, results) {
     Q.ninvoke(getWindowsVersion).then(function (version) {
       if (results && results.length > 0 && isWindows10Version(version)) {
         program.args.push('windows10'); 
-        return open(program);
+        return open(program).then(function () {
+          deferred.resolve();
+        });
       }
       
       fileTools.searchFile(dir, 'CordovaApp.sln', function (err, results) {
         if (results && results.length > 0) {
           program.args.push('windows');
-          return open(program); 
+          return open(program).then(function () {
+            deferred.resolve();
+          });
         }
       });
     });
   });
+  
+  return deferred.promise;
 }
 
 module.exports = runApp;
