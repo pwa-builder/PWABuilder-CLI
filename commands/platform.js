@@ -16,20 +16,15 @@ function addPlatform (program) {
   if (program.args.length < 3) {
     return Q.reject(new Error('You must specify a platform ID.'));    
   }
-
-  if (program.args.length < 4) {
-    return Q.reject(new Error('You must specify the module name of the platform. This is the \'name\' property in its package.json file.'));    
-  }
   
-  if (program.args.length < 5) {
+  if (program.args.length < 4) {
     return Q.reject(new Error('You must specify a package source for the platform. This can be an npm package, a GitHub URL, or a local path.'));    
   }
   
   var platformId = program.args[2].toLowerCase();
-  var packageName = program.args[3];
-  var source = program.args[4];
+  var source = program.args[3];
   
-  return platformTools.addPlatform(platformId, packageName, source).then(function () {
+  return platformTools.addPlatform(platformId, source).then(function () {
     log.info('The \'' + platformId + '\' platform was registered successfully.');      
   });
 }

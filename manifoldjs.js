@@ -24,7 +24,7 @@ function checkParameters(program) {
         program.package = true;
         break;
       case 'platform':
-        unknownArgs = 5;
+        unknownArgs = 4;
         program.platform = true;
         break;        
       case 'open':
@@ -101,7 +101,7 @@ var program = require('commander')
                     '\n             -l | --loglevel,  -p | --platforms, -S | --Sign' +
                     '\n' +
                     '\n  -or-' +
-                    '\n         manifoldjs platform add <platform-id> <module-name> <source> [options]' +
+                    '\n         manifoldjs platform add <platform-id> <source> [options]' +
                     '\n         manifoldjs platform remove <platform-id> [options]' +
                     '\n         manifoldjs platform list [options]' +
                     '\n           options:' +
