@@ -1,6 +1,8 @@
 #!/usr/bin/env node
 'use strict';
 
+var Q = require('q');
+
 var lib = require('manifoldjs-lib');
 
 var log = lib.log,
@@ -141,6 +143,9 @@ if (validationResult) {
 global.logLevel = program.loglevel;
 log.setLevel(global.logLevel);
 
+if (process.env.NODE_ENV === "development") {
+  Q.longStackSupport = true;
+}
 packageTools.checkForUpdate(function (err, updateAvailable) {
   if (!err && updateAvailable) {
     log.write();
