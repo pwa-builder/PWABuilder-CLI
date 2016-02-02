@@ -1,7 +1,7 @@
 {
   "name": "manifoldjs",
   "version": "0.5.0",
-  "description": "Node.js tool for App Generation",
+  "description": "Node.js Tool for App Generation",
   "repository": {
     "type": "git",
     "url": "https://github.com/manifoldjs/ManifoldJS.git"
@@ -35,7 +35,7 @@
   "dependencies": {
     "commander": "^2.9.0",
     "q": "^1.4.1",
-    "manifoldjs-lib": "git://github.com/manifoldjs/manifoldjs-lib.git"
+    "manifoldjs-lib": "^0.1.0"
   },
   "devDependencies": {
     "blanket": "1.1.6",
