@@ -51,11 +51,11 @@ manifoldjs <command>
 ### Example
 **Creating a new hosted web application**
 ````
-manifoldjs http://shiftr.azurewebsites.net -d C:\Projects -l info -p windows10,android -b
+manifoldjs http://shiftr.azurewebsites.net -d C:\Projects -l info -p windows10,android
 ````
 **Packaging a Windows 10 app for submission to the Store**
 ````
-manifoldjs package /myapp/windows10/manifest /yourapp/yourapp.appx -l debug
+manifoldjs package -p windows10 -l debug
 ````
 
 ## Client Library
