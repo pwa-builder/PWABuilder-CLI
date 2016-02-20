@@ -143,7 +143,7 @@ if (validationResult) {
 global.logLevel = program.loglevel;
 log.setLevel(global.logLevel);
 
-if (process.env.NODE_ENV === "development") {
+if (process.env.NODE_ENV === 'development') {
   Q.longStackSupport = true;
 }
 packageTools.checkForUpdate(function (err, updateAvailable) {
