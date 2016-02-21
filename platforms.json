@@ -1,30 +1,30 @@
 {
     "chrome": {
         "packageName": "manifoldjs-chrome",
-        "source": "git://github.com/manifoldjs/manifoldjs-chrome.git"
+        "source": "manifoldjs-chrome"
     },
     "firefox": {
         "packageName": "manifoldjs-firefox",
-        "source": "git://github.com/manifoldjs/manifoldjs-firefox.git"
+        "source": "manifoldjs-firefox"
     },
     "windows10": {
         "packageName": "manifoldjs-windows10",
-        "source": "git://github.com/manifoldjs/manifoldjs-windows10.git"
+        "source": "manifoldjs-windows10"
     },
     "android": {
         "packageName": "manifoldjs-cordova",
-        "source": "git://github.com/manifoldjs/manifoldjs-cordova.git"
+        "source": "manifoldjs-cordova"
     },
     "ios": {
         "packageName": "manifoldjs-cordova",
-        "source": "git://github.com/manifoldjs/manifoldjs-cordova.git"
+        "source": "manifoldjs-cordova"
     },
     "windows": {
         "packageName": "manifoldjs-cordova",
-        "source": "git://github.com/manifoldjs/manifoldjs-cordova.git"
+        "source": "manifoldjs-cordova"
     },
     "web": {
         "packageName": "manifoldjs-web",
-        "source": "git://github.com/manifoldjs/manifoldjs-web.git"
+        "source": "manifoldjs-web"
     }
 }
