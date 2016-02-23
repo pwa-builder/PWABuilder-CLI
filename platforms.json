@@ -1,0 +1,30 @@
+{
+    "chrome": {
+        "packageName": "manifoldjs-chrome",
+        "source": "manifoldjs-chrome"
+    },
+    "firefox": {
+        "packageName": "manifoldjs-firefox",
+        "source": "manifoldjs-firefox"
+    },
+    "windows10": {
+        "packageName": "manifoldjs-windows10",
+        "source": "manifoldjs-windows10"
+    },
+    "android": {
+        "packageName": "manifoldjs-cordova",
+        "source": "manifoldjs-cordova"
+    },
+    "ios": {
+        "packageName": "manifoldjs-cordova",
+        "source": "manifoldjs-cordova"
+    },
+    "windows": {
+        "packageName": "manifoldjs-cordova",
+        "source": "manifoldjs-cordova"
+    },
+    "web": {
+        "packageName": "manifoldjs-web",
+        "source": "manifoldjs-web"
+    }
+}

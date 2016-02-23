@@ -1,7 +1,7 @@
 {
   "name": "manifoldjs",
-  "version": "0.4.3",
-  "description": "Node.js tool for App Generation",
+  "version": "0.5.0",
+  "description": "Node.js Tool for App Generation",
   "repository": {
     "type": "git",
     "url": "https://github.com/manifoldjs/ManifoldJS.git"
@@ -33,19 +33,14 @@
     "iOS"
   ],
   "dependencies": {
-    "archiver": "^0.14.4",
-    "cheerio": "^0.18.0",
-    "cloudappx-server": "^0.0.4",
-    "commander": "^2.8.1",
-    "cordova": "5.4.1",
-    "hwa": "^0.0.4",
-    "loglevel": "^1.2.0",
-    "mkdirp": "^0.5.0",
-    "ncp": "^2.0.0",
-    "q": "^1.2.0",
-    "request": "^2.53.0",
-    "semver": "^4.3.6",
-    "tv4": "^1.1.12"
+    "commander": "^2.9.0",
+    "q": "^1.4.1",
+    "manifoldjs-lib": "^0.1.0",
+    "manifoldjs-chrome": "^0.1.0",
+    "manifoldjs-cordova": "^0.1.0",
+    "manifoldjs-firefox": "^0.1.0",
+    "manifoldjs-web": "^0.1.0",
+    "manifoldjs-windows10": "^0.1.0"
   },
   "devDependencies": {
     "blanket": "1.1.6",
@@ -65,7 +60,8 @@
     "travis-cov": "^0.2.5"
   },
   "scripts": {
-    "test": "grunt"
+    "test": "grunt",
+    "debug-tests": "mocha --debug-brk"
   },
   "bin": "manifoldjs.js",
   "config": {
