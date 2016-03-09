@@ -46,7 +46,7 @@ manifoldjs <command>
 | ---------------- | --------------- |
 | `run <platform>` | Launches the app of the specified platform. Currently, only _android_ and _windows_ platforms are supported by this command |
 | `visualstudio`   | (for Windows only) Opens the project file of the generated Windows 8.1 / Windows 10 app in Visual Studio |
-| `package <content-directory> <output-package-path>`   | Creates an APPX package for uploading the Windows 10 app to the Store, where _&lt;content-directory&gt;_ is the folder that contains the app contents, including the **appmanifest.xml** file and the app's icons, and _&lt;output-package-path&gt;_ is the path to the APPX file to be generated|
+| `package <platform (-p)-optional> <platform-list-optional>`   | Creates a package for supported platforms (windows10, android, iOS)  for uploading to the Store, where _&lt;platform (-p)&gt;_ is an optional parameter to specificy the platform to be packaged. The  _&lt;platform-list&gt;_ is used in conjunction with the platform.  In some cases, like Windows 10, data must be pulled from the store and updated in the manifest before it can be uploaded.|
 
 ### Example
 **Creating a new hosted web application**
