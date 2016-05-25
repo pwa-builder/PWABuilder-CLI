@@ -56,8 +56,9 @@ function generateApp(program) {
   var rootDir = program.directory ? path.resolve(program.directory) : process.cwd();
   var platforms = program.platforms.split(/[\s,]+/);
   
-  var deferred = Q.defer();  
-  getW3cManifest(siteUrl, program.manifest, function (err, manifestInfo) {
+  var deferred = Q.defer();
+  
+  function callback (err, manifestInfo) {
     if (err) {
       return deferred.reject(err);
     }
@@ -94,7 +95,20 @@ function generateApp(program) {
     .catch(function (err) {
       return deferred.reject(err);
     });
-  });
+  };  
+  
+  
+  if (platforms.length === 1 && platforms[0] === 'edgeextension')
+  {
+    if (program.manifest) {
+      manifestTools.getManifestFromFile(program.manifest, callback);
+    } else {
+      return callback(new Error('A local manifest file should be specified.'));
+    }
+    return deferred.promise;
+  }
+  
+  getW3cManifest(siteUrl, program.manifest, callback);
   
   return deferred.promise;
 };
