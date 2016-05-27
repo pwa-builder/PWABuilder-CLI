@@ -35,9 +35,9 @@
   "dependencies": {
     "commander": "^2.9.0",
     "q": "^1.4.1",
-    "manifoldjs-lib": "^0.1.1",
+    "manifoldjs-lib": "^0.1.2",
     "manifoldjs-chrome": "^0.1.1",
-    "manifoldjs-cordova": "^0.1.1",
+    "manifoldjs-cordova": "^0.1.2",
     "manifoldjs-firefox": "^0.1.1",
     "manifoldjs-web": "^0.1.1",
     "manifoldjs-windows10": "^0.1.1"
