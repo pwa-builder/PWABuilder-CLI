@@ -1,6 +1,6 @@
 {
   "name": "manifoldjs",
-  "version": "0.5.1",
+  "version": "0.5.2",
   "description": "Node.js Tool for App Generation",
   "repository": {
     "type": "git",
@@ -36,11 +36,11 @@
     "commander": "^2.9.0",
     "q": "^1.4.1",
     "manifoldjs-lib": "^0.1.2",
-    "manifoldjs-chrome": "^0.1.1",
+    "manifoldjs-chrome": "^0.1.2",
     "manifoldjs-cordova": "^0.1.2",
-    "manifoldjs-firefox": "^0.1.1",
-    "manifoldjs-web": "^0.1.1",
-    "manifoldjs-windows10": "^0.1.1"
+    "manifoldjs-firefox": "^0.1.2",
+    "manifoldjs-web": "^0.1.2",
+    "manifoldjs-windows10": "^0.1.2"
   },
   "devDependencies": {
     "blanket": "1.1.6",
