@@ -8,9 +8,13 @@ var lib = require('manifoldjs-lib');
 var log = lib.log,
     packageTools = lib.packageTools,
     platformTools = lib.platformTools,
+    manifestTools = lib.manifestTools,
     validations = lib.validations; 
 
 var commands = require('./commands');
+
+// Get the available formats for the --forceManifestFormat parameter
+var availableManifestFormats = manifestTools.listAvailableManifestFormats();
 
 function checkParameters(program) {
   var unknownArgs = 0;
@@ -66,6 +70,12 @@ function checkParameters(program) {
       return 'Invalid loglevel specified. Valid values are: debug, info, warn, error.';
     }
   }
+
+  if (program.forceManifestFormat) {
+    if (!validations.manifestFormatValid(program.forceManifestFormat)) {
+      return 'Invalid manifest format specified. Valid values are: ' + availableManifestFormats.join(', ') + '.';
+    }
+  }
 }
 
 // get the list of registered platforms
@@ -96,7 +106,7 @@ var program = require('commander')
                     '\n         manifoldjs -m <manifest-location> [options]' +
                     '\n           options:' +
                     '\n             -d | --directory, -s | --short-name, -l | --loglevel,' +
-                    '\n             -p | --platforms, -m | --manifest,   -c | --crosswalk' +                    
+                    '\n             -p | --platforms, -m | --manifest, -f | --forceManifestFormat, -c | --crosswalk' +                    
                     '\n  -or-' +
                     '\n         manifoldjs package [project-directory] [options]' +
                     '\n           options:' +
@@ -128,6 +138,7 @@ var program = require('commander')
              .option('-c, --crosswalk', 'enable Crosswalk for Android', false)
              .option('-S, --Sign', 'return a signed package in windows', false)
              .option('-w, --webAppToolkit', 'adds the Web App Toolkit cordova plugin', false)
+             .option('-f, --forceManifestFormat <format>', availableManifestFormats.join('|'))
              .parse(process.argv);
 
 if (!process.argv.slice(2).length) {

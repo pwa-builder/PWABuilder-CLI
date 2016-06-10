@@ -14,7 +14,7 @@ var log = lib.log,
 
 var build = require('./package');
 
-function getW3cManifest(siteUrl, manifestLocation, callback) {
+function getW3cManifest(siteUrl, manifestLocation, manifestFormat, callback) {
   function resolveStartURL(err, manifestInfo) {
     if (err) {
       return callback(err, manifestInfo);
@@ -35,16 +35,16 @@ function getW3cManifest(siteUrl, manifestLocation, callback) {
     if (parsedManifestUrl && parsedManifestUrl.host) {
       // download manifest from remote location
       log.info('Downloading manifest from ' + manifestLocation + '...');
-      manifestTools.downloadManifestFromUrl(manifestLocation, resolveStartURL);
+      manifestTools.downloadManifestFromUrl(manifestLocation, manifestFormat, resolveStartURL);
     } else {
       // read local manifest file
       log.info('Reading manifest file ' + manifestLocation + '...');
-      manifestTools.getManifestFromFile(manifestLocation, resolveStartURL);
+      manifestTools.getManifestFromFile(manifestLocation, manifestFormat, resolveStartURL);
     }
   } else if (siteUrl) {    
     // scan a site to retrieve its manifest
     log.info('Scanning ' + siteUrl + ' for manifest...');
-    manifestTools.getManifestFromSite(siteUrl, resolveStartURL);
+    manifestTools.getManifestFromSite(siteUrl, manifestFormat, resolveStartURL);
   } else {
     return callback(new Error('A site URL or manifest should be specified.'));
   }
@@ -101,14 +101,14 @@ function generateApp(program) {
   if (platforms.length === 1 && platforms[0] === 'edgeextension')
   {
     if (program.manifest) {
-      manifestTools.getManifestFromFile(program.manifest, callback);
+      manifestTools.getManifestFromFile(program.manifest, program.forceManifestFormat, callback);
     } else {
       return callback(new Error('A local manifest file should be specified.'));
     }
     return deferred.promise;
   }
   
-  getW3cManifest(siteUrl, program.manifest, callback);
+  getW3cManifest(siteUrl, program.manifest, program.forceManifestFormat, callback);
   
   return deferred.promise;
 };
