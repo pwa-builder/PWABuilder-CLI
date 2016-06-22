@@ -20,7 +20,11 @@ function getW3cManifest(siteUrl, manifestLocation, manifestFormat, callback) {
       return callback(err, manifestInfo);
     }
 
-    return manifestTools.validateAndNormalizeStartUrl(siteUrl, manifestInfo, callback);
+    if (manifestInfo.format === lib.constants.BASE_MANIFEST_FORMAT) {
+      return manifestTools.validateAndNormalizeStartUrl(siteUrl, manifestInfo, callback);
+    } else {
+      return callback(undefined, manifestInfo);
+    }
   }
   
   if (siteUrl) {
@@ -77,6 +81,16 @@ function generateApp(program) {
     
     // add generatedFrom value to manifestInfo for telemetry
     manifestInfo.generatedFrom = 'CLI';
+
+    if (manifestInfo.format === lib.constants.EDGE_EXTENSION_FORMAT) {
+      log.debug('Detected Edge Extension manifest. Building only for Edge Extension platform...');
+      platforms = [lib.constants.EDGE_EXTENSION_FORMAT];
+    } else {
+      var edgeIndex = platforms.indexOf(lib.constants.EDGE_EXTENSION_FORMAT);
+      if (edgeIndex > -1) {
+        platforms.splice(edgeIndex, 1);
+      }
+    }
 
     // Create the apps for the specified platforms
     return projectBuilder.createApps(manifestInfo, rootDir, platforms, program).then(function (projectDir) {
