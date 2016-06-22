@@ -83,7 +83,7 @@ function generateApp(program) {
     manifestInfo.generatedFrom = 'CLI';
 
     if (manifestInfo.format === lib.constants.EDGE_EXTENSION_FORMAT) {
-      log.debug('Detected Edge Extension manifest. Building only for Edge Extension platform...');
+      log.info('Detected Edge Extension manifest. Building only for Edge Extension platform...');
       platforms = [lib.constants.EDGE_EXTENSION_FORMAT];
     } else {
       var edgeIndex = platforms.indexOf(lib.constants.EDGE_EXTENSION_FORMAT);
