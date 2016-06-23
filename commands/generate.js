@@ -82,13 +82,23 @@ function generateApp(program) {
     // add generatedFrom value to manifestInfo for telemetry
     manifestInfo.generatedFrom = 'CLI';
 
-    if (manifestInfo.format === lib.constants.EDGE_EXTENSION_FORMAT) {
-      log.info('Detected Edge Extension manifest. Building only for Edge Extension platform...');
-      platforms = [lib.constants.EDGE_EXTENSION_FORMAT];
+    var edgeIndex = platforms.indexOf(lib.constants.EDGE_EXTENSION_MANIFEST_FORMAT);
+    if (manifestInfo.format === lib.constants.EDGE_EXTENSION_MANIFEST_FORMAT) {
+      if (edgeIndex < 0) {
+        return deferred.reject(new Error('Edge Extension manifests can only be used with the \'' + lib.constants.EDGE_EXTENSION_MANIFEST_FORMAT + '\' platform.'));
+      } else if (platforms.length > 1) {
+        log.info('Detected Edge Extension manifest. Building only for Edge Extension platform...');
+        platforms = [lib.constants.EDGE_EXTENSION_MANIFEST_FORMAT];
+      }
     } else {
-      var edgeIndex = platforms.indexOf(lib.constants.EDGE_EXTENSION_FORMAT);
-      if (edgeIndex > -1) {
-        platforms.splice(edgeIndex, 1);
+      if (platforms.length > 1) {
+
+        if (edgeIndex > -1) {
+          log.info('Removing Edge Extension platform. This platform is not compatible with the input manifest format...');
+          platforms.splice(edgeIndex, 1);
+        }
+      } else if (platforms[0] === lib.constants.EDGE_EXTENSION_MANIFEST_FORMAT) {
+        return deferred.reject(new Error('The \'' + lib.constants.EDGE_EXTENSION_MANIFEST_FORMAT + '\' platform can be used only with Edge Extension manifests.'));
       }
     }
 
@@ -112,7 +122,7 @@ function generateApp(program) {
   };  
   
   
-  if (platforms.length === 1 && platforms[0] === 'edgeextension')
+  if (platforms.length === 1 && platforms[0] === lib.constants.EDGE_EXTENSION_MANIFEST_FORMAT)
   {
     if (program.manifest) {
       manifestTools.getManifestFromFile(program.manifest, program.forceManifestFormat, callback);
