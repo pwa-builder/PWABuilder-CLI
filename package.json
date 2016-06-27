@@ -41,7 +41,7 @@
     "manifoldjs-firefox": "^0.1.2",
     "manifoldjs-web": "^0.1.2",
     "manifoldjs-windows10": "^0.1.2",
-    "manifoldjs-edgeextension": "https://github.com/MicrosoftEdge/manifoldjs-edgeextension.git"
+    "manifoldjs-edgeextension": "https://github.com/manifoldjs/manifoldjs-edgeextension.git"
   },
   "devDependencies": {
     "blanket": "1.1.6",
