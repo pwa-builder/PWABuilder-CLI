@@ -29,6 +29,6 @@
     },
     "edgeextension": {
         "packageName": "manifoldjs-edgeextension",
-        "source": "https://github.com/manifoldjs/manifoldjs-edgeextension.git"
+        "source": "manifoldjs-edgeextension"
     }
 }
