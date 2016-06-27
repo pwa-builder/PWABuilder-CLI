@@ -131,7 +131,7 @@ var program = require('commander')
              .option('-d, --directory <app-dir>', 'path to the generated project files')
              .option('-s, --shortname <short-name>', 'application short name')
              .option('-l, --loglevel <log-level>', 'debug|info|warn|error', 'warn')
-             .option('-p, --platforms <platforms>', getPlatformHelpText(), availablePlatforms.join(',')) 
+             .option('-p, --platforms <platforms>', getPlatformHelpText()) 
              .option('-b, --build', 'forces the building process', false)
              .option('-m, --manifest <manifest-location>', 'location of the W3C Web App manifest\n                                    ' +
                                                     'file (URL or local path)')

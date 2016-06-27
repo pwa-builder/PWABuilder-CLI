@@ -9,6 +9,7 @@ var lib = require('manifoldjs-lib');
 
 var log = lib.log,
     manifestTools = lib.manifestTools,
+    platformTools = lib.platformTools,
     projectBuilder = lib.projectBuilder,
     utils = lib.utils;
 
@@ -20,7 +21,11 @@ function getW3cManifest(siteUrl, manifestLocation, manifestFormat, callback) {
       return callback(err, manifestInfo);
     }
 
-    return manifestTools.validateAndNormalizeStartUrl(siteUrl, manifestInfo, callback);
+    if (manifestInfo.format === lib.constants.BASE_MANIFEST_FORMAT) {
+      return manifestTools.validateAndNormalizeStartUrl(siteUrl, manifestInfo, callback);
+    } else {
+      return callback(undefined, manifestInfo);
+    }
   }
   
   if (siteUrl) {
@@ -54,7 +59,6 @@ function generateApp(program) {
   
   var siteUrl = program.args[0];
   var rootDir = program.directory ? path.resolve(program.directory) : process.cwd();
-  var platforms = program.platforms.split(/[\s,]+/);
   
   var deferred = Q.defer();
   
@@ -78,11 +82,26 @@ function generateApp(program) {
     // add generatedFrom value to manifestInfo for telemetry
     manifestInfo.generatedFrom = 'CLI';
 
+    var platforms = [];
+    if (program.platforms) {
+      platforms = program.platforms.split(/[\s,]+/);
+    } else {
+      platforms = platformTools.listPlatforms();
+      // Remove edgeextension from the default platforms for W3C manifests
+      if (manifestInfo.format === lib.constants.BASE_MANIFEST_FORMAT) {
+        var edgeIndex = platforms.indexOf('edgeextension');
+        if (edgeIndex > -1) {
+          log.debug('Removing Edge Extension platform. The W3C manifest format is not currently supported by this platform.');
+          platforms.splice(edgeIndex, 1);
+        }
+      }
+    }
+
     // Create the apps for the specified platforms
     return projectBuilder.createApps(manifestInfo, rootDir, platforms, program).then(function (projectDir) {
       if (program.build) {
         program.args[1] = projectDir;
-        return build(program).catch(function (err) {
+        return build(program, platforms).catch(function (err) {
           log.warn('One or more platforms could not be built successfully. Correct any errors and then run manifoldjs package [project-directory] [options] to build the applications.');
           // return deferred.reject(err);
         });
@@ -95,18 +114,7 @@ function generateApp(program) {
     .catch(function (err) {
       return deferred.reject(err);
     });
-  };  
-  
-  
-  if (platforms.length === 1 && platforms[0] === 'edgeextension')
-  {
-    if (program.manifest) {
-      manifestTools.getManifestFromFile(program.manifest, program.forceManifestFormat, callback);
-    } else {
-      return callback(new Error('A local manifest file should be specified.'));
-    }
-    return deferred.promise;
-  }
+  };
   
   getW3cManifest(siteUrl, program.manifest, program.forceManifestFormat, callback);
   
