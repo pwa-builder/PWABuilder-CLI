@@ -35,6 +35,7 @@ manifoldjs <command>
 | `-p, --platforms` | **(optional)** Platforms to generate. Supported platforms: _windows,windows10,android,ios,chrome,web,firefox_ (default value: all platforms) |
 | `-b, --build`     | **(optional)** Forces the building process |
 | `-m, --manifest`  | **(optional)** Location of the W3C Web App manifest file (URL or local path). If not specified, the tool looks for a manifest in the site URL. Otherwise, a new manifest will be created pointing to the site URL. |
+| `-f, --forceManifestFormat`  | **(optional)** Allows to specify the manifest format and skip the automatic detection. Can be used when the manifest contains additional, non-standard members. |
 | `-c, --crosswalk` | **(optional)** Enable Crosswalk for Android. Crosswalk is a web runtime that can be used to replace the stock WebView used by Android Cordova apps. Crosswalk is based on Google Chromium with Cordova API support and has better HTML5 feature support compared to the default WebView available in Android. |
 | `-w, --webAppToolkit` | **(optional)** Adds the [Web App Toolkit](https://github.com/manifoldjs/Web-App-ToolKit) cordova plugin. The Web App Toolkit is a plugin for creating Windows, Android and iOS apps based on existing web content. It depends on the Hosted Web App Plugin. Used in the right way, it can facilitate the creation of compelling extensions to your web content for users across platforms. |
 
@@ -44,8 +45,8 @@ manifoldjs <command>
 
 |  **&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Command&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;** | **Description** |
 | ---------------- | --------------- |
-| `run <platform>` | Launches the app of the specified platform. Currently, only _android_ and _windows_ platforms are supported by this command |
-| `visualstudio`   | (for Windows only) Opens the project file of the generated Windows 8.1 / Windows 10 app in Visual Studio |
+| `run <platform>` | Launches the app of the specified platform. Currently, _android_, _ios_, _windows_ and _windows10_ platforms are supported by this command |
+| `open`   | (for Windows only) Opens the project file of the generated Windows 8.1 / Windows 10 app in Visual Studio |
 | `package <platform (-p)-optional> <platform-list-optional>`   | Creates a package for supported platforms (windows10, android, iOS)  for uploading to the Store, where _&lt;platform (-p)&gt;_ is an optional parameter to specificy the platform to be packaged. The  _&lt;platform-list&gt;_ is used in conjunction with the platform.  In some cases, like Windows 10, data must be pulled from the store and updated in the manifest before it can be uploaded.|
 
 ### Example
