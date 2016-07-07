@@ -26,5 +26,9 @@
     "web": {
         "packageName": "manifoldjs-web",
         "source": "manifoldjs-web"
+    },
+    "edgeextension": {
+        "packageName": "manifoldjs-edgeextension",
+        "source": "manifoldjs-edgeextension"
     }
 }
