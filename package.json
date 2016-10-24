@@ -1,6 +1,6 @@
 {
   "name": "manifoldjs",
-  "version": "0.7.1",
+  "version": "0.7.5",
   "description": "Node.js Tool for App Generation",
   "repository": {
     "type": "git",
