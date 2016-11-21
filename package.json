@@ -36,9 +36,7 @@
     "commander": "^2.9.0",
     "q": "^1.4.1",
     "manifoldjs-lib": "^1.0.0",
-    "manifoldjs-chrome": "^0.1.3",
     "manifoldjs-cordova": "^0.1.3",
-    "manifoldjs-firefox": "^0.1.3",
     "manifoldjs-web": "^0.1.3",
     "manifoldjs-windows10": "^0.1.6",
     "manifoldjs-edgeextension": "^0.1.6"
