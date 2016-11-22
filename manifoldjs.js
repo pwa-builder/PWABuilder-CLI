@@ -140,6 +140,7 @@ var program = require('commander')
              .option('-w, --webAppToolkit', 'adds the Web App Toolkit cordova plugin', false)
              .option('-f, --forceManifestFormat <format>', availableManifestFormats.join('|'))
              .option('-W, --DotWeb', 'generate a .web package in windows', false)
+             .option('-a, --AutoPublish', 'auto-publish a .web package in windows', false)
              .parse(process.argv);
 
 if (!process.argv.slice(2).length) {
