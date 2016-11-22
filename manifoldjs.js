@@ -110,7 +110,7 @@ var program = require('commander')
                     '\n  -or-' +
                     '\n         manifoldjs package [project-directory] [options]' +
                     '\n           options:' +
-                    '\n             -l | --loglevel,  -p | --platforms, -S | --Sign, -W | --DotWeb' +
+                    '\n             -l | --loglevel,  -p | --platforms, -S | --Sign, -W | --DotWeb, -a | --AutoPublish' +
                     '\n' +
                     '\n  -or-' +
                     '\n         manifoldjs platform add <platform-id> <source> [options]' +
