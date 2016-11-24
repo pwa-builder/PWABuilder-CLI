@@ -51,6 +51,7 @@
     "grunt-contrib-nodeunit": "^0.4.1",
     "grunt-contrib-watch": "^0.6.1",
     "grunt-mocha-test": "^0.12.7",
+    "grunt-sync": "^0.6.2",
     "jshint-stylish": "^1.0.0",
     "jshint-teamcity": "^1.0.6",
     "load-grunt-tasks": "^1.0.0",
