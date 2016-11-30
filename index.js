@@ -22,16 +22,12 @@ var validationConstants = {
   platforms: {
     all: 'all',
     android: 'android',
-    chrome: 'chrome',
-    firefox: 'firefox',
     ios: 'ios',
     windows: 'windows'
   },
   platformDisplayNames: {
     all: 'All Platforms',
     android: 'Android',
-    chrome: 'Chrome',
-    firefox: 'Firefox',
     ios: 'iOS',
     windows: 'Windows'
   }

@@ -153,7 +153,7 @@ Generates the applications for the specified platforms.
 
 `rootDir` is the root directory where the apps will be generated.
 
-`platforms` a string array specifying one or more target platforms: _windows,android,ios,chrome,web,firefox_.
+`platforms` a string array specifying one or more target platforms: _windows10,windows,android,ios,web_.
 
 `options` an object with one or more properties that customize the generated application:
 

@@ -79,7 +79,7 @@ module.exports = function (grunt) {
 			tasks: ['sync:windows10']
 		},
 		lib: {
-			files: ['../manifoldjs-lib/lib/*.js'],
+			files: ['../manifoldjs-lib/lib/*.js', '../manifoldjs-lib/lib/manifestTools/*.js'],
 			tasks: ['sync:lib']
 		}
     },
@@ -95,7 +95,7 @@ module.exports = function (grunt) {
 		},
 		lib: {
       		files: [{
-      			src: ['../manifoldjs-lib/lib/*.js'],
+      			src: ['../manifoldjs-lib/lib/*.js','../manifoldjs-lib/lib/manifestTools/*.js'],
       			dest: 'node_modules/manifoldjs-lib'  
       		}],
       		verbose: true,
