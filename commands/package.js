@@ -22,7 +22,7 @@ function packageApps(program, platforms) {
       return projectPlatforms.indexOf(platform) >= 0;
     });
 
-    log.debug('Packaging the following platforms:'+ platforms);
+    log.debug('Packaging the following platforms: ' + platforms);
 
     return projectBuilder.packageApps(platforms, projectDir, program); 
   });
