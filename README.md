@@ -26,7 +26,7 @@ manifoldjs <command> [options]
 
 ### Options
 
-|  **Option&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;** | **Description** |
+|  **&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Option&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;** | **Description** |
 | ----------------- | --------------- |
 | `website-url`     | URL of the hosted website. This parameter is not required if a manifest location is specified with the *-m* option |
 | `-d, --directory` | **(optional)** Path to the generated project files (default value: current directory) |
@@ -44,12 +44,12 @@ manifoldjs <command> [options]
 
 ### Commands
 
-| **Command&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;** | **Description** |
+| **&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Command&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;** | **Description** |
 | ------------------------- | --------------- |
 | `package [directory] [options]` | Creates a package for supported platforms (_windows10_, _android_, _iOS_)  for uploading to the Store. In some cases, like Windows 10, data must be pulled from the store and updated in the manifest before it can be uploaded. __directory__ is the root path where to look for the target platforms (defaults to the current location). **options:** _-l \| --loglevel, -p \| --platforms, -S \| --Sign, -W \| --DotWeb, -a \| --AutoPublish_ |
 | `platform add <platform-id> <source> [options]` | Adds a new platform. **platform-id** is the platform to be added. **source** could be either npm package, a GitHub reporitory or a local path to the platform source code. **options:** _-l \| --loglevel_ |
 | `platform remove <platform-id> [options]` | Removes an existing platform. **platform-id** is the platform to be removed. **options:** _-l \| --loglevel_ |
-| `platform list [options]` | Removes an existing platform. **platform-id** is the platform to be removed. **options:** _-l \| --loglevel_ |
+| `platform list [options]` | List the existing platforms. **options:** _-l \| --loglevel_ |
 | `run <platform> [directory] [options]` | Launches the app of the specified platform. Currently, _android_, _ios_, _windows_ and _windows10_ platforms are supported by this command. __directory__ is the root path where to look for the target platforms (defaults to the current location). **options:** _-l \| --loglevel_ |
 | `open <platform> [directory] [options]` | (for Windows only) Opens the project file of the generated Windows 8.1 / Windows 10 app in Visual Studio. __directory__ is the root path where to look for the target platforms (defaults to the current location). **options:** _-l \| --loglevel_ |
 
