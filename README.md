@@ -21,33 +21,37 @@ manifoldjs <website-url> [options]
 -or-
 
 ````
-manifoldjs <command>
+manifoldjs <command> [options]
 ````
 
-### Parameters
+### Options
 
-|  **&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Parameter&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;** | **Description** |
+|  **Option&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;** | **Description** |
 | ----------------- | --------------- |
 | `website-url`     | URL of the hosted website. This parameter is not required if a manifest location is specified with the *-m* option |
 | `-d, --directory` | **(optional)** Path to the generated project files (default value: current directory) |
 | `-s, --shortname` | **(optional)** Application short name. When specified, it overrides the short_name value of the manifest |
 | `-l, --loglevel`  | **(optional)** Tracing log level options. Available log levels: _debug,info,warn,error_ (default value: _warn_) |
 | `-p, --platforms` | **(optional)** Platforms to generate. Supported platforms: _windows,windows10,android,ios,web_ (default value: all platforms) |
-| `-b, --build`     | **(optional)** Forces the building process |
 | `-m, --manifest`  | **(optional)** Location of the W3C Web App manifest file (URL or local path). If not specified, the tool looks for a manifest in the site URL. Otherwise, a new manifest will be created pointing to the site URL. |
+| `-i, --image`     | **(optional)** Local path to the image file used to generate missing icons in the manifest |
 | `-f, --forceManifestFormat`  | **(optional)** Allows to specify the manifest format and skip the automatic detection. Can be used when the manifest contains additional, non-standard members. |
 | `-c, --crosswalk` | **(optional)** Enable Crosswalk for Android. Crosswalk is a web runtime that can be used to replace the stock WebView used by Android Cordova apps. Crosswalk is based on Google Chromium with Cordova API support and has better HTML5 feature support compared to the default WebView available in Android. |
 | `-w, --webAppToolkit` | **(optional)** Adds the [Web App Toolkit](https://github.com/manifoldjs/Web-App-ToolKit) cordova plugin. The Web App Toolkit is a plugin for creating Windows, Android and iOS apps based on existing web content. It depends on the Hosted Web App Plugin. Used in the right way, it can facilitate the creation of compelling extensions to your web content for users across platforms. |
-
-
+| `-S, --Sign` | **(optional - for _package_ command)** Return a signed package for Windows 10. |
+| `-W, --DotWeb` | **(optional - for _package_ command)** Generate a .web package for Windows 10. |
+| `-a, --AutoPublish` | **(optional - for _package_ command)** Auto-publish a package for Windows 10. |
 
 ### Commands
 
-|  **&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Command&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;** | **Description** |
-| ---------------- | --------------- |
-| `run <platform>` | Launches the app of the specified platform. Currently, _android_, _ios_, _windows_ and _windows10_ platforms are supported by this command |
-| `open`   | (for Windows only) Opens the project file of the generated Windows 8.1 / Windows 10 app in Visual Studio |
-| `package <platform (-p)-optional> <platform-list-optional>`   | Creates a package for supported platforms (windows10, android, iOS)  for uploading to the Store, where _&lt;platform (-p)&gt;_ is an optional parameter to specificy the platform to be packaged. The  _&lt;platform-list&gt;_ is used in conjunction with the platform.  In some cases, like Windows 10, data must be pulled from the store and updated in the manifest before it can be uploaded.|
+| **Command&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;** | **Description** |
+| ------------------------- | --------------- |
+| `package [directory] [options]` | Creates a package for supported platforms (_windows10_, _android_, _iOS_)  for uploading to the Store. In some cases, like Windows 10, data must be pulled from the store and updated in the manifest before it can be uploaded. __directory__ is the root path where to look for the target platforms (defaults to the current location). **options:** _-l \| --loglevel, -p \| --platforms, -S \| --Sign, -W \| --DotWeb, -a \| --AutoPublish_ |
+| `platform add <platform-id> <source> [options]` | Adds a new platform. **platform-id** is the platform to be added. **source** could be either npm package, a GitHub reporitory or a local path to the platform source code. **options:** _-l \| --loglevel_ |
+| `platform remove <platform-id> [options]` | Removes an existing platform. **platform-id** is the platform to be removed. **options:** _-l \| --loglevel_ |
+| `platform list [options]` | Removes an existing platform. **platform-id** is the platform to be removed. **options:** _-l \| --loglevel_ |
+| `run <platform> [directory] [options]` | Launches the app of the specified platform. Currently, _android_, _ios_, _windows_ and _windows10_ platforms are supported by this command. __directory__ is the root path where to look for the target platforms (defaults to the current location). **options:** _-l \| --loglevel_ |
+| `open <platform> [directory] [options]` | (for Windows only) Opens the project file of the generated Windows 8.1 / Windows 10 app in Visual Studio. __directory__ is the root path where to look for the target platforms (defaults to the current location). **options:** _-l \| --loglevel_ |
 
 ### Example
 **Creating a new hosted web application**
@@ -158,7 +162,6 @@ Generates the applications for the specified platforms.
 `options` an object with one or more properties that customize the generated application:
 
 - `crosswalk` (boolean) enable Crosswalk in the Cordova Android app
-- `build`     (boolean) set to build the generated application
 - `webAppToolkit` (boolean) adds the Web App Toolkit <https://github.com/manifoldjs/Web-App-ToolKit> cordova plugin
 
 `callback(err)` returns an error, if any.
@@ -208,7 +211,7 @@ We plan to support the following manifest files in the future:
 
 ## Navigation Scope
 
-The W3C manifest defines a scope that restricts the URLs to which the application can navigate. ManifoldJS supports the scope setting for the Android, iOS and Windows platforms (more details [here](https://github.com/manifoldjs/ManifoldCordova#url-access-rules)).
+The W3C manifest defines a scope that restricts the URLs to which the application can navigate. ManifoldJS supports the scope setting for the Android, iOS and Windows platforms (more details [here](https://github.com/manifoldjs/ManifoldCordova#navigation-scope)).
 
 ## Changelog
 

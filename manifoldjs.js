@@ -110,7 +110,7 @@ var program = require('commander')
                     '\n  -or-' +
                     '\n         manifoldjs package [project-directory] [options]' +
                     '\n           options:' +
-                    '\n             -l | --loglevel,  -p | --platforms, -S | --Sign, -W | --DotWeb, -a | --AutoPublish' +
+                    '\n             -l | --loglevel, -p | --platforms, -S | --Sign, -W | --DotWeb, -a | --AutoPublish' +
                     '\n' +
                     '\n  -or-' +
                     '\n         manifoldjs platform add <platform-id> <source> [options]' +
@@ -120,29 +120,28 @@ var program = require('commander')
                     '\n             -l | --loglevel' +
                     '\n' +
                     '\n  -or-' +
-                    '\n         manifoldjs run <platform> [project-directory]' +
+                    '\n         manifoldjs run <platform> [project-directory] [options]' +
                     '\n           options:' +
                     '\n             -l | --loglevel' +
                     '\n' +
                     '\n  -or-' +
-                    '\n         manifoldjs open <platform> [project-directory]' +
+                    '\n         manifoldjs open <platform> [project-directory] [options]' +
                     '\n           options:' +
                     '\n             -l | --loglevel')
              .option('-d, --directory <app-dir>', 'path to the generated project files')
              .option('-s, --shortname <short-name>', 'application short name')
              .option('-l, --loglevel <log-level>', 'debug|info|warn|error', 'warn')
-             .option('-p, --platforms <platforms>', getPlatformHelpText()) 
-             .option('-b, --build', 'forces the building process', false)
+             .option('-p, --platforms <platforms>', getPlatformHelpText())
              .option('-m, --manifest <manifest-location>', 'location of the W3C Web App manifest\n                                    ' +
                                                     'file (URL or local path)')
              .option('-i, --image <image-location>', 'local path to the image file used to\n                                    ' +
                                                     'generate missing icons in the manifest')
              .option('-c, --crosswalk', 'enable Crosswalk for Android', false)
-             .option('-S, --Sign', 'return a signed package in windows', false)
+             .option('-S, --Sign', 'return a signed package for Windows 10', false)
              .option('-w, --webAppToolkit', 'adds the Web App Toolkit cordova plugin', false)
              .option('-f, --forceManifestFormat <format>', availableManifestFormats.join('|'))
-             .option('-W, --DotWeb', 'generate a .web package in windows', false)
-             .option('-a, --AutoPublish', 'auto-publish a .web package in windows', false)
+             .option('-W, --DotWeb', 'generate a .web package for Windows 10', false)
+             .option('-a, --AutoPublish', 'auto-publish a package for Windows 10', false)
              .parse(process.argv);
 
 if (!process.argv.slice(2).length) {
