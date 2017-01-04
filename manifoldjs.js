@@ -105,8 +105,8 @@ var program = require('commander')
              .usage('<website-url> [options]' +
                     '\n         manifoldjs -m <manifest-location> [options]' +
                     '\n           options:' +
-                    '\n             -d | --directory, -s | --short-name, -l | --loglevel,' +
-                    '\n             -p | --platforms, -m | --manifest, -f | --forceManifestFormat, -c | --crosswalk' +                    
+                    '\n             -d | --directory, -s | --short-name, -l | --loglevel, -p | --platforms' +
+                    '\n             -i | --image, -m | --manifest, -f | --forceManifestFormat, -c | --crosswalk' +                    
                     '\n  -or-' +
                     '\n         manifoldjs package [project-directory] [options]' +
                     '\n           options:' +
@@ -135,6 +135,8 @@ var program = require('commander')
              .option('-b, --build', 'forces the building process', false)
              .option('-m, --manifest <manifest-location>', 'location of the W3C Web App manifest\n                                    ' +
                                                     'file (URL or local path)')
+             .option('-i, --image <image-location>', 'local path to the image file used to\n                                    ' +
+                                                    'generate missing icons in the manifest')
              .option('-c, --crosswalk', 'enable Crosswalk for Android', false)
              .option('-S, --Sign', 'return a signed package in windows', false)
              .option('-w, --webAppToolkit', 'adds the Web App Toolkit cordova plugin', false)
