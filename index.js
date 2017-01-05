@@ -7,11 +7,11 @@
  * Usage
  * -----
  *
- *      var manifoldjs = require('manifoldjs');
+ *      var manifoldjs = require('xanifoldjs');
  *
  */
 
-var lib = require('manifoldjs-lib');
+var lib = require('xanifoldjs-lib');
 var libValidationContants = lib.constants.validation;
 
 // Maintain compatibility with original constant definitions

@@ -1,26 +1,26 @@
 {
     "windows10": {
-        "packageName": "manifoldjs-windows10",
-        "source": "manifoldjs-windows10"
+        "packageName": "xanifoldjs-windows10",
+        "source": "xanifoldjs-windows10"
     },
     "android": {
-        "packageName": "manifoldjs-cordova",
-        "source": "manifoldjs-cordova"
+        "packageName": "xanifoldjs-cordova",
+        "source": "xanifoldjs-cordova"
     },
     "ios": {
-        "packageName": "manifoldjs-cordova",
-        "source": "manifoldjs-cordova"
+        "packageName": "xanifoldjs-cordova",
+        "source": "xanifoldjs-cordova"
     },
     "windows": {
-        "packageName": "manifoldjs-cordova",
-        "source": "manifoldjs-cordova"
+        "packageName": "xanifoldjs-cordova",
+        "source": "xanifoldjs-cordova"
     },
     "web": {
-        "packageName": "manifoldjs-web",
-        "source": "manifoldjs-web"
+        "packageName": "xanifoldjs-web",
+        "source": "xanifoldjs-web"
     },
     "edgeextension": {
-        "packageName": "manifoldjs-edgeextension",
-        "source": "manifoldjs-edgeextension"
+        "packageName": "xanifoldjs-edgeextension",
+        "source": "xanifoldjs-edgeextension"
     }
 }

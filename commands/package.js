@@ -1,6 +1,6 @@
 'use strict';
 
-var lib = require('manifoldjs-lib');
+var lib = require('xanifoldjs-lib');
 
 var log = lib.log,
     platformTools= lib.platformTools,

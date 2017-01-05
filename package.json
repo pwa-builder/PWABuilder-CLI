@@ -1,5 +1,5 @@
 {
-  "name": "manifoldjs",
+  "name": "xanifoldjs",
   "version": "1.0.0",
   "description": "Node.js Tool for App Generation",
   "repository": {
@@ -35,11 +35,11 @@
   "dependencies": {
     "commander": "^2.9.0",
     "q": "^1.4.1",
-    "manifoldjs-lib": "^1.1.0",
-    "manifoldjs-cordova": "^0.1.4",
-    "manifoldjs-web": "^0.2.0",
-    "manifoldjs-windows10": "^0.2.0",
-    "manifoldjs-edgeextension": "^0.1.7"
+    "xanifoldjs-lib": "^1.1.0",
+    "xanifoldjs-cordova": "^0.1.4",
+    "xanifoldjs-web": "^0.2.0",
+    "xanifoldjs-windows10": "^0.2.0",
+    "xanifoldjs-edgeextension": "^0.1.7"
   },
   "devDependencies": {
     "blanket": "1.1.6",

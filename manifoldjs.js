@@ -3,7 +3,7 @@
 
 var Q = require('q');
 
-var lib = require('manifoldjs-lib');
+var lib = require('xanifoldjs-lib');
 
 var log = lib.log,
     packageTools = lib.packageTools,

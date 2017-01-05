@@ -2,7 +2,7 @@
 
 var Q = require('q');
 
-var lib = require('manifoldjs-lib');
+var lib = require('xanifoldjs-lib');
 
 var CustomError = lib.CustomError,
     exec = lib.processTools.exec,

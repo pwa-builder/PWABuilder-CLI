@@ -5,7 +5,7 @@ var url = require('url'),
 
 var Q = require('q');
 
-var lib = require('manifoldjs-lib');
+var lib = require('xanifoldjs-lib');
 
 var log = lib.log,
     manifestTools = lib.manifestTools,
