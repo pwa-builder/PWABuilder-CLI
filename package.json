@@ -36,7 +36,7 @@
     "commander": "^2.9.0",
     "q": "^1.4.1",
     "xanifoldjs-lib": "^1.1.0",
-    "xanifoldjs-cordova": "^0.1.4",
+    "xanifoldjs-cordova": "^0.1.9",
     "xanifoldjs-web": "^0.2.0",
     "xanifoldjs-windows10": "^0.2.0",
     "xanifoldjs-edgeextension": "^0.1.7"
