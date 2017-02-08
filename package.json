@@ -1,6 +1,6 @@
 {
   "name": "xanifoldjs",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "Node.js Tool for App Generation",
   "repository": {
     "type": "git",
@@ -38,7 +38,7 @@
     "xanifoldjs-lib": "^1.1.0",
     "xanifoldjs-cordova": "^0.1.10",
     "xanifoldjs-web": "^0.2.0",
-    "xanifoldjs-windows10": "^0.2.1",
+    "xanifoldjs-windows10": "^0.3.0",
     "xanifoldjs-edgeextension": "^0.1.7"
   },
   "devDependencies": {
