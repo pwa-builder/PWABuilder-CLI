@@ -1,26 +1,26 @@
 {
     "windows10": {
-        "packageName": "xanifoldjs-windows10",
-        "source": "xanifoldjs-windows10"
+        "packageName": "pwabuilder-windows10",
+        "source": "pwabuilder-windows10"
     },
     "android": {
-        "packageName": "xanifoldjs-cordova",
-        "source": "xanifoldjs-cordova"
+        "packageName": "pwabuilder-cordova",
+        "source": "pwabuilder-cordova"
     },
     "ios": {
-        "packageName": "xanifoldjs-cordova",
-        "source": "xanifoldjs-cordova"
+        "packageName": "pwabuilder-cordova",
+        "source": "pwabuilder-cordova"
     },
     "windows": {
-        "packageName": "xanifoldjs-cordova",
-        "source": "xanifoldjs-cordova"
+        "packageName": "pwabuilder-cordova",
+        "source": "pwabuilder-cordova"
     },
     "web": {
-        "packageName": "xanifoldjs-web",
-        "source": "xanifoldjs-web"
+        "packageName": "pwabuilder-web",
+        "source": "pwabuilder-web"
     },
     "edgeextension": {
-        "packageName": "xanifoldjs-edgeextension",
-        "source": "xanifoldjs-edgeextension"
+        "packageName": "pwabuilder-edgeextension",
+        "source": "pwabuilder-edgeextension"
     }
 }

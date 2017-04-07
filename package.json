@@ -1,6 +1,6 @@
 {
   "name": "pwabuilder",
-  "version": "0.1.5",
+  "version": "2.0.0-rc.0",
   "description": "Node.js Tool for App Generation",
   "repository": {
     "type": "git",
@@ -35,11 +35,11 @@
   "dependencies": {
     "commander": "^2.9.0",
     "q": "^1.4.1",
-    "xanifoldjs-lib": "^1.1.0",
-    "xanifoldjs-cordova": "^0.1.11",
-    "xanifoldjs-web": "^0.2.0",
-    "xanifoldjs-windows10": "^0.3.0",
-    "xanifoldjs-edgeextension": "^0.1.7"
+    "pwabuilder-lib": "^2.0.0-rc",
+    "pwabuilder-web": "^2.0.0-rc",
+    "pwabuilder-windows10": "^2.0.0-rc",
+    "pwabuilder-cordova": "^2.0.0-rc",
+    "pwabuilder-edgeextension": "^2.0.0-rc"
   },
   "devDependencies": {
     "blanket": "1.1.6",
@@ -63,7 +63,7 @@
     "test": "grunt",
     "debug-tests": "mocha --debug-brk"
   },
-  "bin": "manifoldjs.js",
+  "bin": "pwabuilder.js",
   "config": {
     "travis-cov": {
       "threshold": 80

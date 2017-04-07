@@ -218,16 +218,16 @@ The W3C manifest defines a scope that restricts the URLs to which the applicatio
 Releases are documented in [GitHub](https://github.com/manifoldjs/ManifoldJS/releases).
 
 ## Known Issues
-- Creating the directory shortcuts to the Cordova platform-specific projects may fail when running in the Windows environment. The tool reports **_"WARNING: Failed to create shortcut for Cordova platform: XXXX."__** where **_XXXX_** is **_ios_**, **_windows_**, or **_android_**.  
+- Creating the directory shortcuts to the Cordova platform-specific projects may fail when running in the Windows environment. The tool reports **_"WARNING: Failed to create shortcut for Cordova platform: XXXX."__** where **_XXXX_** is **_ios_**, **_windows_**, or **_android_**.
   This is caused by an issue in Node.js which has been fixed in more recent releases. To resolve this issue, upgrade Node.js to the latest version.
 
-- Adding the **windows** platform in the Linux and Mac OS environments fails. The tool reports **_"WARNING: Failed to add the Cordova platforms: XXXX."_** where **_XXXX_** includes **_windows_**.  
+- Adding the **windows** platform in the Linux and Mac OS environments fails. The tool reports **_"WARNING: Failed to add the Cordova platforms: XXXX."_** where **_XXXX_** includes **_windows_**.
   This is caused by an issue in the Windows platform for Cordova. Depending on the cordova-windows version, running the tool can show one of two errors: **"_Cannot find module 'Q'."_** or **"_No such file or directory."_**. Until this problem is fixed by Cordova, we've removed the windows platform from the default list when creating the app in Linux or Mac OS.
 
-- Error when building an iOS application for projects generated in a Windows machine and then copied to an OS X machine. Xcode reports "**_Shell Script Invocation Error - Command /bin/sh failed with exit code 126_**". This happens when the execution permission (+x) is lost on some scripts when copying between the different file systems.  
+- Error when building an iOS application for projects generated in a Windows machine and then copied to an OS X machine. Xcode reports "**_Shell Script Invocation Error - Command /bin/sh failed with exit code 126_**". This happens when the execution permission (+x) is lost on some scripts when copying between the different file systems.
 
   To resolve this, open a Terminal window in OS X and execute the following command to restore the executable bit on the script.
-  ```  
+  ```
   chmod +x [path to the ManifoldJS project]/cordova/platforms/ios/cordova/lib/copy-www-build-step.sh
   ```
 

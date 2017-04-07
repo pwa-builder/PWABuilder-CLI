@@ -1,17 +1,17 @@
 ﻿/**
- * **NOTE**: Use of manifoldjs as a library is now DEPRECATED. Use manifoldjs-lib instead.
+ * **NOTE**: Use of pwabuilder as a library is now DEPRECATED. Use pwabuilder-lib instead.
  *
- * The top-level API for `manifoldjs`. Provides access to the key libraries in
- * manifoldjs so you can write your own tools using `manifoldjs` as a library.
+ * The top-level API for `pwabuilder`. Provides access to the key libraries in
+ * pwabuilder so you can write your own tools using `pwabuilder` as a library.
  *
  * Usage
  * -----
  *
- *      var manifoldjs = require('xanifoldjs');
+ *      var pwabuilder = require('pwabuilder-lib');
  *
  */
 
-var lib = require('xanifoldjs-lib');
+var lib = require('pwabuilder-lib');
 var libValidationContants = lib.constants.validation;
 
 // Maintain compatibility with original constant definitions

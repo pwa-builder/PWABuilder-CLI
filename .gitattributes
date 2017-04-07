@@ -1,2 +1,2 @@
-# Make sure that manifoldjs.js file will always have LF line endings on checkout.
-manifoldjs.js eol=lf
+# Make sure that pwabuilder.js file will always have LF line endings on checkout.
+pwabuilder.js eol=lf

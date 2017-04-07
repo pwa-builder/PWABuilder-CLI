@@ -1,6 +1,6 @@
 'use strict';
 
-var lib = require('xanifoldjs-lib');
+var lib = require('pwabuilder-lib');
 
 var log = lib.log,
     platformTools= lib.platformTools,
@@ -8,7 +8,7 @@ var log = lib.log,
 
 function packageApps(program, platforms) {
   if (!platforms) {
-    platforms = program.platforms ? 
+    platforms = program.platforms ?
                 program.platforms.split(/[\s,]+/) :
                 platformTools.listPlatforms();
   }
@@ -24,7 +24,7 @@ function packageApps(program, platforms) {
 
     log.debug('Packaging the following platforms: ' + platforms);
 
-    return projectBuilder.packageApps(platforms, projectDir, program); 
+    return projectBuilder.packageApps(platforms, projectDir, program);
   });
 }
 
