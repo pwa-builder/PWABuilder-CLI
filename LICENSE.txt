@@ -1,4 +1,4 @@
-ManifoldJS
+PWA Builder
 
 Copyright (c) Microsoft Corporation
 
