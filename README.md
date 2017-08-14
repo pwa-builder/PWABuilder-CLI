@@ -1,11 +1,11 @@
-﻿# ManifoldJS
+﻿# PWA Builder
 
 This tool is used to create hosted web applications based on a [W3C Web App manifest](http://www.w3.org/TR/appmanifest/).
 
 ## Installation
 
 ````
-npm install -g manifoldjs
+npm install -g pwabuilder
 ````
 
 ## Documentation
@@ -16,47 +16,51 @@ To get started, visit our [wiki](https://github.com/manifoldjs/manifoldJS/wiki).
 ### Usage
 
 ````
-manifoldjs <website-url> [options]
+pwabuilder <website-url> [options]
 ````
 -or-
 
 ````
-manifoldjs <command>
+pwabuilder <command> [options]
 ````
 
-### Parameters
+### Options
 
-|  **&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Parameter&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;** | **Description** |
+|  **&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Option&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;** | **Description** |
 | ----------------- | --------------- |
 | `website-url`     | URL of the hosted website. This parameter is not required if a manifest location is specified with the *-m* option |
 | `-d, --directory` | **(optional)** Path to the generated project files (default value: current directory) |
 | `-s, --shortname` | **(optional)** Application short name. When specified, it overrides the short_name value of the manifest |
 | `-l, --loglevel`  | **(optional)** Tracing log level options. Available log levels: _debug,info,warn,error_ (default value: _warn_) |
-| `-p, --platforms` | **(optional)** Platforms to generate. Supported platforms: _windows,windows10,android,ios,chrome,web,firefox_ (default value: all platforms) |
-| `-b, --build`     | **(optional)** Forces the building process |
+| `-p, --platforms` | **(optional)** Platforms to generate. Supported platforms: _windows,windows10,android,ios,web_ (default value: all platforms) |
 | `-m, --manifest`  | **(optional)** Location of the W3C Web App manifest file (URL or local path). If not specified, the tool looks for a manifest in the site URL. Otherwise, a new manifest will be created pointing to the site URL. |
+| `-i, --image`     | **(optional)** Local path to the image file used to generate missing icons in the manifest |
 | `-f, --forceManifestFormat`  | **(optional)** Allows to specify the manifest format and skip the automatic detection. Can be used when the manifest contains additional, non-standard members. |
 | `-c, --crosswalk` | **(optional)** Enable Crosswalk for Android. Crosswalk is a web runtime that can be used to replace the stock WebView used by Android Cordova apps. Crosswalk is based on Google Chromium with Cordova API support and has better HTML5 feature support compared to the default WebView available in Android. |
 | `-w, --webAppToolkit` | **(optional)** Adds the [Web App Toolkit](https://github.com/manifoldjs/Web-App-ToolKit) cordova plugin. The Web App Toolkit is a plugin for creating Windows, Android and iOS apps based on existing web content. It depends on the Hosted Web App Plugin. Used in the right way, it can facilitate the creation of compelling extensions to your web content for users across platforms. |
-
-
+| `-S, --Sign` | **(optional - for _package_ command)** Return a signed package for Windows 10. |
+| `-W, --DotWeb` | **(optional - for _package_ command)** Generate a .web package for Windows 10. |
+| `-a, --AutoPublish` | **(optional - for _package_ command)** Auto-publish a package for Windows 10. |
 
 ### Commands
 
-|  **&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Command&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;** | **Description** |
-| ---------------- | --------------- |
-| `run <platform>` | Launches the app of the specified platform. Currently, _android_, _ios_, _windows_ and _windows10_ platforms are supported by this command |
-| `open`   | (for Windows only) Opens the project file of the generated Windows 8.1 / Windows 10 app in Visual Studio |
-| `package <platform (-p)-optional> <platform-list-optional>`   | Creates a package for supported platforms (windows10, android, iOS)  for uploading to the Store, where _&lt;platform (-p)&gt;_ is an optional parameter to specificy the platform to be packaged. The  _&lt;platform-list&gt;_ is used in conjunction with the platform.  In some cases, like Windows 10, data must be pulled from the store and updated in the manifest before it can be uploaded.|
+| **&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Command&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;** | **Description** |
+| ------------------------- | --------------- |
+| `package [directory] [options]` | Creates a package for supported platforms (_windows10_, _android_, _iOS_)  for uploading to the Store. In some cases, like Windows 10, data must be pulled from the store and updated in the manifest before it can be uploaded. __directory__ is the root path where to look for the target platforms (defaults to the current location). **options:** _-l \| --loglevel, -p \| --platforms, -S \| --Sign, -W \| --DotWeb, -a \| --AutoPublish_ |
+| `platform add <platform-id> <source> [options]` | Adds a new platform. **platform-id** is the platform to be added. **source** could be either npm package, a GitHub reporitory or a local path to the platform source code. **options:** _-l \| --loglevel_ |
+| `platform remove <platform-id> [options]` | Removes an existing platform. **platform-id** is the platform to be removed. **options:** _-l \| --loglevel_ |
+| `platform list [options]` | List the existing platforms. **options:** _-l \| --loglevel_ |
+| `run <platform> [directory] [options]` | Launches the app of the specified platform. Currently, _android_, _ios_, _windows_ and _windows10_ platforms are supported by this command. __directory__ is the root path where to look for the target platforms (defaults to the current location). **options:** _-l \| --loglevel_ |
+| `open <platform> [directory] [options]` | (for Windows only) Opens the project file of the generated Windows 8.1 / Windows 10 app in Visual Studio. __directory__ is the root path where to look for the target platforms (defaults to the current location). **options:** _-l \| --loglevel_ |
 
 ### Example
 **Creating a new hosted web application**
 ````
-manifoldjs http://shiftr.azurewebsites.net -d C:\Projects -l info -p windows10,android
+pwabuilder http://shiftr.azurewebsites.net -d C:\Projects -l info -p windows10,android
 ````
 **Packaging a Windows 10 app for submission to the Store**
 ````
-manifoldjs package -p windows10 -l debug
+pwabuilder package -p windows10 -l debug
 ````
 
 ## Client Library
@@ -153,12 +157,11 @@ Generates the applications for the specified platforms.
 
 `rootDir` is the root directory where the apps will be generated.
 
-`platforms` a string array specifying one or more target platforms: _windows,android,ios,chrome,web,firefox_.
+`platforms` a string array specifying one or more target platforms: _windows10,windows,android,ios,web_.
 
 `options` an object with one or more properties that customize the generated application:
 
 - `crosswalk` (boolean) enable Crosswalk in the Cordova Android app
-- `build`     (boolean) set to build the generated application
 - `webAppToolkit` (boolean) adds the Web App Toolkit <https://github.com/manifoldjs/Web-App-ToolKit> cordova plugin
 
 `callback(err)` returns an error, if any.
@@ -208,24 +211,24 @@ We plan to support the following manifest files in the future:
 
 ## Navigation Scope
 
-The W3C manifest defines a scope that restricts the URLs to which the application can navigate. ManifoldJS supports the scope setting for the Android, iOS and Windows platforms (more details [here](https://github.com/manifoldjs/ManifoldCordova#url-access-rules)).
+The W3C manifest defines a scope that restricts the URLs to which the application can navigate. PWA Builder supports the scope setting for the Android, iOS and Windows platforms (more details [here](https://github.com/manifoldjs/ManifoldCordova#navigation-scope)).
 
 ## Changelog
 
 Releases are documented in [GitHub](https://github.com/manifoldjs/ManifoldJS/releases).
 
 ## Known Issues
-- Creating the directory shortcuts to the Cordova platform-specific projects may fail when running in the Windows environment. The tool reports **_"WARNING: Failed to create shortcut for Cordova platform: XXXX."__** where **_XXXX_** is **_ios_**, **_windows_**, or **_android_**.  
+- Creating the directory shortcuts to the Cordova platform-specific projects may fail when running in the Windows environment. The tool reports **_"WARNING: Failed to create shortcut for Cordova platform: XXXX."__** where **_XXXX_** is **_ios_**, **_windows_**, or **_android_**.
   This is caused by an issue in Node.js which has been fixed in more recent releases. To resolve this issue, upgrade Node.js to the latest version.
 
-- Adding the **windows** platform in the Linux and Mac OS environments fails. The tool reports **_"WARNING: Failed to add the Cordova platforms: XXXX."_** where **_XXXX_** includes **_windows_**.  
+- Adding the **windows** platform in the Linux and Mac OS environments fails. The tool reports **_"WARNING: Failed to add the Cordova platforms: XXXX."_** where **_XXXX_** includes **_windows_**.
   This is caused by an issue in the Windows platform for Cordova. Depending on the cordova-windows version, running the tool can show one of two errors: **"_Cannot find module 'Q'."_** or **"_No such file or directory."_**. Until this problem is fixed by Cordova, we've removed the windows platform from the default list when creating the app in Linux or Mac OS.
 
-- Error when building an iOS application for projects generated in a Windows machine and then copied to an OS X machine. Xcode reports "**_Shell Script Invocation Error - Command /bin/sh failed with exit code 126_**". This happens when the execution permission (+x) is lost on some scripts when copying between the different file systems.  
+- Error when building an iOS application for projects generated in a Windows machine and then copied to an OS X machine. Xcode reports "**_Shell Script Invocation Error - Command /bin/sh failed with exit code 126_**". This happens when the execution permission (+x) is lost on some scripts when copying between the different file systems.
 
   To resolve this, open a Terminal window in OS X and execute the following command to restore the executable bit on the script.
-  ```  
-  chmod +x [path to the ManifoldJS project]/cordova/platforms/ios/cordova/lib/copy-www-build-step.sh
+  ```
+  chmod +x [path to the PWA Builder project]/cordova/platforms/ios/cordova/lib/copy-www-build-step.sh
   ```
 
 - Issues in Visual Studio 2015 RC with the Windows solution generated by Cordova:
@@ -234,7 +237,7 @@ Releases are documented in [GitHub](https://github.com/manifoldjs/ManifoldJS/rel
 
 ## License
 
-> ManifoldJS
+> PWA Builder
 
 > Copyright (c) Microsoft Corporation
 

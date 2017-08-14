@@ -1,6 +1,6 @@
 'use strict';
 
-var lib = require('manifoldjs-lib');
+var lib = require('pwabuilder-lib');
 
 var log = lib.log,
     platformTools= lib.platformTools,
@@ -8,19 +8,23 @@ var log = lib.log,
 
 function packageApps(program, platforms) {
   if (!platforms) {
-    platforms = program.platforms ? 
+    platforms = program.platforms ?
                 program.platforms.split(/[\s,]+/) :
                 platformTools.listPlatforms();
   }
 
   var projectDir = program.args.length < 2 ? process.cwd() : program.args[1];
   return lib.projectTools.getProjectPlatforms(projectDir).then(function (projectPlatforms) {
+    log.debug('Available platforms within project: ' + projectPlatforms);
+
     // exclude any platforms not present in the project
     platforms = platforms.filter(function (platform) {
       return projectPlatforms.indexOf(platform) >= 0;
     });
-    
-    return projectBuilder.packageApps(platforms, projectDir, program); 
+
+    log.debug('Packaging the following platforms: ' + platforms);
+
+    return projectBuilder.packageApps(platforms, projectDir, program);
   });
 }
 

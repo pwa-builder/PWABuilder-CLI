@@ -2,7 +2,7 @@
 
 var Q = require('q');
 
-var lib = require('manifoldjs-lib');
+var lib = require('pwabuilder-lib');
 
 var CustomError = lib.CustomError,
     exec = lib.processTools.exec,
@@ -21,29 +21,29 @@ function getWindowsVersion (callback) {
     return result.stdout.trim();
   })
   .catch (function (err) {
-    return Q.reject(new CustomError('Failed to run the app for Windows platform.', err));    
+    return Q.reject(new CustomError('Failed to run the app for Windows platform.', err));
   })
-  .nodeify(callback); 
+  .nodeify(callback);
 }
 
 // implements the original behavior of the visualstudio command
 //  open windows10 project, if available, otherwise, open the windows project
 function runApp(program) {
-  
-  log.warn('The \'visualstudio\' command is deprecated. Use \'manifoldjs open <windows|windows10>\' instead.');
-  
+
+  log.warn('The \'visualstudio\' command is deprecated. Use \'pwabuilder open <windows|windows10>\' instead.');
+
   var deferred = Q.defer();
-  
+
   var dir = process.cwd();
   fileTools.searchFile(dir, 'App.jsproj', function (err, results) {
     Q.ninvoke(getWindowsVersion).then(function (version) {
       if (results && results.length > 0 && isWindows10Version(version)) {
-        program.args.push('windows10'); 
+        program.args.push('windows10');
         return open(program).then(function () {
           deferred.resolve();
         });
       }
-      
+
       fileTools.searchFile(dir, 'CordovaApp.sln', function (err, results) {
         if (results && results.length > 0) {
           program.args.push('windows');
@@ -54,7 +54,7 @@ function runApp(program) {
       });
     });
   });
-  
+
   return deferred.promise;
 }
 

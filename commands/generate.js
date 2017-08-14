@@ -5,7 +5,7 @@ var url = require('url'),
 
 var Q = require('q');
 
-var lib = require('manifoldjs-lib');
+var lib = require('pwabuilder-lib');
 
 var log = lib.log,
     manifestTools = lib.manifestTools,
@@ -27,7 +27,7 @@ function getW3cManifest(siteUrl, manifestLocation, manifestFormat, callback) {
       return callback(undefined, manifestInfo);
     }
   }
-  
+
   if (siteUrl) {
     var parsedSiteUrl = url.parse(siteUrl);
     if (!parsedSiteUrl.hostname) {
@@ -46,7 +46,7 @@ function getW3cManifest(siteUrl, manifestLocation, manifestFormat, callback) {
       log.info('Reading manifest file ' + manifestLocation + '...');
       manifestTools.getManifestFromFile(manifestLocation, manifestFormat, resolveStartURL);
     }
-  } else if (siteUrl) {    
+  } else if (siteUrl) {
     // scan a site to retrieve its manifest
     log.info('Scanning ' + siteUrl + ' for manifest...');
     manifestTools.getManifestFromSite(siteUrl, manifestFormat, resolveStartURL);
@@ -56,19 +56,19 @@ function getW3cManifest(siteUrl, manifestLocation, manifestFormat, callback) {
 }
 
 function generateApp(program) {
-  
+
   var siteUrl = program.args[0];
   var rootDir = program.directory ? path.resolve(program.directory) : process.cwd();
-  
+
   var deferred = Q.defer();
-  
+
   function callback (err, manifestInfo) {
     if (err) {
       return deferred.reject(err);
     }
-    
+
     // Fix #145: don't require a short name
-    manifestInfo.content.short_name = manifestInfo.content.short_name || 
+    manifestInfo.content.short_name = manifestInfo.content.short_name ||
                                       manifestInfo.content.name ||
                                       manifestInfo.default.short_name;
 
@@ -76,9 +76,9 @@ function generateApp(program) {
     if (program.shortname) {
       manifestInfo.content.short_name = program.shortname;
     }
- 
+
     log.debug('Manifest contents:\n' + JSON.stringify(manifestInfo.content, null, 4));
-    
+
     // add generatedFrom value to manifestInfo for telemetry
     manifestInfo.generatedFrom = 'CLI';
 
@@ -102,7 +102,7 @@ function generateApp(program) {
       if (program.build) {
         program.args[1] = projectDir;
         return build(program, platforms).catch(function (err) {
-          log.warn('One or more platforms could not be built successfully. Correct any errors and then run manifoldjs package [project-directory] [options] to build the applications.');
+          log.warn('One or more platforms could not be built successfully. Correct any errors and then run pwabuilder package [project-directory] [options] to build the applications.');
           // return deferred.reject(err);
         });
       }
@@ -115,9 +115,9 @@ function generateApp(program) {
       return deferred.reject(err);
     });
   };
-  
+
   getW3cManifest(siteUrl, program.manifest, program.forceManifestFormat, callback);
-  
+
   return deferred.promise;
 };
 

@@ -73,19 +73,19 @@ module.exports = function (grunt) {
         tasks: ['jshint:test', 'mochaTest']
       },
       windows10: {
-        files: ['../manifoldjs-windows10/lib/*.js'],
+        files: ['../pwabuilder-windows10/lib/*.js'],
         tasks: ['sync:windows10']
       },
       lib: {
-        files: ['../manifoldjs-lib/lib/*.js', '../manifoldjs-lib/lib/manifestTools/*.js'],
+        files: ['../pwabuilder-lib/lib/*.js', '../pwabuilder-lib/lib/manifestTools/*.js'],
         tasks: ['sync:lib']
       }
     },
     sync: {
     	windows10: {
       		files: [{
-      			src: ['../manifoldjs-windows10/lib/*.js'],
-      			dest: 'node_modules/manifoldjs-windows10'  
+      			src: ['../pwabuilder-windows10/lib/*.js'],
+      			dest: 'node_modules/pwabuilder-windows10'
       		}],
       		verbose: true,
       		failOnError: true,
@@ -93,15 +93,15 @@ module.exports = function (grunt) {
 		  },
       lib: {
             files: [{
-              src: ['../manifoldjs-lib/lib/*.js','../manifoldjs-lib/lib/manifestTools/*.js'],
-              dest: 'node_modules/manifoldjs-lib'  
+              src: ['../pwabuilder-lib/lib/*.js','../pwabuilder-lib/lib/manifestTools/*.js'],
+              dest: 'node_modules/pwabuilder-lib'
             }],
             verbose: true,
             failOnError: true,
             updateAndDelete: false
       }
 	  }
-  });                
+  });
 
   grunt.registerTask('jshint-all', ['jshint:js', 'jshint:test', 'jshint:gruntfile']);
   grunt.registerTask('tests-all', ['mochaTest:test', 'mochaTest:html-cov', 'mochaTest:travis-cov']);

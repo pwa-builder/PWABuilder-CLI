@@ -1,34 +1,26 @@
 {
-    "chrome": {
-        "packageName": "manifoldjs-chrome",
-        "source": "manifoldjs-chrome"
-    },
-    "firefox": {
-        "packageName": "manifoldjs-firefox",
-        "source": "manifoldjs-firefox"
-    },
     "windows10": {
-        "packageName": "manifoldjs-windows10",
-        "source": "manifoldjs-windows10"
+        "packageName": "pwabuilder-windows10",
+        "source": "pwabuilder-windows10"
     },
     "android": {
-        "packageName": "manifoldjs-cordova",
-        "source": "manifoldjs-cordova"
+        "packageName": "pwabuilder-cordova",
+        "source": "pwabuilder-cordova"
     },
     "ios": {
-        "packageName": "manifoldjs-cordova",
-        "source": "manifoldjs-cordova"
+        "packageName": "pwabuilder-cordova",
+        "source": "pwabuilder-cordova"
     },
     "windows": {
-        "packageName": "manifoldjs-cordova",
-        "source": "manifoldjs-cordova"
+        "packageName": "pwabuilder-cordova",
+        "source": "pwabuilder-cordova"
     },
     "web": {
-        "packageName": "manifoldjs-web",
-        "source": "manifoldjs-web"
+        "packageName": "pwabuilder-web",
+        "source": "pwabuilder-web"
     },
     "edgeextension": {
-        "packageName": "manifoldjs-edgeextension",
-        "source": "manifoldjs-edgeextension"
+        "packageName": "pwabuilder-edgeextension",
+        "source": "pwabuilder-edgeextension"
     }
 }
