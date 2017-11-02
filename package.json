@@ -1,6 +1,6 @@
 {
   "name": "pwabuilder",
-  "version": "2.0.1-rc.2",
+  "version": "2.0.1-beta.1",
   "description": "Node.js Tool for App Generation",
   "repository": {
     "type": "git",
@@ -37,7 +37,7 @@
     "q": "^1.4.1",
     "pwabuilder-lib": "^2.0.0-rc",
     "pwabuilder-web": "^2.0.0-rc",
-    "pwabuilder-windows10": "^2.0.1-rc",
+    "pwabuilder-windows10": "^2.0.2-beta.1",
     "pwabuilder-cordova": "^2.0.0-rc",
     "pwabuilder-edgeextension": "^2.0.0-rc",
     "pwabuilder-android": "^2.0.0-rc"
