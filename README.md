@@ -38,9 +38,9 @@ pwabuilder <command> [options]
 | `-f, --forceManifestFormat`  | **(optional)** Allows to specify the manifest format and skip the automatic detection. Can be used when the manifest contains additional, non-standard members. |
 | `-c, --crosswalk` | **(optional)** Enable Crosswalk for Android. Crosswalk is a web runtime that can be used to replace the stock WebView used by Android Cordova apps. Crosswalk is based on Google Chromium with Cordova API support and has better HTML5 feature support compared to the default WebView available in Android. |
 | `-w, --webAppToolkit` | **(optional)** Adds the [Web App Toolkit](https://github.com/manifoldjs/Web-App-ToolKit) cordova plugin. The Web App Toolkit is a plugin for creating Windows, Android and iOS apps based on existing web content. It depends on the Hosted Web App Plugin. Used in the right way, it can facilitate the creation of compelling extensions to your web content for users across platforms. |
-| `-S, --Sign` | **(optional - for _package_ command)** Return a signed package for Windows 10. |
-| `-W, --DotWeb` | **(optional - for _package_ command)** Generate a .web package for Windows 10. |
-| `-a, --AutoPublish` | **(optional - for _package_ command)** Auto-publish a package for Windows 10. |
+| `-S, --Sign` | **(deprecated --optional - for _package_ command)** Return a signed package for Windows 10. |
+| `-W, --DotWeb` | **(deprecated --optional - for _package_ command)** Generate a .web package for Windows 10. |
+| `-a, --AutoPublish` | **(deprecated --optional - for _package_ command)** Auto-publish a package for Windows 10. |
 
 ### Commands
 
