@@ -11,6 +11,10 @@
         "packageName": "pwabuilder-cordova",
         "source": "pwabuilder-cordova"
     },
+    "mac": {
+        "packageName": "xwabuilder-mac",
+        "source": "xwabuilder-mac"
+    },
     "windows": {
         "packageName": "pwabuilder-cordova",
         "source": "pwabuilder-cordova"
