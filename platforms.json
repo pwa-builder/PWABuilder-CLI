@@ -7,8 +7,8 @@
         "packageName": "pwabuilder-android",
         "source": "pwabuilder-android"
     },
-    "mac": {
-        "packageName": "pwabuilder-mac",
+    "macos": {
+        "packageName": "pwabuilder-macos",
         "source": "pwabuilder-mac"
     },
     "ios": {
