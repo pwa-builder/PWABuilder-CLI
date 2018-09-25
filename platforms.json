@@ -9,7 +9,7 @@
     },
     "macos": {
         "packageName": "pwabuilder-macos",
-        "source": "pwabuilder-mac"
+        "source": "pwabuilder-macos"
     },
     "ios": {
         "packageName": "pwabuilder-cordova",
