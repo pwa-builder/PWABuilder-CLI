@@ -4,8 +4,12 @@
         "source": "pwabuilder-windows10"
     },
     "android": {
-        "packageName": "pwabuilder-cordova",
-        "source": "pwabuilder-cordova"
+        "packageName": "pwabuilder-android",
+        "source": "pwabuilder-android"
+    },
+    "mac": {
+        "packageName": "pwabuilder-mac",
+        "source": "pwabuilder-mac"
     },
     "ios": {
         "packageName": "pwabuilder-cordova",
