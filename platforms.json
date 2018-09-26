@@ -7,6 +7,10 @@
         "packageName": "pwabuilder-android",
         "source": "pwabuilder-android"
     },
+    "macos": {
+        "packageName": "pwabuilder-macos",
+        "source": "pwabuilder-macos"
+    },
     "ios": {
         "packageName": "pwabuilder-cordova",
         "source": "pwabuilder-cordova"
