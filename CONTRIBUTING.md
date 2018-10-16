@@ -1,6 +1,6 @@
-#Contributing to PWA Builder
+# Contributing to PWA Builder
 
-##Join in the Fun
+## Join in the Fun
 
 PWA Builder is a community project. Our goal is to leverage community tools when possible, build for the platforms the Web Developer community will target, and solicit contributes from the community at large.  We would love to have some help from our developers. You can contribute in a number of ways:
 
@@ -9,7 +9,7 @@ PWA Builder is a community project. Our goal is to leverage community tools when
 3. **Support a new platform**: Are there other platforms that your targeting that support (or have a polyfill for) hosted web apps?  Contribute the code to support additional platforms (see contribute guidelines below).
 
 
-##Contribution Guidelines
+## Contribution Guidelines
 
 1. Code contribution must have an issue tracking it in the issue tracker that has been approved (Status = Active) by the PWA Builder team. Your pull request should include a link to the bug that you are fixing
 2. You will need to complete a Contributor License Agreement (CLA). Briefly, this agreement testifies that you are granting us permission to use the submitted change according to the terms of the project’s license, and that the work being submitted is under appropriate copyright. (docx:  [Microsoft Contribution License Agreement.docx](https://www.codeplex.com/Download?ProjectName=typescript&DownloadId=822190), pdf:  [Microsoft Contribution License Agreement.pdf](https://www.codeplex.com/Download?ProjectName=typescript&DownloadId=921298) ).
