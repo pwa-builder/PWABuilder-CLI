@@ -202,7 +202,7 @@ grunt
 ## Supported Input Manifests
 
 - [W3C Web App](http://www.w3.org/TR/appmanifest/)
-- [Chrome Hosted Apps](https://developers.google.com/chrome/apps/docs/developers_guide)
+- [Chrome Hosted Apps](https://developer.chrome.com/apps/about_apps)
 
 We plan to support the following manifest files in the future:
 

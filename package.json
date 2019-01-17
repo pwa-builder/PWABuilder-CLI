@@ -33,15 +33,14 @@
     "iOS"
   ],
   "dependencies": {
-    "commander": "^2.9.0",
-    "q": "^1.4.1",
-    "pwabuilder-lib": "^2.0.0-rc",
-    "pwabuilder-web": "^2.0.0-rc",
-    "pwabuilder-windows10": "^2.0.3-rc",
-    "pwabuilder-cordova": "^2.0.0-rc",
-    "pwabuilder-android": "^2.0.0-rc",
-    "pwabuilder-macos": "^0.3.0",
-    "pwabuilder-edgeextension": "^2.0.0-rc"
+    "commander": "^2.19.0",
+    "q": "^1.5.1",
+    "pwabuilder-lib": "^2.0.3-RC.0",
+    "pwabuilder-web": "^2.0.0-rc.2",
+    "pwabuilder-windows10": "^2.0.3-rc.1",
+    "pwabuilder-cordova": "^2.0.0-rc.1",
+    "pwabuilder-edgeextension": "^2.0.0-rc.2",
+    "npm-install-peers": "1.2.1"
   },
   "devDependencies": {
     "blanket": "1.1.6",
@@ -63,7 +62,8 @@
   },
   "scripts": {
     "test": "grunt",
-    "debug-tests": "mocha --debug-brk"
+    "debug-tests": "mocha --debug-brk",
+    "setup": "npm install && npm-install-peers"
   },
   "bin": "pwabuilder.js",
   "config": {
