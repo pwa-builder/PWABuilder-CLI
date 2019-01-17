@@ -61,7 +61,8 @@
   },
   "scripts": {
     "test": "grunt",
-    "debug-tests": "mocha --debug-brk"
+    "debug-tests": "mocha --debug-brk",
+    "setup": "npm install && npm-install-peers"
   },
   "bin": "pwabuilder.js",
   "config": {
