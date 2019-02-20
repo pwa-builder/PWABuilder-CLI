@@ -15,10 +15,6 @@
         "packageName": "pwabuilder-cordova",
         "source": "pwabuilder-cordova"
     },
-    "windows": {
-        "packageName": "pwabuilder-cordova",
-        "source": "pwabuilder-cordova"
-    },
     "web": {
         "packageName": "pwabuilder-web",
         "source": "pwabuilder-web"
