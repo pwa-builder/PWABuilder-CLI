@@ -68,7 +68,7 @@ pwabuilder package -p windows10 -l debug
 ### Manifest Module
 
 ````
-var manifesTools = require('manifestTools');
+var manifestTools = require('manifestTools');
 ````
 
 #### getManifestFromSite(siteUrl, callback)
