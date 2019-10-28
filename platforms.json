@@ -7,6 +7,10 @@
         "packageName": "pwabuilder-android",
         "source": "pwabuilder-android"
     },
+    "android-twa": {
+        "packageName": "pwabuilder-android-twa",
+        "source": "pwabuilder-android-twa"
+    },
     "macos": {
         "packageName": "pwabuilder-macos",
         "source": "pwabuilder-macos"
