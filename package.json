@@ -37,6 +37,7 @@
     "pwabuilder-cordova": "^2.0.0-rc.3",
     "pwabuilder-edgeextension": "^2.0.0-rc",
     "pwabuilder-lib": "^2.0.4-RC.2",
+    "pwabuilder-msteams": "file:../pwabuilder-msteams",
     "pwabuilder-web": "^2.0.0-rc.3",
     "pwabuilder-windows10": "^2.0.4-rc.4",
     "q": "^1.4.1"

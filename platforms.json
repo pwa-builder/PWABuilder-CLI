@@ -22,5 +22,9 @@
     "edgeextension": {
         "packageName": "pwabuilder-edgeextension",
         "source": "pwabuilder-edgeextension"
+    },
+    "msteams": {
+        "packageName": "pwabuilder-msteams",
+        "source": "pwabuilder-msteams"
     }
 }
