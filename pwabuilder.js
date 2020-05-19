@@ -134,6 +134,7 @@ var program = require('commander')
              .option('-p, --platforms <platforms>', getPlatformHelpText())
              .option('-m, --manifest <manifest-location>', 'location of the W3C Web App manifest\n                                    ' +
                                                     'file (URL or local path)')
+             .option('--schema <schema-file-path>', 'location of the schema json')
              .option('-i, --image <image-location>', 'local path to the image file used to\n                                    ' +
                                                     'generate missing icons in the manifest')
              .option('-c, --crosswalk', 'enable Crosswalk for Android', false)
