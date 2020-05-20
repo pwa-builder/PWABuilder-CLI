@@ -1,7 +1,8 @@
 'use strict';
 
 var url = require('url'),
-    path = require('path');
+    path = require('path'),
+    fs = require('fs');
 
 var Q = require('q');
 
@@ -59,6 +60,10 @@ function generateApp(program) {
 
   var siteUrl = program.args[0];
   var rootDir = program.directory ? path.resolve(program.directory) : process.cwd();
+
+  if (program.schema) {
+    program.schema = fs.readFileSync(path.resolve(program.schema), { encoding: 'utf-8' });
+  }
 
   var deferred = Q.defer();
 
