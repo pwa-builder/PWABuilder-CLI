@@ -23,13 +23,15 @@ var validationConstants = {
     all: 'all',
     android: 'android',
     ios: 'ios',
-    windows: 'windows'
+    windows: 'windows',
+    msteams: 'msteams'
   },
   platformDisplayNames: {
     all: 'All Platforms',
     android: 'Android',
     ios: 'iOS',
-    windows: 'Windows'
+    windows: 'Windows',
+    msteams: 'msteams'
   }
 };
 
