@@ -38,6 +38,7 @@
     "pwabuilder-edgeextension": "^2.0.0-rc",
     "pwabuilder-lib": "^2.0.4-RC.2",
     "pwabuilder-web": "^2.0.0-rc.3",
+    "pwabuilder-android-twa": "^2.0.0-rc.2",
     "pwabuilder-windows10": "^2.0.4-rc.4",
     "pwabuilder-macos": "^0.3.11",
     "q": "^1.4.1"
