@@ -1,4 +1,8 @@
-﻿# PWA Builder
+﻿# DEPRECATEd
+ 
+ This CLI for PWABuilder is no longer maintained. Please use [PWABuilder.com](https://www.pwabuilder.com) instead. If you need to open an issue for PWABuilder-related things, please do so at https://github.com/pwa-builder/PWABuilder/issues
+ 
+ # PWA Builder CLI
 
 This tool is used to create hosted web applications based on a [W3C Web App manifest](http://www.w3.org/TR/appmanifest/).
 
